@@ -368,7 +368,6 @@
             <div class="b-col">
                 <div class="b-col-indent">
                     <?php include_partial('global/common/reminders') ?>
-                    <p class="b-custom-input-hint" id="operationEdit_noReminders" style="display:none;">Для использования напоминаний необходимо подключить услугу <a href="/my/services/">"Напоминания о событиях"</a>!</p>
                 </div>
             </div>
         </div>

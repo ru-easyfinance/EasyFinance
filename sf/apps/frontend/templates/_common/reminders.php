@@ -219,6 +219,14 @@
                 </div>
             </div>
         </div>
+        <div class="b-row">
+            <div class="b-col">
+                <p class="b-custom-input-hint b-custom-input-hint__warning" id="operationEdit_noReminders" style="display: none;">
+                    Для использования напоминаний необходимо 
+                    <a href="/my/services/">подключить услугу &laquo;Напоминания по календарю&raquo;</a>.
+                </p>
+            </div>
+        </div>
     </div>
     <b class="clear"></b>
 </div>

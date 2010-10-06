@@ -9,6 +9,11 @@
     color:#ccc;
     margin:5px 0 0 0;
 }
+.b-custom-input-hint__warning,
+.b-custom-textarea-hint__warning {
+    color: red;
+}
+
 .b-custom-input-hint_msg,
 .b-custom-textarea-hint_msg {
     color:#20201E;
