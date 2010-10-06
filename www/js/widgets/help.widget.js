@@ -37,7 +37,6 @@ easyFinance.widgets.help = function(){
 
     // private functions
 
-
     // public functions
     function init(nodeSelector, isDialog) {
         _$node = $(nodeSelector);
@@ -66,7 +65,7 @@ easyFinance.widgets.help = function(){
             $("<br>").appendTo(_$divLinks);
         }
 
-        /*
+/*
         $("<br>").appendTo(_$divLinks);
         $("<a>")
             .text("Все видео")
@@ -80,7 +79,7 @@ easyFinance.widgets.help = function(){
             _$node.dialog({title: "Видео-гид", bgiframe: true, autoOpen: false, width: 662, modal:true});
     }
 
-    function showVideo(strVideo) {
+    function showVideo(strVideo) { log(strVideo)
         if (!_videos[strVideo])
             return;
 
@@ -97,6 +96,7 @@ easyFinance.widgets.help = function(){
         } else {
             _player.play(_strVideoPrefix + _videos[strVideo].file);
         }
+        _$node.dialog('open')
     }
 
     return {
