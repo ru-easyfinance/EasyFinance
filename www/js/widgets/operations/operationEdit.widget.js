@@ -83,7 +83,7 @@ easyFinance.widgets.operationEdit = function(){
             //$('.b-tagsedit li').show();
         });
 
-        $('.js-tagsedit-window a').live('click',function(){
+        $('.js-tagsedit-window span').live('click',function(){
             var txt = $('input.js-tagslist').val() + $(this).text() + ', ';
             $('input.js-tagslist').val(txt);
             $('.js-tagsedit-window').dialog("close");
@@ -93,20 +93,15 @@ easyFinance.widgets.operationEdit = function(){
         var k, n;
         var data = res.cloud;
         var tags = [];
-        var m = -1;
-        for (var key in data) {
-            if (m == -1) {
-                m = data[key]['cnt'];
-            }
-            else {
-                k = data[key]['cnt']/m;
-                n = Math.floor(k*5);
-                tags.push('<a class="tag' + n + '">' + data[key]['name'] + '</a>');
-            }
+        var m = data[0].cnt; // cnt значит count
+
+        for (var key = 1; key < data.length; key++) {
+            k = data[key].cnt / m;
+            n = Math.floor(k * 5);
+            tags.push('<span class="pseudo-active tag' + n + '">' + data[key].name + '</span>');
         }
 
         $('.js-tagsedit-window').html(tags.join(''));
-        //$('.op_tags_could li').hide();
     }
 
     function _initUFDs() {
