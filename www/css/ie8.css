@@ -35,3 +35,7 @@ body .ui-dialog.edit .ui-dialog-title {
     z-index:999 !important;
     margin:0 0 0 0 !important;
 }
+
+.block1 .transaction .sum .amount {
+    width: 160px;
+}
