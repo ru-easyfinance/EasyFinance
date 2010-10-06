@@ -1,0 +1,47 @@
+.noTextDecoration {
+    text-decoration: none;
+}
+.white {
+    color: white;
+}
+.sumGreen {
+    color: green;
+    font-weight: bold;
+}
+.sumRed {
+    color: red;
+    font-weight: bold;
+}
+.hidden {
+    display: none;
+}
+.padding10 {
+    padding: 10px
+}
+
+img.preload {
+    display: none;
+}
+
+/* ClearFix */
+.clearfix:after {
+    content: "";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+.clearfix {
+    display: inline-block;
+}
+
+.pseudo, .pseudo-active {
+    color: #6CBD45;
+    text-decoration: none;
+    cursor: pointer;
+    border-bottom: 1px dashed #6CBD45;
+}
+.pseudo-active:hover {
+    border-bottom: 0 none;
+}
