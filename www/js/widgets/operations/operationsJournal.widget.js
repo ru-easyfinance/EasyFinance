@@ -93,7 +93,7 @@ easyFinance.widgets.operationsJournal = function(){
                 '<span class="' + (this.money >= 0 ? 'sumGreen' : 'sumRed') + '">' + strMoney + '</span>',
                 this.cat_name,
                 ((this.tags ? '[' + this.tags + '] ' : '') + (this.comment || '')),
-                '<ul class="b-row-menu-block" id="' + rowID + '" trid="' + this.target_id + '"><li><a href="#edit"></li><li><a href="#del"></li><li><a href="#add"></li></ul>'
+                '<ul class="b-row-menu-block" id="' + rowID + '" trid="' + this.target_id + '"><li><a href="#edit" title="Редактировать"></li><li><a href="#del" title="Удалить"></li><li><a href="#add" title="Добавить"></li></ul>'
             ], true);
 
             rowsCollection[rowID] = {
