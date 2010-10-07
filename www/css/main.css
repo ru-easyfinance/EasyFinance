@@ -1375,7 +1375,7 @@ ul.month_cal li.y_next a, ul.month_cal li.m_next a , #ui-datepicker-div  .ui-dat
 #footer .creator a { color: #7f7f7f; text-decoration: none; }
 #footer .certificate { position: absolute; left: 700px; top: 10px; }
 
-#footer .footerTextsArea { padding: 4px; }
+#footer .footerTextsArea { padding: 4px; width: 930px; margin: auto; }
 #footer .footerTextsArea h4 { margin-top: 2px; color: grey; }
 #footer .footerTextsArea li:first-child { margin:0; }
 #footer .footerTextsArea li { float:left; margin: 0 0 0 34px; width: 286px; }
