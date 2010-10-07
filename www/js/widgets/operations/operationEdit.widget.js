@@ -93,15 +93,17 @@ easyFinance.widgets.operationEdit = function(){
         var k, n;
         var data = res.cloud;
         var tags = [];
-        var m = data[0].cnt; // cnt значит count
+        if (data.length) {
+            var m = data[0].cnt; // cnt значит count
 
-        for (var key = 1; key < data.length; key++) {
-            k = data[key].cnt / m;
-            n = Math.floor(k * 5);
-            tags.push('<span class="pseudo-active tag' + n + '">' + data[key].name + '</span>');
+            for (var key = 1; key < data.length; key++) {
+                k = data[key].cnt / m;
+                n = Math.floor(k * 5);
+                tags.push('<span class="pseudo-active tag' + n + '">' + data[key].name + '</span>');
+            }
+
+            $('.js-tagsedit-window').html(tags.join(''));
         }
-
-        $('.js-tagsedit-window').html(tags.join(''));
     }
 
     function _initUFDs() {
