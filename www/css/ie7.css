@@ -63,6 +63,13 @@
     width:406px;
 }
 
+.DataTables_sort_wrapper span.ui-icon {
+    display: inline;
+    float: none;
+    zoom: 1;
+    margin-left: 3px;
+}
+
 .bill_list {
     margin-top: 22px;
     zoom: 1;
