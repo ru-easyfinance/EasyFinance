@@ -411,13 +411,13 @@ easyFinance.widgets.operationEdit = function(){
         // TEMP: СКРЫВАЕМ переводы на фин. цель
         var htmlOptions = '<option value="0">Расход</option><option value="1">Доход</option><option value="2">Перевод со счёта</option>';
         $("#op_type").html(htmlOptions).ufd("changeOptions");
-        setType(data.type);
+        //setType(data.type);
         // EOF TEMP
 
         if (!_reminders) {
             // если планируем операцию в первый раз,
             // инициализируем виджет напоминалок
-            _reminders = easyFinance.widgets.operationReminders.init("#reminders", easyFinance.models.user, "operation");
+            _reminders = easyFinance.widgets.operationReminders.init("#operationEdit_reminders", easyFinance.models.user, "operation");
         } else {
             // выставляем опции напоминалок по умолчанию
             _reminders.setDefaults();
@@ -1297,7 +1297,7 @@ easyFinance.widgets.operationEdit = function(){
         $("#op_type").html(htmlOptions).ufd("changeOptions");
         setType(data.type);
         // EOF TEMP
-        
+
         // открываем диалог для планирования
         _expandCalendar();
 

@@ -124,17 +124,18 @@ easyFinance.widgets.operationReminders = function(){
             });
         } else {
             // отображаем галочку использования напоминаний
-            $("#divUseReminders").show();
+            // Что делать если таких элементов на странице 2 как в профиле?
+            $("#divUseReminders", _$node).show();
         }
 
         if (setDefaults() || _mode == "profile") {
             // показываем остальные опции
-            $("#tableReminders").show();
+            $("#tableReminders", _$node).show();
         }
 
         // переключалка в форме операций
-        $("#op_checkReminders").click(function() {
-            $("#tableReminders")[( $( this ).attr('checked') ) ? "show" : "hide"]();
+        $("#op_checkReminders", _$node).click(function() {
+            $("#tableReminders", _$node)[( $( this ).attr('checked') ) ? "show" : "hide"]();
         });
 
         return this;
