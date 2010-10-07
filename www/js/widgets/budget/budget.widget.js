@@ -174,7 +174,7 @@ easyFinance.widgets.budget = function(data){
             // для доходов
             diff = params.fact - params.plan;
 
-            if (elapsedPercent < params.drain) {
+            if (elapsedPercent <= params.drain) {
                 color = 'green';
             } else {
                 color = 'red';
@@ -188,7 +188,7 @@ easyFinance.widgets.budget = function(data){
             // для расходов
             diff = params.plan - params.fact;
 
-            if (elapsedPercent > params.drain) {
+            if (elapsedPercent >= params.drain) {
                 color = 'green';
             } else {
                 color = 'red';
@@ -250,7 +250,7 @@ easyFinance.widgets.budget = function(data){
             } else {
                 elapsedPercent = 100;
             }
-        }        
+        }
     }
 
     function _updateTimeLine() {
