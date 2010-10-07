@@ -51,7 +51,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Финансовая цель -->
         <div id="op_target_fields" style="display:none;">
             <div class="b-row">
@@ -223,10 +223,10 @@
                     <div class="b-custom-input-container icon tags">
                         <div class="b-custom-input">
                             <div class="b-custom-input-border">
-                                <input class="b-custom-input-field js-tagslist" type="text" value="" />
+                                <input class="b-custom-input-field js-tagslist" id="op_tags" type="text" value="" />
                             </div>
                         </div>
-                        <i class="b-custom-input-icon" id="op_tags" title="Редактировать метки"></i>
+                        <i class="b-custom-input-icon" id="op_tags_popup_trigger" title="Редактировать метки"></i>
                     </div>
                     <p class="b-custom-input-hint">Пометки для быстрого поиска. Например: аванс</p>
                 </div>

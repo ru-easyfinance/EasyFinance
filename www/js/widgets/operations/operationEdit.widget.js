@@ -76,7 +76,7 @@ easyFinance.widgets.operationEdit = function(){
         $('#op_infobut1').hide();
         $('#op_infobut2').hide();
 
-        $('#op_tags').click(function(){
+        $('#op_tags_popup_trigger').click(function(){
             $('.js-tagsedit-window').dialog({
                 close: function(event, ui){$(this).dialog( "destroy" )}
             }).dialog("open");
