@@ -43,7 +43,7 @@ function getClientPlugins(){
 
  $(document).ready(function(){
     var dialogWrapper = $('#sendFeedBack');
-        
+
     function onSend() {
         var feedback = getClientDisplayMods();
         feedback.plugins = getClientPlugins();
@@ -56,15 +56,15 @@ function getClientPlugins(){
             return false;
         }
 
-        var msg = dialogWrapper.find('.js-feedback-msg');
-        feedback.msg = $.trim(msg.val())
+        var msg = dialogWrapper.find('textarea');
+        feedback.msg = $.trim(msg.val());
 
         if (!feedback.msg) {
             $.jGrowl('Введите отзыв!', {theme: 'red'});
             return false;
         }
 
-        var email = dialogWrapper.find('.js-feedback-email');
+        var email = dialogWrapper.find('.js-feedback-mail');
 
         if (email.length) {
             feedback.email = $.trim(email.val())
@@ -117,5 +117,9 @@ function getClientPlugins(){
 
     $('#btnFeedback, #footerAddMessage, #linkMainMenuFeedback').click(function(){
         dialogWrapper.dialog('open');
+        dialogWrapper.find('input')[0].focus();
+        if ($.browser.opera) {
+            dialogWrapper.find('textarea').css({display: 'block'});
+        }
     });
 });
