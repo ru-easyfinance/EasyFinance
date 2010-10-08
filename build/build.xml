@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Easyfinance build" default="build" basedir="..">
 
-    <!-- Подключение библиотек для сжатия css и js-->
-    <taskdef name="stubjsmin" classname="tasks.stubJsMinTask" classpath="${project.basedir}/build/libs" />
-    <taskdef name="stubcssmin" classname="tasks.stubCssMinTask" classpath="${project.basedir}/build/libs"/>
-
-
     <!-- Загрузка конфигов -->
     <echo>Load config ...</echo>
     <if>
@@ -36,6 +31,10 @@
     <!-- Создание директорий -->
     <echo>Prepare paths ...</echo>
     <phing phingfile="build/paths.target.xml" inheritAll="true" target="System paths prepare" />
+
+
+    <!-- Подключаем минификации CSS/JS -->
+    <import file="build/minify.target.xml" />
 
 
     <!-- BUILD: Сборка проекта -->
@@ -81,12 +80,8 @@
         <exec command="php ${project.basedir}/sf/symfony project:permissions" dir="${project.basedir}/sf" checkreturn="true" />
 
         <!-- Minify -->
-        <phing phingfile="build/minify.target.xml" inheritAll="true" target="minify" />
-    </target>
-
-    <target name="minify">
-        <!-- just minify -->
-        <phing phingfile="build/minify.target.xml" inheritAll="true" target="minify" />
+        <phingcall target="minify-js" />
+        <phingcall target="minify-css" />
     </target>
 
 
