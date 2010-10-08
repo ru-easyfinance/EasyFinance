@@ -31,7 +31,7 @@
         </div>
     </div>
 
-    <div id="tableReminders" class="hidden">
+    <div id="tableReminders" class="b-form-skeleton hidden">
         <div class="b-row cols2">
             <div class="b-col">
                 <div class="b-col-indent">
