@@ -78,7 +78,7 @@ class Login_Controller extends _Core_Controller
 
         }
 
-        if ( isset($_POST['responseMode']) && $_POST['responseMode'] == 'json') {
+        if (isset($_POST['responseMode']) && $_POST['responseMode'] == 'json') {
             if (!$errorMessage) {
                 die(json_encode(
                     array('result' => array(
@@ -92,7 +92,9 @@ class Login_Controller extends _Core_Controller
             }
         } else {
             if (!$errorMessage) {
-                header("Location: ".$_SESSION['REQUEST_URI']);
+                $redirectUrl = isset($_SESSION['REQUEST_URI']) ?
+                    $_SESSION['REQUEST_URI'] : '/info/';
+                header("Location: $redirectUrl");
                 unset($_SESSION['REQUEST_URI']);
                 exit;
             }

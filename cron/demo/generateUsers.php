@@ -383,7 +383,7 @@ Use: ./generateUsers.php -sdb user:passwd@source_host/database \
         // Файл для хранения массива сгенерённых пользователей
         $usersFile = DIR_SHARED . 'generatedUsers.php';
         $users = var_export($users, true);
-        file_put_contents($usersFile, "<?php $users = $users;");
+        file_put_contents($usersFile, "<?php \$users = $users;");
         chmod($usersFile, 0777);
     }
 
