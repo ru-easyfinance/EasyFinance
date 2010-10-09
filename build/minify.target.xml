@@ -2,7 +2,6 @@
 <project name="Minify js css files" default="minify">
 
     <!-- Подключение библиотек для сжатия css и js-->
-    <taskdef name="stubjsmin" classname="tasks.stubJsMinTask" classpath="${project.basedir}/build/libs" />
     <taskdef name="stubcssmin" classname="tasks.stubCssMinTask" classpath="${project.basedir}/build/libs"/>
 
 
@@ -18,14 +17,15 @@
                 <mkdir dir="${project.js.root}tmp" />
 
                 <append destFile="${project.js.root}tmp/global.js">
-                    <filelist dir="${project.basedir}/www/js/" listfile="include/assets/js.list"/>
+                    <filelist dir="${project.js.root}" listfile="include/assets/js.list" />
                 </append>
 
-                <stubjsmin jsminpath="external/jsmin-1.1.1.php" targetdir="${project.js.root}">
+                <jsMin targetDir="${project.js.root}" failOnError="false">
                     <fileset dir="${project.js.root}tmp/">
                         <include name="global.js" />
                     </fileset>
-                </stubjsmin>
+                </jsMin>
+
                 <delete dir="${project.js.root}tmp/" includeemptydirs="true" />
             </then>
             <else>
