@@ -44,8 +44,10 @@ class form_frontend_UserProfileFormTest extends myFormTestCase
             'user_mail'         => array(),
             'password_new'      => array(),
             'password_repeat'   => array(),
-            'password'          => array(),
             'notify'            => array(),
+            'password'          => array(
+                'required' => false,
+            ),
         );
     }
 
@@ -76,21 +78,6 @@ class form_frontend_UserProfileFormTest extends myFormTestCase
         $validInput = $this->getValidInput();
 
         return array(
-            // Ничего не отправлено
-            'Empty request' => new sfPHPUnitFormValidationItem(
-                array(),
-                array(
-                    'name'      => 'required',
-                )),
-
-            // Пароль можно оставить пустым, если не обновляются "обязательные" поля
-            'Password is not required' => new sfPHPUnitFormValidationItem(
-                array_merge($validInput, array(
-                    'password'  => '',
-                    )),
-                array(
-                )),
-
             // Заполнить пароль для обновления мэйла
             'Password required: mail' => new sfPHPUnitFormValidationItem(
                 array_merge($validInput, array(

@@ -38,7 +38,6 @@ class frontend_profile_profileActionsTest extends myFunctionalTestCase
             ->post($this->generateUrl('profile_save', array('sf_format'  => 'json')), array(
                 'login'     => 'Qwer',
                 'nickname'  => 'Querty',
-                'guide'     => 0,
             ))
             ->with('request')->checkModuleAction('profile', 'save')
             ->with('response')->isStatusCode(200)
@@ -48,57 +47,7 @@ class frontend_profile_profileActionsTest extends myFunctionalTestCase
             ->end()
             ->with('response')->begin()
                 ->checkJsonContains('result', array('text' => 'Данные успешно сохранены'))
-                ->setsCookie('guide', false)
             ->end();
-    }
-
-
-    /**
-     * Сохранить профиль, установив куку на "гайд"
-     */
-    public function testProfileSaveWithGuide()
-    {
-        $this->authenticateUser();
-
-        $this->browser
-            ->post($this->generateUrl('profile_save', array('sf_format'  => 'json')), array(
-                'login'     => 'Qwer',
-                'nickname'  => 'Querty',
-                'guide'     => 1,
-            ))
-            ->with('request')->checkModuleAction('profile', 'save')
-            ->with('response')->isStatusCode(200)
-            ->with('form')->begin()
-                ->isInstanceOf('UserProfileForm')
-                ->hasErrors(false)
-            ->end()
-            ->with('response')->begin()
-                ->checkJsonContains('result', array('text' => 'Данные успешно сохранены'))
-                ->setsCookie('guide', 'uyjsdhf')
-            ->end();
-    }
-
-
-    /**
-     * Сохранить состояние куки на гайд
-     */
-    public function testGuideCookie()
-    {
-        $this->authenticateUser();
-
-        // убрать куку
-        $this->browser
-            ->post($this->generateUrl('profile_guide', array('sf_format'  => 'json')), array('state' => '0'))
-            ->with('request')->checkModuleAction('profile', 'guide')
-            ->with('response')->isStatusCode(200)
-            ->with('response')->setsCookie('guide', false);
-
-        // поставить куку
-        $this->browser
-            ->post($this->generateUrl('profile_guide', array('sf_format'  => 'json')), array('state' => '1'))
-            ->with('request')->checkModuleAction('profile', 'guide')
-            ->with('response')->isStatusCode(200)
-            ->with('response')->setsCookie('guide', 'uyjsdhf');
     }
 
 }

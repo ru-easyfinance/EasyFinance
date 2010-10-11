@@ -63,16 +63,8 @@
                 </tr>
                 <?php endif; ?>
                 <tr>
-                    <td><label for="guide">Включить гид</label></td>
-                    <td><input id="guide" name="guide" class="chek" type="checkbox"<?php echo $sf_request->getCookie('guide', false) ? ' checked="checked"' : '' ?> /></td>
-                </tr>
-                <tr>
                     <td><label for="getNotify">Получать уведомления об изменениях сервиса на электронную почту</label></td>
                     <td><input id="getNotify" name="getNotify" class="chek" type="checkbox" checked="checked" /></td>
-                </tr>
-                <tr>
-                    <td><label for="help">Включить подсказки</label></td>
-                    <td><input id="help" name="help" class="chek" type="checkbox" checked="checked" /></td>
                 </tr>
                 <tr>
                     <td colspan="2"><h3><div> </div></h3></td>

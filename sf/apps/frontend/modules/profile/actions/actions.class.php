@@ -53,7 +53,6 @@ class profileActions extends sfActions
         $this->form->bind($formParameters, array());
         if ($this->form->isValid()) {
             $this->form->save();
-            $this->setGuideCookie($postParameters['guide']);
 
             return $this->renderText(json_encode(array('result' => array('text' => 'Данные успешно сохранены'))));
         }
@@ -183,52 +182,6 @@ class profileActions extends sfActions
 
         $this->getResponse()->setHttpHeader('Content-Type','application/json; charset=utf-8');
         return $this->renderText(json_encode($result));
-    }
-
-
-    /**
-     * Установить состояние включенности гайда
-     */
-    public function executeGuide(sfWebRequest $request)
-    {
-        $params = $request->getPostParameters();
-
-        $state = false;
-        $message = '';
-        if (isset($params['state'])) {
-            $state = (bool) $params['state'];
-        }
-
-        $this->setGuideCookie($state);
-
-        if ($state) {
-            $message = 'Гид включен.';
-        } else {
-            $message = 'Гид отключён. Включить его Вы всегда можете в настройках профиля.';
-        }
-
-        $this->getResponse()->setHttpHeader('Content-Type','application/json; charset=utf-8');
-        return $this->renderText(json_encode(array('result' => array(
-            'text' => $message,
-        ))));
-    }
-
-
-    /**
-     * Установить куки гайда
-     *
-     * @param  boolean  $state
-     * @return void
-     */
-    private function setGuideCookie($state)
-    {
-        if ((bool) $state) {
-            // поганый хардкод
-            $this->getResponse()->setCookie('guide', 'uyjsdhf', 0, COOKIE_PATH, COOKIE_DOMEN, false);
-        // убить куку
-        } else {
-            $this->getResponse()->setCookie('guide', '', time() - 3600, COOKIE_PATH, COOKIE_DOMEN, false);
-        }
     }
 
 }
