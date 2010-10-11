@@ -76,10 +76,9 @@ easyFinance.models.accounts = function(){
             _accountsOrdered.push(_accounts[key]);
         }
 
-        if (isChrome) {
-            // сортируем по алфавиту специально для Хрома
-            _accountsOrdered.sort(_compareAccountsOrderByName);
-        }
+        // т.к. стандарт языка не гарантирует порядка в словарях,
+        // то обязательно перед отдачей сортируем
+        _accountsOrdered.sort(_compareAccountsOrderByName);
     }
 
     function _loadAccounts(callback) {
