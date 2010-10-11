@@ -99,38 +99,51 @@ class api_sync_OutOperationTest extends myFunctionalTestCase
      */
     public function testTransferOperationWithoutAmount()
     {
-        $transfer = $this->helper->makeAccount();
+        $accFrom = $this->helper->makeAccount();
+        $transfer = $this->helper->makeAccount($accFrom->getUser());
 
-        $op = $this->helper->makeOperation(null, array(
-            'type' => Operation::TYPE_TRANSFER,
+        $op1 = $this->helper->makeOperation($accFrom, array(
+            'type'                => Operation::TYPE_TRANSFER,
             'transfer_account_id' => $transfer->getId(),
-            'amount' => -567.12,
-            'transfer_amount' => '',
+            'amount'              => -567.12,
+            'transfer_amount'     => '',
+            ));
+        $op2 = $this->helper->makeOperation($accFrom, array(
+            'type'                => Operation::TYPE_TRANSFER,
+            'transfer_account_id' => $transfer->getId(),
+            'amount'              => -563.12,
+            'transfer_amount'     => '',
+            'deleted_at'          => date('Y-m-d H:i:s'),
             ));
 
-        $this->authenticateUser($op->getUser());
+        $this->authenticateUser($accFrom->getUser());
 
-        $opRecord = "record[id=\"{$op->getId()}\"]";
+        $op1Record = "record[id=\"{$op1->getId()}\"]";
+        $op2Record = "record[id=\"{$op2->getId()}\"]";
 
         // проверим, что в БД попала пустая сумма
         $result = $this->getConnection()->getDbh()
-            ->query("SELECT o.transfer_amount FROM operation o WHERE o.id = '{$op->getId()}'")
-            ->fetch(PDO::FETCH_ASSOC);
-        $this->assertEmpty($result['transfer_amount']);
+            ->query("SELECT o.transfer_amount FROM operation o WHERE o.id = '{$op1->getId()}' OR o.id = '{$op2->getId()}'")
+            ->fetchAll(PDO::FETCH_ASSOC);
+        $this->assertEmpty($result[0]['transfer_amount']);
+        $this->assertEmpty($result[1]['transfer_amount']);
 
-        $op->refresh(false);
+        $op1->refresh(false);
+        $op2->refresh(false);
         // при гидрации уже не пустая
-        $this->assertNotEmpty($op->getTransferAmount());
+        $this->assertNotEmpty($op1->getTransferAmount());
+        $this->assertNotEmpty($op2->getTransferAmount());
 
         $this->browser
             ->getAndCheck('sync', 'syncOut', $this->generateUrl('sync_get_modified', array(
                 'model'   => 'operation',
-                'from'    => $this->_makeDate(-100),
-                'to'      => $this->_makeDate(+100),
+                'from'    => $this->_makeDate(-500),
+                'to'      => $this->_makeDate(+500),
             )), 200)
             ->with('response')->begin()
                 ->isValid()
-                ->checkElement("$opRecord transfer_amount", (string) $op->getTransferAmount())
+                ->checkElement("$op1Record transfer_amount", (string) $op1->getTransferAmount())
+                ->checkElement("$op2Record transfer_amount", (string) $op2->getTransferAmount())
             ->end();
     }
 
