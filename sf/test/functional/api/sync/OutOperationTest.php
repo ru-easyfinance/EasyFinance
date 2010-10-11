@@ -93,4 +93,45 @@ class api_sync_OutOperationTest extends myFunctionalTestCase
             ->end();
     }
 
+
+    /**
+     * Операция перевода где не указана переведенная сумма
+     */
+    public function testTransferOperationWithoutAmount()
+    {
+        $transfer = $this->helper->makeAccount();
+
+        $op = $this->helper->makeOperation(null, array(
+            'type' => Operation::TYPE_TRANSFER,
+            'transfer_account_id' => $transfer->getId(),
+            'amount' => -567.12,
+            'transfer_amount' => '',
+            ));
+
+        $this->authenticateUser($op->getUser());
+
+        $opRecord = "record[id=\"{$op->getId()}\"]";
+
+        // проверим, что в БД попала пустая сумма
+        $result = $this->getConnection()->getDbh()
+            ->query("SELECT o.transfer_amount FROM operation o WHERE o.id = '{$op->getId()}'")
+            ->fetch(PDO::FETCH_ASSOC);
+        $this->assertEmpty($result['transfer_amount']);
+
+        $op->refresh(false);
+        // при гидрации уже не пустая
+        $this->assertNotEmpty($op->getTransferAmount());
+
+        $this->browser
+            ->getAndCheck('sync', 'syncOut', $this->generateUrl('sync_get_modified', array(
+                'model'   => 'operation',
+                'from'    => $this->_makeDate(-100),
+                'to'      => $this->_makeDate(+100),
+            )), 200)
+            ->with('response')->begin()
+                ->isValid()
+                ->checkElement("$opRecord transfer_amount", (string) $op->getTransferAmount())
+            ->end();
+    }
+
 }
