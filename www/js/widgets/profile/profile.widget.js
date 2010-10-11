@@ -16,12 +16,6 @@ easyFinance.widgets.profile = function(model){
         $('input#login').val(data.login);
         $('input#mailIntegration').val( res.profile.integration && res.profile.integration.email || '');
         $('input#mail').val(data.mail);
-        if (data.tooltip == '0'){
-            $('#help').removeAttr('checked');
-        }
-        if (!data.guide){
-            $('#guide').removeAttr('checked');
-        }
         if (data.getNotify == "0")
             $('#getNotify').removeAttr('checked');
         easyFinance.widgets.operationReminders.init("#reminders", easyFinance.models.user, "profile");
@@ -37,8 +31,6 @@ easyFinance.widgets.profile = function(model){
             return;
         }
         var data = {
-            tooltip : $('#help:checked').length,
-            guide : ($('#guide:checked').length > 0 ? 'uyjsdhf' : ''),//@todo guid
             getNotify : $('#getNotify:checked').length.toString(),
             login : $('#login').val(),
             password : $('#pass').val(),
@@ -62,3 +54,4 @@ easyFinance.widgets.profile = function(model){
         sendProfile : sendProfile
     }
 }(easyFinance.models.user);
+

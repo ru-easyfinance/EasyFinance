@@ -44,16 +44,7 @@
             bgiframe: true,
             autoOpen: false,
             width: 680,
-            modal:true,
-            close: function() {
-                var isSecure = window.location.protocol == 'https'? 1:0
-                $.cookie('guide', '', {expire: 100, path : '/', domain: false, secure : isSecure});
-                $.post('/my/profile/guide.json', { state: '0' });
-                $.jGrowl('Вы всегда можете открыть &laquo;Мастер старта&raquo; в меню &laquo;Помощь&raquo;.', {
-                    theme: 'green',
-                    stick: true
-                });
-            }
+            modal:true
         })
     }
 
@@ -69,3 +60,4 @@
         show: show
     }
 })();
+

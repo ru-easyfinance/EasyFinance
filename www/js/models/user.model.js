@@ -8,13 +8,6 @@ easyFinance.models.user = function(data){
     var URL_FOR_SAVE_USER_INFO = '/my/profile/save_main_settings.json';
     var URL_SAVE_REMINDERS = '/my/profile/save_reminders';
 
-    var SETTING_FOR_WRITING_COOKIE = {
-        expire: 100,
-        path: '/',
-        domain: false,
-        secure: '1'
-    }
-
     var _data = data || {};
     /**
      * Инициирует модель из реса - пока не реализовано со стороны сервера
@@ -31,8 +24,6 @@ easyFinance.models.user = function(data){
         $.get(URL_FOR_LOAD_USER_INFO, {}, function(data){
             _data = data.profile;  //server will be sent 'spamer'&& notify && specialMail
             _data.getNotify = res.getNotify;
-            _data.tooltip = $.cookie('tooltip');
-            _data.guide = $.cookie('guide') == 'uyjsdhf';//guide
             if (typeof(calback) == 'function') {
                 calback($.extend({}, _data));
             }
@@ -53,9 +44,6 @@ easyFinance.models.user = function(data){
      */
     function setUserInfo(data, calback){
         if (typeof(data) == 'object') {
-            //cookies
-            $.cookie('tooltip', (data.tooltip || null), SETTING_FOR_WRITING_COOKIE);
-            $.cookie('guide', (data.guide || null), SETTING_FOR_WRITING_COOKIE);
             //Ajax
             $.post(URL_FOR_SAVE_USER_INFO, {
                 getNotify: data.getNotify || 0,
@@ -66,7 +54,6 @@ easyFinance.models.user = function(data){
                 mail: data.mail || '',
                 nickname: data.nickname ? data.nickname : (data.login || ''),
                 mailIntegration: data.mailIntegration || '',
-                guide: data.guide || 0 // server line75
             }, function(data){
                 if (typeof(calback) == 'function') {
                     calback(data);
@@ -74,20 +61,7 @@ easyFinance.models.user = function(data){
             }, 'json');
         }
     }
-    /**
-     * Возвращает факт показывания гида
-     * @return {boolean}
-     */
-    function isUsedGuide(){
-        return _data.guide ? true : false;//Now we use this cookie where not use guide
-    }
-    /**
-     * Возвращает факт показывания всплывающих подсказок
-     * @return {boolean}
-     */
-    function isUsedTooltip(){
-        return _data.tooltip ? true : false;
-    }
+
     /**
      * Создания почты для интеграции с банками
      * @param callback {function}

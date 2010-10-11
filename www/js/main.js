@@ -517,30 +517,6 @@ $(document).ready(function(){
     $('li.over2').remove();
     $('li.over1').remove();
 
-    //Функция показывает гид.
-    function ShowGuide(){
-        //alert('гид!');
-        //$("#tabs").tabs();
-        $('#guide').tabs();
-        $('#guide').show();
-        $('#dial').show();
-        $('#dial').dialog({
-            width: 540
-        });
-        $('.dial').bind('dialogclose', function(event, ui){
-            $.cookie('guide', '', {expire: 100, path : '/', domain: false, secure : isSecure});
-            $.post('/my/profile/guide.json', { state: '0' });
-            $.jGrowl('Гид отключён. Включить его Вы всегда можете в настройках профиля.', {
-                theme: 'green',
-                stick: true
-            });
-        });
-    }
-
-//    if ($.cookie('guide') == 'uyjsdhf') {
-//        easyFinance.widgets.help.showVideo('newAccount');
-//    }
-
     $(document).keypress(function(e) {
         if(e.keyCode == 27) {
             $(document).trigger('event.esc');
