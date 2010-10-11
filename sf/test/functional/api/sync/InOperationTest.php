@@ -419,6 +419,39 @@ class api_sync_InOperationTest extends api_sync_in
 
 
     /**
+     * Принять: отсутствующая сумма перевода
+     */
+    public function testTransferAccountNoAmount()
+    {
+        $acc_from = $this->helper->makeAccount($this->_user);
+        $acc_to   = $this->helper->makeAccount($this->_user);
+        $expectedData = array(
+            'transfer_account_id' => $acc_to->getId(),
+            'account_id' => $acc_from->getId(),
+            'amount' => -10.99,
+            'type'   => 2,
+            'transfer_amount' => null,
+        );
+
+        $xml = $this->getXMLHelper()->make(array_merge($expectedData, array('cid' => 2)));
+
+        $this
+            ->myXMLPost($xml, 200)
+            ->with('response')->begin()
+                ->checkElement('resultset[type="Operation"] record[id][success="true"][cid]', "OK")
+            ->end();
+
+        unset($expectedData['transfer_amount']);
+
+        $this->browser
+            ->with('model')->check('Operation', $expectedData, 1, $foundList);
+
+        // условность - конвертации валют не произошло, т.к. счета созданы в 1ой валюте
+        $this->assertEquals(abs($expectedData['amount']), $foundList['0']->getTransferAmount(), '', 0.01);
+    }
+
+
+    /**
      * Принять: операция-черновик с незаполненными полями
      */
     public function testEmptyFieldsDraftOperation()

@@ -89,7 +89,7 @@ class Operation extends BaseOperation
                     $transferAccount->getCurrencyId()
                 );
 
-            $data['transfer_amount'] = ($rate ? $rate : 1) * $data['amount'];
+            $data['transfer_amount'] = ($rate ? $rate : 1) * abs($data['amount']);
         }
 
         $event->data = $data;
