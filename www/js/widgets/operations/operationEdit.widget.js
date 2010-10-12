@@ -808,13 +808,6 @@ easyFinance.widgets.operationEdit = function(){
 
         $('.week input').removeAttr('checked');
 
-        // сбрасываем параметры повторения операции
-        $('#cal_repeat').val("0").change();
-        $('#cal_rep_every').attr('checked', 'checked');
-        $('#cal_count').val("1");
-        $('.week input').removeAttr('checked');
-        $('#cal_date_end').val("");
-
         // скрываем сообщение об оплате напоминалок
         $("#operationEdit_noReminders").hide();
     }
