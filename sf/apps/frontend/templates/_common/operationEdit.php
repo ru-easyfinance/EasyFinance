@@ -332,14 +332,14 @@
                     <div class="b-col text-right center-input">
                         <div class="b-col-indent">
                             <label for="cal_rep_every">Повторить несколько раз</label>
-                            <input type="radio" checked="checked" rep="1" id="cal_rep_every" name="rep_type" />
+                            <input type="radio" checked="checked" rep="1" id="cal_rep_every" name="rep_type" class="js-reptype-switcher"/>
                         </div>
                     </div>
                     <div class="b-col">
                         <div class="b-col-indent">
                             <div class="b-custom-input b-date">
                                 <div class="b-custom-input-border">
-                                    <input class="b-custom-input-field" type="text" id="cal_count" value="1" maxlength="3" name="count" />
+                                    <input class="b-custom-input-field js-reptype-val" type="text" id="cal_count" value="1" maxlength="3" name="count" />
                                 </div>
                             </div>
                         </div>
@@ -349,14 +349,14 @@
                     <div class="b-col text-right center-input">
                         <div class="b-col-indent">
                             <label for="cal_rep_to">Повторить до даты</label>
-                            <input type="radio" rep="3" id="cal_rep_to" name="rep_type" />
+                            <input type="radio" rep="3" id="cal_rep_to" name="rep_type" class="js-reptype-switcher"/>
                         </div>
                     </div>
                     <div class="b-col">
                         <div class="b-col-indent">
                             <div class="b-custom-input b-date">
                                 <div class="b-custom-input-border">
-                                    <input class="b-custom-input-field" type="text" id="cal_date_end" value="" name="date_end" disabled="disabled" />
+                                    <input class="b-custom-input-field js-reptype-val" type="text" id="cal_date_end" value="" name="date_end" disabled="disabled"/>
                                 </div>
                             </div>
                         </div>

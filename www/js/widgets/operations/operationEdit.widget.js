@@ -334,10 +334,11 @@ easyFinance.widgets.operationEdit = function(){
 
         // переключаемся между режимами повторения
         // по количеству раз или до определённой даты
-        _$blockCalendar.find('.rep_type').click(function(){
-            _$blockCalendar.find('#cal_count,#cal_infinity,#cal_date_end').attr('disabled','disabled');
-            _$blockCalendar.find('.rep_type:checked').closest('div').find('input,select').removeAttr('disabled');
-        });
+        function toggleRepetitionType(evt) {
+            _$blockCalendar.find('input.js-reptype-val').attr('disabled','disabled');
+            $(this).closest('div.b-row').find('input.js-reptype-val').removeAttr('disabled');
+        }
+        _$blockCalendar.find('input.js-reptype-switcher').bind('click', toggleRepetitionType);
     }
 
     // открываем и инициализируем диалог с заданным заголовком и классом
