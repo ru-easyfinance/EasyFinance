@@ -605,7 +605,7 @@ $.widget(widgetName, {
         // console.time("1");
 
         this.wrapper.addClass(this.css.hidden);
-        if(this.selectIsWrapped && (!this.options.manualWidth || this.options.unwrapForCSS)) { // unwrap
+        if(this.selectIsWrapped && (!this.options.manualWidth || this.options.unwrapForCSS) && !$.browser.opera) { // unwrap
             this.wrapper.before(this.selectbox);
             this.selectIsWrapped = false;
         }
