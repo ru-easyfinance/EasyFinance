@@ -3,7 +3,7 @@
 /**
  * Добавляем расходные категории
  */
-class Migration048_Create_Debt_Categories extends myBaseMigration
+class Migration049_Create_Debt_Categories extends myBaseMigration
 {
     /**
      * Up

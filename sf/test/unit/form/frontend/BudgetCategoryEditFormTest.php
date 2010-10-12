@@ -4,7 +4,7 @@ require_once sfConfig::get('sf_root_dir') . '/apps/frontend/lib/form/BudgetCateg
 
 
 /**
- * Форма для создания/редактирования счета с начальным балансом
+ * Форма для создания/редактирования бюджета
  */
 class form_frontend_BudgetCategoryEditFormTest extends myFormTestCase
 {
