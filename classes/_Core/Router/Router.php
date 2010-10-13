@@ -94,7 +94,13 @@ class _Core_Router
 
         $controller = new $this->className( $this->templateEngine, $this->request );
 
-        call_user_func( array( $controller, $this->methodName ), $this->requestRemains );
+        // Svel: добавил редирект, только ему пофигу на GET-POST, будет 404ые генерить
+        if (method_exists($controller, $this->methodName)) {
+            call_user_func( array( $controller, $this->methodName ), $this->requestRemains );
+        } else {
+            _Core_Router::redirect('https://'. URL_ROOT . 'my/' . $uri, true, 404);
+            die();
+        }
 
         unset($controller);
     }

@@ -36,7 +36,7 @@ function get_array_key($arr, $val){
 
 var isChrome = /chrome/.test( navigator.userAgent.toLowerCase() );
 
-var aPath = ['//', '/about/', '/accounts/', '/admin/', '/blog/', '/budget/', '/calendar/', '/category/', '/experts/', '/feedback/', '/forum/', '/info/', '/login/', '/logout/', '/mail/', '/operation/', '/periodic/', '/profile/', '/registration/', '/report/', '/review/', '/rules/', '/security/', '/start/', '/tags/', '/targets/', '/welcome/', '/template/', '/my/']; //данный контроллер можно использовать как системный))
+var aPath = ['//', '/about/', '/accounts/', '/admin/', '/blog/', '/budget/', '/calendar/', '/category/', '/experts/', '/feedback/', '/forum/', '/info/', '/login/', '/logout/', '/mail/', '/operation/', '/periodic/', '/my/profile/', '/registration/', '/report/', '/review/', '/rules/', '/security/', '/start/', '/tags/', '/targets/', '/welcome/', '/template/', '/my/']; //данный контроллер можно использовать как системный))
 
 href = location.pathname;
 href = href.toLowerCase() + '/';
@@ -59,7 +59,7 @@ var pathtoid = {
     '/mail/': 'm0',
     '/operation/': 'm2',
     '/periodic/': 'm5',
-    '/profile/': 'm1',
+    '/my/profile/': 'm1',
     '/targets/': 'm3',
     '/report/': 'm4'
 };
@@ -550,3 +550,4 @@ $(document).ready(function(){
         }
     });
 });
+

@@ -32,68 +32,6 @@ class Profile_Controller extends _Core_Controller_UserCommon
 
 
     /**
-     * @deprecated
-     * @see profileActions::executeIndex
-     */
-    function index()
-    {
-        trigger_error('Deprecated: use profileActions::executeIndex', E_USER_WARNING);
-        $this->addToRes('profile', array(
-            'integration' => array(
-                'email'   => str_replace('@mail.easyfinance.ru', '', $this->_user->getUserProps('user_service_mail')),
-            ),
-        ));
-    }
-
-
-    /**
-     * @deprecated
-     * @see profileActions
-     * отдаёт логин имя мыло
-     * return void;
-     */
-    function load_main_settings(){
-        trigger_error('Deprecated: use profileActions', E_USER_WARNING);
-        die($this->model->mainsettings('load'));
-    }
-
-
-    /**
-     * @deprecated
-     * @see profileActions::executeSave
-     */
-    function save_main_settings(){
-        trigger_error('Deprecated: use profileActions::executeSave', E_USER_WARNING);
-        $prop = array();
-        $prop['user_pass']   = $_POST['pass'];
-        //$prop['user_name'] = htmlspecialchars($_POST['name']);
-        $prop['user_mail']   = $_POST['mail'];
-        $prop['newpass']     = $_POST['newpass'];
-        $prop['getNotify']   = ((bool)$_POST['getNotify'])? 1: 0;
-        $prop['guide']       = $_POST['guide'];
-
-        if (!empty($_POST['mailIntegration'])) {
-            $mail = $_POST['mailIntegration'] . "@mail.easyfinance.ru";
-            if (Helper_Mail::validateEmail($mail)) {
-                if ($this->model->checkServiceEmailIsUnique($mail)) {
-                    $prop['user_service_mail'] = $mail;
-                } else {
-                    $this->renderJsonError("Такой адрес уже существует.\nПожалуйста, выберите другой адрес.");
-                }
-            } else {
-                $this->renderJsonError("В названии ящика есть недопустимые символы.\n".
-                    "Постарайтесь задать почту латинскими буквами, цифрами, без пробелов или других непонятных знаков.");
-            }
-        } else {
-            $prop['user_service_mail'] = '';
-        }
-
-        $this->model->mainsettings('save',$prop);
-        $this->renderJsonSuccess("Данные успешно сохранены");
-    }
-
-
-    /**
      * @deprecated - вообще пора внедрять новый алгоритм валют
      */
     function load_currency(){
@@ -112,37 +50,6 @@ class Profile_Controller extends _Core_Controller_UserCommon
         die($this->model->currency('save', $prop));
     }
 
-
-    function save_reminders(){
-        // заглушка для #1492
-
-        $ret = array(
-            "result" => array(
-                "text" => "Настройки напоминаний сохранены"
-            ),
-            "reminders" => array(
-                "mailAvailable" => true, // подключена ли услуга
-                "mailDefaultEnabled" => true, // уведомление для новых событий
-                "mailHour" => "23",
-                "mailMinutes" => "45",
-
-                "smsAvailable" => true, // подключена ли услуга
-                "smsDefaultEnabled" => true, // уведомление для новых событий
-                "smsHour" => "10",
-                "smsMinutes" => "15"
-            )
-        );
-
-        die(json_encode($ret));
-    }
-
-
-    /**
-     * @deprecated
-     */
-    function cook(){
-        die($this->model->cook());
-    }
 
     /**
      * Генерируем служебную почту (если она не была сгенерирована)
