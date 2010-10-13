@@ -39,15 +39,17 @@ _Suggest = {
                     $('.b-custom-select-trigger', input).trigger('click');
                 };
 
-            el.unbind().keyup(function() {
+            el.bind('keyup', function() {
                 self.onKeyUp(list.listWrapper, input);
-            }).focus(function() {
-                focus();
-            }).blur(function() {
-                $(this).unbind('focus').focus(function() {
-                    focus();
-                });
             });
+
+            el.unbind('focus blur click');
+
+            el.bind('focus', focus);
+            el.bind('blur', function() {
+                el.unbind('focus', focus).bind('focus', focus); // freakin' magic для оперы
+            })
+
         });
 
         // Проверка ушел ли фокус с ufd инпутов, если да то убираем дропдауны
