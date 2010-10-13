@@ -50,6 +50,14 @@ class form_frontend_BudgetCategoryEditFormTest extends myFormTestCase
 
 
     /**
+     * Перекрыл sfPHPUnitFormTestCase::testAutoFields т.к. у нас нет виджетов
+     */
+    public function testAutoFields()
+    {
+    }
+
+
+    /**
      * План тестирования ошибок валидации
      */
     protected function getValidationTestingPlan()
@@ -88,7 +96,7 @@ class form_frontend_BudgetCategoryEditFormTest extends myFormTestCase
      * Редактируем счет с начальным балансом
      * Балансовой операции нет
      */
-    public function testValudData()
+    public function testValidData()
     {
         $input = $this->getValidInput();
 

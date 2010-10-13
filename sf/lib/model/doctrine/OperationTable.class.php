@@ -70,18 +70,16 @@ class OperationTable extends Doctrine_Table
     public function getMeanByCategory(User $user, $date, $monthCount = 3)
     {
         $monthCount = (int) $monthCount ? (int) $monthCount : 3 ;
+        $rate = sfContext::getInstance()
+            ->getMyCurrencyExchange()->getRate($user->getCurrencyId());
+
         $alias = 'foo';
-        $query = $this->createQuery("{$alias}")
-            ->select("category_id, sum(amount*cu.rate)/$monthCount AS mean")
-            ->innerJoin("{$alias}.Category c")
-            ->innerJoin("{$alias}.Account a")
-            ->innerJoin("{$alias}.Account.Currency cu")
-            ->where("{$alias}.date >= ADDDATE('$date',
+
+        $query = $this->querySumByCategory($user, $alias)
+            ->select("category_id, sum(amount*cu.rate/$rate)/$monthCount AS mean")
+            ->andWhere("{$alias}.date >= ADDDATE('$date',
                 INTERVAL -$monthCount MONTH)")
-            ->andWhere("{$alias}.date <= '$date'")
-            ->andWhere("{$alias}.user_id = ?", $user->getId())
-            ->andWhere("{$alias}.accepted = 1")
-            ->groupBy("{$alias}.category_id");
+            ->andWhere("{$alias}.date <= '$date'");
 
         $data = $query->execute(array(), 'FetchPair');
 
@@ -93,26 +91,44 @@ class OperationTable extends Doctrine_Table
      *
      * @param  sfUser $user
      * @param  string $date дата начала месяца
-     * @param  string $monthCount
      * @return array
      */
     public function getFactByCategory(User $user, $date)
     {
         $alias = 'foo';
-        $query = $this->createQuery("{$alias}")
-            ->select("category_id, sum(amount*cu.rate) AS fact")
-            ->innerJoin("{$alias}.Category c")
-            ->innerJoin("{$alias}.Account a")
-            ->innerJoin("{$alias}.Account.Currency cu")
-            ->where("{$alias}.date >= ?", $date)
-            ->andWhere("{$alias}.date <= LAST_DAY('$date')")
-            ->andWhere("{$alias}.user_id = ?", $user->getId())
-            ->andWhere("{$alias}.accepted = 1")
-            ->groupBy("{$alias}.category_id");
+
+        $query = $this->querySumByCategory($user, $alias)
+            ->andWhere("{$alias}.date >= ?", $date)
+            ->andWhere("{$alias}.date <= LAST_DAY('$date')");
 
         $data = $query->execute(array(), 'FetchPair');
 
         return $data;
+    }
+
+
+    /**
+     * Посчитать фактический расход по категориям
+     *
+     * @param  sfUser $user
+     * @param  string $alias
+     * @return Doctrine_Query
+     */
+    public function querySumByCategory(User $user, $alias = 'o')
+    {
+        $rate = sfContext::getInstance()
+            ->getMyCurrencyExchange()->getRate($user->getCurrencyId());
+
+        $query = $this->createQuery("{$alias}")
+            ->select("category_id, sum(amount*cu.rate/$rate) AS fact")
+            ->innerJoin("{$alias}.Category c")
+            ->innerJoin("{$alias}.Account a")
+            ->innerJoin("{$alias}.Account.Currency cu")
+            ->where("{$alias}.user_id = ?", $user->getId())
+            ->andWhere("{$alias}.accepted = 1")
+            ->groupBy("{$alias}.category_id");
+
+        return $query;
     }
 
 

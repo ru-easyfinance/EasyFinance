@@ -385,32 +385,67 @@ class model_OperationTableTest extends myUnitTestCase
         $this->assertEquals(2, $result);
     }
 
+
+    /**
+     * Данные для тестов getSumByCategory
+     *
+     * @param User $user
+     * @return float сумма по добавленным операциям с учётом валюты
+     */
+    private function makeFixturesForGetSumByCategory(User $user)
+    {
+        $defaultCurrancy = myMoney::EUR;
+
+        $user->setCurrencyId($defaultCurrancy);
+
+        $category = $this->helper->makeCategory($user);
+        $exchange = $this->getContext()->getMyCurrencyExchange();
+
+        $expected = 0;
+
+        foreach (array(myMoney::RUR, myMoney::USD, myMoney::EUR) as $currency) {
+            $amount  = 100;
+            $rate    = $exchange->getRate($currency, $defaultCurrancy);
+
+            $account = $this->helper->makeAccount(
+                $user,
+                array('currency_id' => $currency)
+            );
+            $this->helper->makeOperation(
+                $account,
+                array(
+                    'amount' => $amount,
+                    'date'   => date('Y-m-d'),
+                    'category_id' => $category->getId()
+                )
+            );
+
+            $expected += $amount * $rate;
+        }
+
+        return $expected;
+    }
+
+
     /**
      * Считаем средний расход за 3 месяца по категориям
      */
     public function testGetMeanByCategory()
     {
-        $account = $this->helper->makeAccount();
-        $category = $this->helper->makeCategory($account->getUser());
-
-        $amount = 300;
+        $user = $this->helper->makeUser();
+        $expected = $this->makeFixturesForGetSumByCategory($user);
         $monthCount = 3;
-        $op1 = $this->helper->makeOperation($account, array(
-            'amount' => $amount,
-            'date'   => date('Y-m-d', time() - ONE_DAY_SECONDS * 60),
-            'category_id' => $category->getId()
-        ));
-
-        $op1 = $this->helper->makeOperation($account, array(
-            'amount' => $amount,
-            'date'   => date('Y-m-d', time() - ONE_DAY_SECONDS * 61),
-            'category_id' => $category->getId()
-        ));
+        $expected = $expected / $monthCount;
 
         $result = Doctrine::getTable("Operation")
-            ->getMeanByCategory($account->getUser(), date('Y-m-d'), $monthCount);
+            ->getMeanByCategory($user, date('Y-m-d'), 3);
 
-        $this->assertEquals(2 * $amount / $monthCount, array_pop($result));
+        $this->assertEquals(
+            $expected,
+            array_pop($result),
+            'Средний расход с учётом валют',
+            $expected * 0.01
+        );
     }
 
     /**
@@ -418,27 +453,18 @@ class model_OperationTableTest extends myUnitTestCase
      */
     public function testGetFactByCategory()
     {
-        $account = $this->helper->makeAccount();
-        $category = $this->helper->makeCategory($account->getUser());
-
-        $amount = 300;
-        $monthCount = 3;
-        $op1 = $this->helper->makeOperation($account, array(
-            'amount' => $amount,
-            'date'   => date('Y-m-d'),
-            'category_id' => $category->getId()
-        ));
-
-        $op1 = $this->helper->makeOperation($account, array(
-            'amount' => $amount,
-            'date'   => date('Y-m-d'),
-            'category_id' => $category->getId()
-        ));
+        $user = $this->helper->makeUser();
+        $expected = $this->makeFixturesForGetSumByCategory($user);
 
         $result = Doctrine::getTable("Operation")
-            ->getFactByCategory($account->getUser(), date('Y-m-d'));
+            ->getFactByCategory($user, date('Y-m-d'));
 
-        $this->assertEquals(2 * $amount, array_pop($result));
+        $this->assertEquals(
+            $expected,
+            array_pop($result),
+            'Фактический расход с учётом валют',
+            $expected * 0.01
+        );
     }
 
 }
