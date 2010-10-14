@@ -200,7 +200,7 @@ easyFinance.widgets.report = function(){
         var tr = '';
         for (var key in data[0]) {
             if (key > 0) {
-                if (data[0][key].cat_name != data[0][key - 1].cat_name && data[0][key].account_name != null) {
+                if (data[0][key].cat_name != data[0][key - 1].cat_name) {
                     tr +=
                         '<tr><th>' +
                         data[0][key].cat_name +
@@ -212,22 +212,21 @@ easyFinance.widgets.report = function(){
                 tr += '<tr><th>' + data[0][0].cat_name +
                 '</th><td></td><td></td><td></td></tr>';
             }
-            if (data[0][key].account_name != null) {
-                tr += "<tr>" +
-                '<th>&nbsp;</th>' +
-                '<td><span>' +
-                data[0][key].date +
-                '</span></td>' +
-                '<td class="light"><span>' +
-                data[0][key].account_name +
-                '</span></td>' +
-                '<td class="' +
-                (type == 'profit' ? 'sumGreen' : 'sumRed') +
-                '"><span>' +
-                formatCurrency(data[0][key].money) +
-                '</span></td>' +
-                '</tr>';
-            }
+            
+            tr += "<tr>" +
+            '<th>&nbsp;</th>' +
+            '<td><span>' +
+            data[0][key].date +
+            '</span></td>' +
+            '<td class="light"><span>' +
+            data[0][key].account_name +
+            '</span></td>' +
+            '<td class="' +
+            (type == 'profit' ? 'sumGreen' : 'sumRed') +
+            '"><span>' +
+            formatCurrency(data[0][key].money) +
+            '</span></td>' +
+            '</tr>';
         }
 
         $('table.js-reports-body tbody.js-comparereport').html('');
