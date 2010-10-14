@@ -196,42 +196,118 @@ easyFinance.widgets.report = function(){
         showReports('graphs');
     }
 
-    function ShowDetailed(data, type){
-        var tr = '';
-        for (var key in data[0]) {
-            if (key > 0) {
-                if (data[0][key].cat_name != data[0][key - 1].cat_name) {
-                    tr +=
-                        '<tr><th>' +
-                        data[0][key].cat_name +
-                        '</th>\n\
-                        <td></td><td></td><td></td></tr>';
-                }
-            }
-            else {
-                tr += '<tr><th>' + data[0][0].cat_name +
-                '</th><td></td><td></td><td></td></tr>';
-            }
-            
-            tr += "<tr>" +
-            '<th>&nbsp;</th>' +
-            '<td>' +
-            data[0][key].date +
-            '</td>' +
-            '<td>' +
-            data[0][key].account_name +
-            '</td>' +
-            '<td class="' +
+    function CreateDetailedRow(parentCategoryName, categoryName, date, accountName, type, money)
+    {
+    	var row = 
+        	'<tr><th>' +
+        	parentCategoryName +
+            '</th><td>' + 
+            categoryName + 
+            '</td><td>' +
+            date + 
+            '</td><td>' +
+            accountName + 
+            '</td><td class="' +
             (type == 'profit' ? 'sumGreen' : 'sumRed') +
             '">' +
-            formatCurrency(data[0][key].money) +
-            '</td>' +
-            '</tr>';
+            formatCurrency(money) + 
+            '</td></tr>';
+    	
+    	return row;
+    }
+    
+    function ShowDetailed(data, type){
 
-        }
+        var tableContent = '';
+        var totalSum = 0;
+        
+        //TODO: если эта хрень окажется нужной в новых отчетах и доживет до рефакторинга,
+        // нужно грамотному JS'еру переделать ее на нормальный рекурсивный обход дерева, чтобы убрать явную обработку 
+        // стоп-случаев смены категорий и родительских
+        // например, сделать так: 
+        // ПоРодительскимКатегориям {ПоКатегориям {ПоОперациям; ИтогПоКатегории}; ИтогПоРодительскойКатегории}
+    	
+        var categorySum = 0;
+        var categoryContent = '';
+        var categoryName;
+        var categoryId = null;
+    	
+        var parentCategorySum = 0;
+        var parentCategoryContent = '';
+        var parentCategoryName;
+        var parentCategoryId = null;
+        
+        var tableData = data[0];
+        
+        if (tableData.length > 0)
+        {
+        	for (var key in data[0]) {
+        	
+	        	var currentCategoryId = tableData[key].category_id;
+	        	var currentParentCategoryId = tableData[key].parent_category_id;
+	        	var currentCategoryName = tableData[key].cat_name;
+	        	var currentParentCategoryName = tableData[key].parent_cat_name;
+	        	var currentDate = tableData[key].date;
+	        	var currentAccountName = tableData[key].account_name;
+	        	var currentMoney = tableData[key].money;       	
+	        	
+	
+	        	//Если сменилась дочерняя категория, занесем ее в родительскую
+	        	if (currentCategoryId != categoryId) {
+	        		
+	        		//проверяем, что какая-то предыдущая категория есть, т.е. мы не в начале массива
+	        		if(categoryId != null) {
+	        			parentCategoryContent += CreateDetailedRow('', categoryName, '', '', type, categorySum) +
+		                    categoryContent;
+	        		}
+	        		categoryName = currentCategoryName;
+	        		categoryId = currentCategoryId;
+	
+	        		categoryContent = '';
+	        		categorySum = 0;
+	            } 	
+	        	
+	        	//Если сменилась родительская категория, занесем ее в общий результат
+	        	if (currentParentCategoryId != parentCategoryId) {
+	        		
+	        		//проверяем, что есть предыдущая родительская категория, и тогда выводим все данные по ней
+	        		if(parentCategoryId != null) {
+	        			tableContent += CreateDetailedRow(parentCategoryName, '', '', '', type, parentCategorySum) +
+	        			parentCategoryContent;
+	        		}
+	        		parentCategoryId = currentParentCategoryId;
+	        		parentCategoryName = currentParentCategoryName;
+	        		
+	        		parentCategoryContent = '';
+	        		parentCategorySum = 0;
+	        		
+	        		//сбросим categoryId при нахождении новой родительской
+	        		//categoryId = null;
+	            }
+	        	
+	        	categorySum += currentMoney;
+        		parentCategorySum += currentMoney;
+        		totalSum += currentMoney;
+	           
+	        	categoryContent += CreateDetailedRow('', '', currentDate, currentAccountName, type, currentMoney);
+	        }
+
+			//сформируем строку итоговой суммы для повторного использования
+			var totalRow = CreateDetailedRow('Всего', '', '', '', type, totalSum);
+        	
+			//выведем итоговую сумму и хвостовые категории, которые не вывели в самом теле for 
+			tableContent = 
+				totalRow +
+				tableContent +
+				CreateDetailedRow(parentCategoryName, '', '', '', type, parentCategorySum) +
+				parentCategoryContent +
+				CreateDetailedRow('', categoryName, '', '', type, categorySum) +
+                categoryContent +				
+				totalRow;			
+		}
 
         $('table.js-reports-body tbody.js-comparereport').html('');
-        $('table.js-reports-body tbody.js-detailreport').html(tr);
+        $('table.js-reports-body tbody.js-detailreport').html(tableContent);
 
         showReports('tables');
         showReportTables('detail');

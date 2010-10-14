@@ -234,6 +234,9 @@ class Report_Model
 
         $sql = "SELECT
                     c.cat_name,
+                    CASE WHEN c_parent.cat_id IS NULL THEN c.cat_name ELSE c_parent.cat_name END AS parent_cat_name,
+                    c.cat_id AS category_id,
+                    CASE WHEN c_parent.cat_id IS NULL THEN c.cat_id ELSE c_parent.cat_id END AS parent_category_id,
                     op.`date`,
                     a.account_name,
                     op.money,
@@ -243,6 +246,8 @@ class Report_Model
                     ON a.account_id=op.account_id
                 INNER JOIN category c
                     ON c.cat_id=op.cat_id
+                LEFT JOIN category c_parent
+                	ON c.cat_parent = c_parent.cat_id
                 INNER JOIN currency cur
                     ON cur.cur_id = a.account_currency_id
                 WHERE
@@ -253,9 +258,10 @@ class Report_Model
                     AND c.cat_name <> ''
                     AND a.deleted_at IS NULL
                     AND c.deleted_at IS NULL
+                    AND c_parent.deleted_at IS NULL
                     AND a.account_id IN({$accounts})
                     AND op.`type` = ?
-                ORDER BY c.cat_name, op.date";
+                ORDER BY parent_cat_name, c.cat_name, op.date";
 
             $result = $this->_db->query($sql, $this->_user->getId(), $date1, $date2, $type);
 
