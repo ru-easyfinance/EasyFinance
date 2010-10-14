@@ -28,7 +28,7 @@ class Budget_Controller extends _Core_Controller_UserCommon
      * @param $args array mixed
      * @return void
      */
-    function index($args)
+    function index_deprecated($args)
     {
         $this->tpl->assign('name_page', 'budget/budget');
 

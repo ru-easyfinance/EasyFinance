@@ -36,7 +36,7 @@ function get_array_key($arr, $val){
 
 var isChrome = /chrome/.test( navigator.userAgent.toLowerCase() );
 
-var aPath = ['//', '/about/', '/accounts/', '/admin/', '/blog/', '/budget/', '/calendar/', '/category/', '/experts/', '/feedback/', '/forum/', '/info/', '/login/', '/logout/', '/mail/', '/operation/', '/periodic/', '/my/profile/', '/registration/', '/report/', '/review/', '/rules/', '/security/', '/start/', '/tags/', '/targets/', '/welcome/', '/template/', '/my/']; //данный контроллер можно использовать как системный))
+var aPath = ['//', '/about/', '/accounts/', '/admin/', '/blog/', '/my/budget/', '/calendar/', '/category/', '/experts/', '/feedback/', '/forum/', '/info/', '/login/', '/logout/', '/mail/', '/operation/', '/periodic/', '/my/profile/', '/registration/', '/report/', '/review/', '/rules/', '/security/', '/start/', '/tags/', '/targets/', '/welcome/', '/template/', '/my/']; //данный контроллер можно использовать как системный))
 
 href = location.pathname;
 href = href.toLowerCase() + '/';
@@ -51,7 +51,7 @@ var Connected_functional = {
 var isIframe = false;
 var pathtoid = {
     '/accounts/': 'm2',
-    '/budget/': 'm3',
+    '/my/budget/': 'm3',
     '/calendar/': 'm5',
     '/category/': 'm2',
     '/experts/': 'm6',

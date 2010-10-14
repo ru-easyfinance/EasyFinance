@@ -20,9 +20,9 @@
             </ul>
         </li>
         <li id="m3">
-            <a href="/budget/" class="top-level"></a>
+            <a href="/my/budget/" class="top-level"></a>
             <ul class="dd-sub">
-                <li><span class="spacer"></span><a href="/budget/">Бюджет</a></li>
+                <li><span class="spacer"></span><a href="/my/budget/">Бюджет</a></li>
                 <li><span class="spacer"></span><a href="/targets/">Фин. цели</a></li>
                 <li class="last"></li>
             </ul>
