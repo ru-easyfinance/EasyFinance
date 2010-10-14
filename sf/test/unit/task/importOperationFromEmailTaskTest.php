@@ -104,7 +104,7 @@ class task_importOperationFromEmailTaskTest extends myUnitTestCase
         // Залезть в БД и проверть операцию
         $expected = array(
             'user_id'   => $user->getId(),
-            'amount'    => abs((float) $this->_amount),
+            'amount'    => abs((float) $this->_amount) * -1,
             'type'      => Operation::TYPE_EXPENSE,
             'accepted'  => Operation::STATUS_DRAFT,
         );
@@ -135,7 +135,7 @@ class task_importOperationFromEmailTaskTest extends myUnitTestCase
         // Залезть в БД и проверть операцию
         $expected = array(
             'user_id'   => $user->getId(),
-            'amount'     => abs((float) $this->_amount),
+            'amount'    => abs((float) $this->_amount) * -1,
             'type'      => Operation::TYPE_EXPENSE,
             'accepted'  => Operation::STATUS_DRAFT,
         );

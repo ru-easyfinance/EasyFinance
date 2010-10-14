@@ -38,6 +38,27 @@ class Operation extends BaseOperation
     }
 
 
+    /**
+     * Конвертирует сумму перевода в нужную валюту автоматом
+     */
+    protected function convertAmounts($data)
+    {
+        $table = Doctrine::getTable('Account');
+        $account         = $table->findOneById($data['account_id']);
+        $transferAccount = $table->findOneById($data['transfer_account_id']);
+
+        $rate = sfContext::getInstance()->getMyCurrencyExchange()
+            ->getRate(
+                $account->getCurrencyId(),
+                $transferAccount->getCurrencyId()
+            );
+
+        $data['transfer_amount'] = ($rate ? $rate : 1) * abs($data['amount']);
+
+        return $data;
+    }
+
+
     public function preSave($event)
     {
         if ($this->getType() == self::TYPE_BALANCE) {
@@ -59,6 +80,24 @@ class Operation extends BaseOperation
         if (!$this->getAccountId()) {
             $this->setAccepted(0);
         }
+
+        // надоело уже руками править по формам, у трансферной операции
+        // сумма из счета - отрицательна, на счет - положительна
+        // TODO: есть исключения
+        if ($this->getType() == self::TYPE_TRANSFER) {
+            $this->amount = abs($this->getAmount()) * -1;
+            if (!$this->transfer_amount) {
+                $this->convertAmounts($this);
+            }
+        }
+
+        if ($this->getType() == self::TYPE_PROFIT) {
+            $this['amount'] = abs($this['amount']);
+        }
+
+        if ($this->getType() == self::TYPE_EXPENSE) {
+            $this['amount'] = abs($this['amount']) * -1;
+        }
     }
 
     /**
@@ -72,24 +111,15 @@ class Operation extends BaseOperation
 
         if (
             isset($data['type'])
-            && $data['type'] == self::TYPE_TRANSFER
-            && $data['transfer_amount'] == 0
+            && ($data['type'] == self::TYPE_TRANSFER)
+            && ($data['transfer_amount'] == 0)
             && isset($data['amount'])
+            && (abs($data['amount']) != 0)
             && isset($data['account_id'])
             && isset($data['transfer_account_id'])
         ) {
-            $account = Doctrine::getTable('Account')
-                ->findOneById($data['account_id']);
-            $transferAccount = Doctrine::getTable('Account')
-                ->findOneById($data['transfer_account_id']);
-
-            $rate = sfContext::getInstance()->getMyCurrencyExchange()
-                ->getRate(
-                    $account->getCurrencyId(),
-                    $transferAccount->getCurrencyId()
-                );
-
-            $data['transfer_amount'] = ($rate ? $rate : 1) * abs($data['amount']);
+            $data['amount'] = abs($data['amount']) * -1;
+            $data = $this->convertAmounts($data);
         }
 
         $event->data = $data;

@@ -121,16 +121,10 @@ class api_sync_OutOperationTest extends myFunctionalTestCase
         $op1Record = "record[id=\"{$op1->getId()}\"]";
         $op2Record = "record[id=\"{$op2->getId()}\"]";
 
-        // проверим, что в БД попала пустая сумма
-        $result = $this->getConnection()->getDbh()
-            ->query("SELECT o.transfer_amount FROM operation o WHERE o.id = '{$op1->getId()}' OR o.id = '{$op2->getId()}'")
-            ->fetchAll(PDO::FETCH_ASSOC);
-        $this->assertEmpty($result[0]['transfer_amount']);
-        $this->assertEmpty($result[1]['transfer_amount']);
-
+        // проверим, что в БД попала уже не пустая сумма
+        // при гидрации тоже не пустая
         $op1->refresh(false);
         $op2->refresh(false);
-        // при гидрации уже не пустая
         $this->assertNotEmpty($op1->getTransferAmount());
         $this->assertNotEmpty($op2->getTransferAmount());
 

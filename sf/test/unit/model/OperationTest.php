@@ -41,6 +41,7 @@ class model_OperationTest extends myUnitTestCase
             'account_id'  => $account->getId(),
             'category_id' => $this->helper->makeCategory($user)->getId(),
             'amount'      => 1234.56,
+            'type'        => Operation::TYPE_PROFIT,
         );
         $this->checkModelDeclaration('Operation', $data, $isTimestampable = true);
     }
@@ -147,10 +148,10 @@ class model_OperationTest extends myUnitTestCase
             ->getRate(myMoney::RUR, myMoney::USD);
 
         $this->assertEquals(
-            $rate * $hydratedOperation->getAmount(),
-            $hydratedOperation->getTransferAmount(),
+            abs(floor($rate * $hydratedOperation->getAmount() * 100) / 100),
+            abs($hydratedOperation->getTransferAmount()),
             'transfer_amount должен вычисляться, если он 0',
-            $hydratedOperation->getTransferAmount() * 0.01
+            0.01
         );
     }
 
