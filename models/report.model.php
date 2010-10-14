@@ -255,7 +255,7 @@ class Report_Model
                     AND c.deleted_at IS NULL
                     AND a.account_id IN({$accounts})
                     AND op.`type` = ?
-                ORDER BY c.cat_name";
+                ORDER BY c.cat_name, op.date";
 
             $result = $this->_db->query($sql, $this->_user->getId(), $date1, $date2, $type);
 
