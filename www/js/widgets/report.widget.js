@@ -66,10 +66,10 @@ easyFinance.widgets.report = function(){
                     ShowCompareGraph(data, currencyId);
                     break;
                 case "txt_profit":
-                    ShowDetailedIncome(data, currencyId);
+                    ShowDetailed(data, currencyId);
                     break;
                 case "txt_loss":
-                    ShowDetailedWaste(data, currencyId);
+                    ShowDetailed(data, currencyId);
                     break;
                 case "txt_loss_difference":
                     ShowCompareWaste(data, currencyId);
@@ -196,7 +196,7 @@ easyFinance.widgets.report = function(){
         showReports('graphs');
     }
 
-    function ShowDetailedIncome(data, currencyId){
+    function ShowDetailed(data, currencyId){
         var tr = '';
         for (var key in data[0]) {
             if (key > 0) {
@@ -236,46 +236,6 @@ easyFinance.widgets.report = function(){
         showReports('tables');
         showReportTables('detail');
     }
-
-    function ShowDetailedWaste(data, currencyId){
-        var tr = '';
-
-        for (var key in data[0]) {
-            if (key > 0) {
-                if (data[0][key].cat_name != data[0][key - 1].cat_name && data[0][key].account_name != null) {
-                    tr += '<tr><th>' + data[0][key].cat_name +
-                    '</th><td></td><td></td><td></td></tr>';
-                }
-            }
-            else {
-                tr += '<tr><th>' + data[0][0].cat_name +
-                '</th><td></td><td></td><td></td></tr>';
-            }
-
-            if (data[0][key].cat_name != null && data[0][key].account_name != null) {
-                tr += "<tr>" +
-                '<th>&nbsp;</th>' +
-                '<td class="repdate"><span>' +
-                data[0][key].date +
-                '</span></td>' +
-                '<td class="repname"><span>' +
-                data[0][key].account_name +
-                '</span></td>' +
-                '<td class="' +
-                (data[0][key].money >= 0 ? 'sumGreen' : 'sumRed') +
-                '"><span>' +
-                formatCurrency(data[0][key].money) +
-                '</span></td>' +
-                '</tr>';
-            }
-        }
-        $('table.js-reports-body tbody.js-comparereport').html('');
-        $('table.js-reports-body tbody.js-detailreport').html(tr);
-
-        showReports('tables');
-        showReportTables('detail');
-    }
-
 
     function ShowCompareWaste(data, currencyId){
         var tr = '';
