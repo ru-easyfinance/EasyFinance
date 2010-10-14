@@ -215,18 +215,19 @@ easyFinance.widgets.report = function(){
             
             tr += "<tr>" +
             '<th>&nbsp;</th>' +
-            '<td><span>' +
+            '<td>' +
             data[0][key].date +
-            '</span></td>' +
-            '<td class="light"><span>' +
+            '</td>' +
+            '<td>' +
             data[0][key].account_name +
-            '</span></td>' +
+            '</td>' +
             '<td class="' +
             (type == 'profit' ? 'sumGreen' : 'sumRed') +
-            '"><span>' +
+            '">' +
             formatCurrency(data[0][key].money) +
-            '</span></td>' +
+            '</td>' +
             '</tr>';
+
         }
 
         $('table.js-reports-body tbody.js-comparereport').html('');
