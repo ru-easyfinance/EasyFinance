@@ -66,10 +66,10 @@ easyFinance.widgets.report = function(){
                     ShowCompareGraph(data, currencyId);
                     break;
                 case "txt_profit":
-                    ShowDetailed(data, currencyId);
+                    ShowDetailed(data, 'profit');
                     break;
                 case "txt_loss":
-                    ShowDetailed(data, currencyId);
+                    ShowDetailed(data, 'drain');
                     break;
                 case "txt_loss_difference":
                     ShowCompareWaste(data, currencyId);
@@ -196,7 +196,7 @@ easyFinance.widgets.report = function(){
         showReports('graphs');
     }
 
-    function ShowDetailed(data, currencyId){
+    function ShowDetailed(data, type){
         var tr = '';
         for (var key in data[0]) {
             if (key > 0) {
@@ -222,7 +222,7 @@ easyFinance.widgets.report = function(){
                 data[0][key].account_name +
                 '</span></td>' +
                 '<td class="' +
-                (data[0][key].money >= 0 ? 'sumGreen' : 'sumRed') +
+                (type == 'profit' ? 'sumGreen' : 'sumRed') +
                 '"><span>' +
                 formatCurrency(data[0][key].money) +
                 '</span></td>' +
