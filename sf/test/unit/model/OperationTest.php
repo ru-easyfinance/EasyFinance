@@ -133,7 +133,7 @@ class model_OperationTest extends myUnitTestCase
         $operation       = $this->helper->makeOperation(
             $account,
             array(
-                'amount'              => -123,
+                'amount'              => 123,
                 'type'                => Operation::TYPE_TRANSFER,
                 'transfer_amount'     => 0,
                 'transfer_account_id' => $transferAccount->getId()
@@ -147,20 +147,9 @@ class model_OperationTest extends myUnitTestCase
             ->getRate(myMoney::RUR, myMoney::USD);
 
         $this->assertEquals(
-            - $rate * $hydratedOperation->getAmount(),
+            $rate * $hydratedOperation->getAmount(),
             $hydratedOperation->getTransferAmount(),
             'transfer_amount должен вычисляться, если он 0',
-            $hydratedOperation->getTransferAmount() * 0.01
-        );
-
-        list($row) = $this->getConnection()
-            ->select('SELECT * FROM operation WHERE id = ' . $operation->getId(), 1)
-            ->fetchAll(Doctrine::FETCH_ASSOC);
-
-        $this->assertEquals(
-            $hydratedOperation->getTransferAmount(),
-            $row['transfer_amount'],
-            'transfer_amount должен сохраняться в БД',
             $hydratedOperation->getTransferAmount() * 0.01
         );
     }

@@ -83,21 +83,13 @@ class Operation extends BaseOperation
             $transferAccount = Doctrine::getTable('Account')
                 ->findOneById($data['transfer_account_id']);
 
-            $rate = ($account && $transferAccount) ?
-                sfContext::getInstance()->getMyCurrencyExchange()
+            $rate = sfContext::getInstance()->getMyCurrencyExchange()
                 ->getRate(
                     $account->getCurrencyId(),
                     $transferAccount->getCurrencyId()
-                ) :
-                1 ;
+                );
 
-            $data['transfer_amount'] =
-                ($rate ? $rate : 1) * abs($data['amount']);
-
-            $this->getTable()->setData(array('id' => $data['id']));
-            $operation = $this->getTable()->getRecord();
-            $operation->setTransferAmount($data['transfer_amount']);
-            $operation->save();
+            $data['transfer_amount'] = ($rate ? $rate : 1) * abs($data['amount']);
         }
 
         $event->data = $data;
