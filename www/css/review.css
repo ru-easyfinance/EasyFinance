@@ -1,0 +1,212 @@
+.b-review {
+    width: 900px;
+    margin: auto;
+}
+    .b-review .b-review-title {
+        margin: .5em auto 1em;
+        text-align: center;
+    }
+        .b-review-title .b-review-help {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            background: url('/img/i/menu3/icons.png') 0 0;
+            vertical-align: middle;
+        }
+
+    .b-review .w-review-picture {
+        position: relative;
+        height: 906px;
+        margin: auto;
+        background: url('/img/i/review/review-circle.png') no-repeat center center;
+    }
+        .w-review-picture .b-review-clip {
+            position: absolute;
+            height: 192px;
+        }
+            .b-review-clip .b-review-clip-point {
+                position: absolute;
+                width: 283px;
+                height: 40px;
+                background: url('/img/i/review/review-points.png') no-repeat;
+            }
+            .b-review-clip .b-review-clip-preview {
+                position: absolute;
+                width: 196px;
+                height: 140px;
+                background: url('/img/i/review/review-frames.png') no-repeat;
+                cursor: pointer;
+            }
+                .b-review-clip-preview .b-clip-thumb {
+                    position: absolute;
+                    display: block;
+                    top: 5px;
+                    left: 5px;
+                    width: 183px;
+                    height: 126px;
+                }
+                .b-review-clip-preview .b-clip-play {
+                    position: absolute;
+                    display: none;
+                    top: 43px;
+                    left: 70px;
+                    width: 48px;
+                    height: 48px;
+                    background: url('/img/i/review/review-play.png') no-repeat;
+                }
+                .b-review-clip-preview:hover .b-clip-play {
+                    display: block;
+                }
+
+            .b-review-clip__1 {
+                top: 203px;
+                left: 0px;
+                width: 285px;
+            }
+                .b-review-clip__1 .b-review-clip-preview {
+                    bottom: 0;
+                    left: 0;
+                    background-position: 0 0;
+                }
+                .b-review-clip__1 .b-review-clip-point {
+                    top: 0;
+                    left: 0;
+                    background-position: 0 0;
+                }
+
+            .b-review-clip__2 {
+                top: 0px;
+                left: 140px;
+                width: 285px;
+            }
+                .b-review-clip__2 .b-review-clip-preview {
+                    bottom: 0;
+                    left: 0;
+                    background-position: 0 0;
+                }
+                .b-review-clip__2 .b-review-clip-point {
+                    top: 0;
+                    left: 0;
+                    background-position: 0 -40px;
+                }
+
+            .b-review-clip__3 {
+                top: 10px;
+                left: 510px;
+                width: 285px;
+            }
+                .b-review-clip__3 .b-review-clip-preview {
+                    bottom: 0;
+                    left: 0;
+                    background-position: 0 -140px;
+                }
+                .b-review-clip__3 .b-review-clip-point {
+                    top: 0;
+                    left: 0;
+                    background-position: 0 -80px;
+                }
+
+            .b-review-clip__4 {
+                top: 213px;
+                right: 0px;
+                width: 285px;
+            }
+                .b-review-clip__4 .b-review-clip-preview {
+                    bottom: 0;
+                    left: 55px;
+                    background-position: 0 -140px;
+                }
+                .b-review-clip__4 .b-review-clip-point {
+                    top: 3px;
+                    left: 50px;
+                    background-position: 0 -120px;
+                }
+
+            .b-review-clip__5 {
+                top: 475px;
+                right: 0px;
+                width: 285px;
+            }
+                .b-review-clip__5 .b-review-clip-preview {
+                    bottom: 0;
+                    left: 55px;
+                    background-position: 0 -280px;
+                }
+                .b-review-clip__5 .b-review-clip-point {
+                    top: 3px;
+                    left: 55px;
+                    background-position: 0 -160px;
+                }
+
+            .b-review-clip__6 {
+                top: 685px;
+                right: 55px;
+                width: 285px;
+            }
+                .b-review-clip__6 .b-review-clip-preview {
+                    bottom: 0;
+                    left: 55px;
+                    background-position: 0 -280px;
+                }
+                .b-review-clip__6 .b-review-clip-point {
+                    top: 3px;
+                    left: 50px;
+                    background-position: 0 -200px;
+                }
+
+            .b-review-clip__7 {
+                bottom: 0px;
+                right: 330px;
+                width: 225px;
+            }
+                .b-review-clip__7 .b-review-clip-preview {
+                    bottom: 0;
+                    left: 0px;
+                    background-position: 0 -280px;
+                }
+                .b-review-clip__7 .b-review-clip-point {
+                    top: 0px;
+                    left: -5px;
+                    background-position: 0 -240px;
+                }
+
+            .b-review-clip__8 {
+                top: 685px;
+                left: 70px;
+                width: 265px;
+            }
+                .b-review-clip__8 .b-review-clip-preview {
+                    bottom: 0;
+                    left: 0px;
+                    background-position: 0 -420px;
+                }
+                .b-review-clip__8 .b-review-clip-point {
+                    top: 0px;
+                    left: 0px;
+                    background-position: 0 -280px;
+                }
+
+            .b-review-clip__9 {
+                top: 475px;
+                left: 0px;
+                width: 265px;
+            }
+                .b-review-clip__9 .b-review-clip-preview {
+                    bottom: 0;
+                    left: 0px;
+                    background-position: 0 -420px;
+                }
+                .b-review-clip__9 .b-review-clip-point {
+                    top: 0px;
+                    left: 0px;
+                    background-position: 0 -320px;
+                }
+
+    .b-review .b-player {
+    }
+        .b-player .b-player-container {
+            display: block;
+            width: 640px;
+            height: 360px;
+            margin: auto;
+        }
