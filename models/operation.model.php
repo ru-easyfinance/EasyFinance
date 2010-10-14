@@ -446,6 +446,10 @@ class Operation_Model
                 array(
                     Account_Collection::ACCOUNT_TYPE_CASH,
                     Account_Collection::ACCOUNT_TYPE_DEBETCARD,
+                    Account_Collection::ACCOUNT_TYPE_DEPOSIT,
+                    Account_Collection::ACCOUNT_TYPE_LOANGIVE,
+                    Account_Collection::ACCOUNT_TYPE_ELECTPURSE,
+                    Account_Collection::ACCOUNT_TYPE_BANKACC,
                 )
             )
         ) {

@@ -70,16 +70,16 @@ class OperationTable extends Doctrine_Table
     public function getMeanByCategory(User $user, $date, $monthCount = 3)
     {
         $monthCount = (int) $monthCount ? (int) $monthCount : 3 ;
+        # TODO: убить контекст в модели (опасно для tasks)
         $rate = sfContext::getInstance()
             ->getMyCurrencyExchange()->getRate($user->getCurrencyId());
 
-        $alias = 'foo';
+        $alias = 'foo'; # TODO: нормальные альясы
 
         $query = $this->querySumByCategory($user, $alias)
-            ->select("category_id, sum(amount*cu.rate/$rate)/$monthCount AS mean")
-            ->andWhere("{$alias}.date >= ADDDATE('$date',
-                INTERVAL -$monthCount MONTH)")
-            ->andWhere("{$alias}.date <= '$date'");
+            ->select("category_id, sum(amount*cu.rate/{$rate})/{$monthCount} AS mean")
+            ->andWhere("{$alias}.date >= ADDDATE('{$date}', INTERVAL -{$monthCount} MONTH)")
+            ->andWhere("{$alias}.date <= '{$date}'");
 
         $data = $query->execute(array(), 'FetchPair');
 
@@ -95,7 +95,7 @@ class OperationTable extends Doctrine_Table
      */
     public function getFactByCategory(User $user, $date)
     {
-        $alias = 'foo';
+        $alias = 'foo'; # TODO: нормальные альясы
 
         $query = $this->querySumByCategory($user, $alias)
             ->andWhere("{$alias}.date >= ?", $date)

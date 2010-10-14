@@ -24,6 +24,26 @@ class Operation extends BaseOperation
      */
     const SOURCE_AMT = 'amt';
 
+    /**
+     * Добавляем связь со счётом-получательем
+     *
+     * @todo сделать через schema.yml
+     * (non-PHPdoc)
+     * @see base/BaseOperation::setUp()
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        $this->hasOne(
+            'Account as TransferAccount',
+            array(
+                'local'    => 'transfer_account_id',
+                'foreign'  => 'id',
+                'onDelete' => 'CASCADE'
+            )
+        );
+    }
+
 
     /**
      * Установить счет и инициализировать user_id
@@ -61,20 +81,39 @@ class Operation extends BaseOperation
 
     public function preSave($event)
     {
-        if ($this->getType() == self::TYPE_BALANCE) {
-            $balanceOperation = $this->getTable()->findByDql(
-                'account_id = ? AND type = ?',
-                array($this->getAccountId(), self::TYPE_BALANCE),
-                Doctrine::HYDRATE_ARRAY
-            );
+        switch ($this->getType()) {
+            case self::TYPE_BALANCE:
+                $balanceOperation = $this->getTable()->findByDql(
+                    'account_id = ? AND type = ?',
+                    array($this->getAccountId(), self::TYPE_BALANCE),
+                    Doctrine::HYDRATE_ARRAY
+                );
 
-            if (isset($balanceOperation[0])) {
-                $amount = $this->getAmount();
-                $this->assignIdentifier($balanceOperation[0]['id']);
-                $this->fromArray($balanceOperation[0]);
-                $this->load();
-                $this->setAmount($amount);
-            }
+                if (isset($balanceOperation[0])) {
+                    $amount = $this->getAmount();
+                    $this->assignIdentifier($balanceOperation[0]['id']);
+                    $this->fromArray($balanceOperation[0]);
+                    $this->load();
+                    $this->setAmount($amount);
+                }
+            break;
+            case self::TYPE_TRANSFER:
+                if (in_array($this->getTransferAccount()->getTypeId(), array(
+                            Account::TYPE_CREDIT,
+                            Account::TYPE_CREDIT_CARD,
+                            Account::TYPE_LOAN_GET,
+                    )) && in_array($this->getAccount()->getTypeId(), array(
+                            Account::TYPE_CASH,
+                            Account::TYPE_DEBIT_CARD,
+                            Account::TYPE_DEPOSIT,
+                            Account::TYPE_LOAN_GIVE,
+                            Account::TYPE_ELECT_PURSE,
+                            Account::TYPE_BANK_ACC,
+                    ))
+                ) {
+                    $this->setCategoryId($this->getUser()->getDebtCategoryId());
+                }
+            break;
         }
 
         if (!$this->getAccountId()) {
@@ -99,6 +138,7 @@ class Operation extends BaseOperation
             $this['amount'] = abs($this['amount']) * -1;
         }
     }
+
 
     /**
      * Хук для починки операций перевода

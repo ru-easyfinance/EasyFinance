@@ -155,4 +155,50 @@ class model_OperationTest extends myUnitTestCase
         );
     }
 
+
+    /**
+     * Добавление категории к переводу на долговой счёт
+     */
+    public function testAddingDebtCategoryToTransfer()
+    {
+        $user = $this->helper->makeUser();
+        $debtCategory = $this->helper->makeCategory(
+            $user,
+            array('system_id' => Category::DEBT_SYSTEM_CATEGORY_ID)
+        );
+        $account = $this->helper->makeAccount(
+            $user,
+            array(
+                'type_id' => Account::TYPE_CASH
+            )
+        );
+        $transferAccount = $this->helper->makeAccount(
+            $user,
+            array(
+                'type_id' => Account::TYPE_CREDIT
+            )
+        );
+
+        $data = array(
+            'type'                => Operation::TYPE_TRANSFER,
+            'user_id'             => $user->getId(),
+            'account_id'          => $account->getId(),
+            'transfer_account_id' => $transferAccount->getId(),
+            'category_id'         => null,
+            'amount'              => 1234.56,
+        );
+
+        $operation = $this->helper->makeOperation(
+            $account,
+            $data,
+            true
+        );
+
+        $this->assertEquals(
+            $debtCategory->getId(),
+            $operation->getCategoryId(),
+            'Должна подставляться долговая категория'
+        );
+    }
+
 }

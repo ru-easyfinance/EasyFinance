@@ -8,8 +8,21 @@ class Account extends BaseAccount
     /**
      * Типы счетов, см. `account_types`
      */
-    const TYPE_CASH       = 1;  // Наличные
-    const TYPE_DEBIT_CARD = 2;  // Дебетовая карта
+    const TYPE_CASH         = 1;  // Наличные
+    const TYPE_DEBIT_CARD   = 2;  // Дебетовая карта
+
+    const TYPE_DEPOSIT      = 5;
+    const TYPE_LOAN_GIVE    = 6;
+    const TYPE_LOAN_GET     = 7;
+    const TYPE_CREDIT_CARD  = 8;
+    const TYPE_CREDIT       = 9;
+    const TYPE_METALLIC     = 10;
+    const TYPE_SHARE        = 11;
+    const TYPE_PIF          = 12;
+    const TYPE_OFBU         = 13;
+    const TYPE_PROPERTY     = 14;
+    const TYPE_ELECT_PURSE  = 15;
+    const TYPE_BANK_ACC     = 16;
 
     /**
      * Состояние счёта - обычный

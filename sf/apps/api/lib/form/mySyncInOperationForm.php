@@ -108,8 +108,6 @@ class mySyncInOperationForm extends BaseFormDoctrine
             case Operation::TYPE_TRANSFER:
                 $this->values['amount'] = -abs($this->values['amount']);
                 $this->values['transfer_amount'] = abs($this->values['transfer_amount']);
-                $this->values['category_id'] = $this->getUser()
-                    ->getUserRecord()->getDebtCategoryId();
                 break;
             case Operation::TYPE_EXPENSE:
                 $this->values['amount'] = -abs($this->values['amount']);
