@@ -81,7 +81,6 @@
             <ul class="dd-sub">
                 <li class="first"></li>
                 <li><span class="spacer"></span><a id="linkMainMenuFeedback" href="#" style="letter-spacing: -1px;">Обратная связь</a></li>
-                <li><span class="spacer"></span><a id="linkMainMenuVideoGuide" href="#">Видео гид</a></li>
                 <li><span class="spacer"></span><a href="/my/review/">Обзор</a></li>
                 <li><span class="spacer"></span><a href="https://<?php echo URL_ROOT_WIKI; ?>tiki-read_article.php?articleId=14">FAQ</a></li>
                 <li class="last"></li>

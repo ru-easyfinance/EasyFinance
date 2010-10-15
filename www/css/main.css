@@ -329,7 +329,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 .info_block dl dd ul li { margin-bottom: 5px; padding-left: 17px; background: url('/img/i/li.gif') no-repeat 0 9px; }
 .info_block dl dd ul li a { color: #474747; }
 #btnFeedback { display: block; position: absolute; top: 44px; left: 0px; width: 42px; height: 161px; text-indent: -999px; overflow: hidden; cursor: pointer; z-index:1000; background: url('/img/i/button_addmsg.png') no-repeat 0 0; }
-#btnVideoGuide { display: block; position: absolute; top: 44px; right: 0px; width: 42px; height: 161px; text-indent: 100px; overflow: hidden; cursor: pointer; z-index:1000; background: url('/img/i/btnHelp.png') no-repeat 0 0; }
+#btnReview { display: block; position: absolute; top: 44px; right: 0px; width: 42px; height: 161px; text-indent: 100px; overflow: hidden; cursor: pointer; z-index:1000; background: url('/img/i/btnHelp.png') no-repeat 0 0; }
 
 .menu31 { position: relative; margin-left: 22px; height: 37px; z-index: 2; }
 

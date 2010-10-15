@@ -164,7 +164,7 @@ $(document).ready(function(){
             "m5": "newOperation",
             "m6": "newOperation"
         };
-        $('#btnVideoGuide, #linkMainMenuVideoGuide').click(function(){
+        $('#linkMainMenuVideoGuide').click(function(){
             $('#popupHelp').dialog('open');
             if (page_mid) {
                 easyFinance.widgets.help.showVideo(tabVideo[page_mid]);

@@ -4,7 +4,9 @@
 }
     .b-review .b-review-title {
         margin: .5em auto 1em;
-        text-align: center;
+        color: #ccc;
+        font-style: italic;
+        font-size: 120%;
     }
         .b-review-title .b-review-help {
             display: inline-block;
@@ -42,8 +44,8 @@
                     display: block;
                     top: 5px;
                     left: 5px;
-                    width: 183px;
-                    height: 126px;
+                    width: 184px;
+                    height: 127px;
                 }
                 .b-review-clip-preview .b-clip-play {
                     position: absolute;
