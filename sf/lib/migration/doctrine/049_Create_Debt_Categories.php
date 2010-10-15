@@ -67,6 +67,13 @@ class Migration049_Create_Debt_Categories extends myBaseMigration
         );
 
         $this->rawQuery(
+            "UPDATE `operation` INNER JOIN category
+            ON category.cat_id = operation.cat_id
+            SET `operation`.`cat_id` = NULL
+            WHERE `system_category_id` IN (25, 24)"
+        );
+
+        $this->rawQuery(
             "DELETE FROM `category` WHERE `system_category_id` IN (24, 25);"
         );
 

@@ -67,7 +67,7 @@ class Budget
     public function getThreeMonthMean($categoryId)
     {
         return isset($this->_threeMonthMean[$categoryId]) ?
-            $this->_threeMonthsMean[$categoryId] : 0;
+            $this->_threeMonthMean[$categoryId] : 0;
     }
 }
 ?>
