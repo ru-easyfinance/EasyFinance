@@ -8,113 +8,160 @@ $data = array(
     'surname'      => 'Тёркин',
     'mobile_code'  => '123',
     'mobile_phone' => '1234567',
-    'email'        => 'vasya@nail.ru',
+    'email'        => 'vasya@example.com',
 );
 $form = new CitiBankApplicationForm();
 $form->bind($data);
+
+function simpleOptions($arr)
+{
+    $result = array();
+    foreach ($arr as $key => $val) {
+        $result[] = '<option value="' . $val . '">' . $val . '</option>';
+    }
+    return implode($result, '');
+}
+
+$api_url = url_for("easybank_citi_cashback_apply");
+
+$cityfield = array(
+    'label'     => 'Город',
+    'name'      => 'city',
+    'id'        => 'city',
+    'selectbox' => simpleOptions($form['city']->getWidget()->getChoices())
+);
+
+$employmentfield = array(
+    'label'     => 'Форма трудоустройства',
+    'name'      => 'employment',
+    'id'        => 'employment',
+    'selectbox' => simpleOptions($form['employment']->getWidget()->getChoices())
+);
+
+$date = array(
+    'label'         => 'Дата рождения',
+    'name'          => 'birthday',
+    'hint'          => 'В формате ДД.ММ.ГГГГ',
+    'inputClass'    => 'js-control js-control-datepicker',
+    'jsparams'      => '{dateFormat: "dd.mm.yy", changeMonth: true, changeYear: true, maxDate: "", minDate: ""}'
+);
+
+$name = array(
+    'label' => 'Имя',
+    'name'  => 'name'
+);
+
+$patronymic = array(
+    'label' => 'Отчество',
+    'name'  => 'patronymic'
+);
+
+$surname = array(
+    'label' => 'Фамилия',
+    'name'  => 'surname'
+);
+
+$phone = array(
+    'label'         => 'Мобильный телефон',
+    'name'          => 'mobile_number',
+    'hint'          => '+7 (xxx) yyyyyyy',
+    'inputClass'    => 'js-control js-control-phonefield'
+);
+
+$email = array(
+    'label' => 'Email',
+    'name'  => 'email',
+    'type'  => 'email'
+);
+
 ?>
 
-<div style="padding: 20px; max-width: 940px; margin: 0 auto 0 auto;">
-    <form id="citiBankApplicationForm" method="post" action="<?php echo url_for("easybank_citi_cashback_apply") ?>">
-        <table>
-            <tbody>
-            <?php foreach ($form as $name => $field) : ?>
-            <?php if (!in_array($name, array('mobile_code', 'mobile_phone'))) : ?>
-                <tr>
-                    <td>
-                        <?php echo $form[$name]->renderLabel(); ?>:
-                        <?php if ($form->getValidator($name)
-                            ->getOption('required')) : ?>*<?php endif; ?>
-                    </td>
-                    <td><?php echo $form[$name]; ?></td>
-                </tr>
-            <?php elseif ($name == 'mobile_code') : ?>
-                <tr>
-                    <td>Мобильный телефон: *</td>
-                    <td>
-                        Код <?php echo $form['mobile_code']
-                            ->render(array('size' => 3)); ?>
-                        Номер <?php echo $form['mobile_phone']
-                            ->render(array('size' => 7)); ?>
-                    </td>
-                </tr>
-            <?php endif;?>
-            <?php endforeach; ?>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td>
-                        <input type="submit" value="Отправить" id="btnPrintForm" />
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-    </form>
-
-    <div class="ohwait"></div>
+<div id="cititabs" class="b-citipage js-widget js-widget-citipage">
+    <div class="w-citipage-wrapper js-control js-control-tabs">
+        <ul>
+            <li><a href="#cititabs-1">Преимущества</a></li>
+            <li><a href="#cititabs-2">Тарифы</a></li>
+            <li><a href="#cititabs-3">Анкета</a></li>
+        </ul>
+        <div id="cititabs-1">
+            <!-- зюда фставлять ис одминге кусок про преимущества -->
+            <!-- каменты жжгут, патом удалить -->
+        </div>
+        <div id="cititabs-2">
+            <!-- зюда фставлять ис одминге кусок про ториффы -->
+            <!-- каменты жжгут, патом удалить -->
+        </div>
+        <div id="cititabs-3" style="width: 400px">
+            <form method="post" action="<?php echo $api_url ?>" class="b-form-skeleton">
+                <div class="b-row">
+                    <div class="b-col">
+                        <div class="b-col-indent">
+                            <?php include_partial('global/common/ui/textfield', $cityfield); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="b-row">
+                    <div class="b-col">
+                        <div class="b-col-indent">
+                            <?php include_partial('global/common/ui/textfield', $employmentfield); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="b-row">
+                    <div class="b-col">
+                        <div class="b-col-indent">
+                            <?php include_partial('global/common/ui/textfield', $date); ?>
+                            <input type="hidden" name="birthday[day]"/>
+                            <input type="hidden" name="birthday[month]"/>
+                            <input type="hidden" name="birthday[year]"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="b-row">
+                    <div class="b-col">
+                        <div class="b-col-indent">
+                            <?php include_partial('global/common/ui/textfield', $name); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="b-row">
+                    <div class="b-col">
+                        <div class="b-col-indent">
+                            <?php include_partial('global/common/ui/textfield', $patronymic); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="b-row">
+                    <div class="b-col">
+                        <div class="b-col-indent">
+                            <?php include_partial('global/common/ui/textfield', $surname); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="b-row">
+                    <div class="b-col">
+                        <div class="b-col-indent">
+                            <?php include_partial('global/common/ui/textfield', $phone); ?>
+                            <input type="hidden" name="mobile_code"/>
+                            <input type="hidden" name="mobile_phone"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="b-row">
+                    <div class="b-col">
+                        <div class="b-col-indent">
+                            <?php include_partial('global/common/ui/textfield', $email); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="b-row">
+                    <div class="b-col">
+                        <div class="b-col-indent">
+                            <?php include_partial('global/common/ui/simplebutton', array()); ?>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
-
-
-<script type="text/javascript">
-$(document).ready(function() {
-    $(".cb-tabs").tabs();
-    prepareBlankAction = function() {
-        // запоминаем событие в Google Analytics
-        try { _gaq.push(['_trackEvent', 'Анкета', 'Заполнена', 'Citi CashBack']); } catch(err) {};
-        var data = wzGetFormData($('#citiBankApplicationForm')[0]);
-
-        return {
-            'data': data,
-            'idleMessage': 'Отправляем анкету в банк ...'
-        };
-    };
-
-    $('#btnPrintForm').ajaxInitiator
-    (
-        $.ajaxInitiator.requestType.post, // request type
-        '<?php echo url_for("easybank_citi_cashback_apply") ?>', // url
-        'json', // data type
-        { // notification params
-            'animationPosition': $.actionInitiator.animationPosition.right,
-            'align': $.actionInitiator.align.left,
-            'notificationPlace': $.actionInitiator.notificationPlace.nearTheInitiator,
-            'notificationLifetime': 7000,
-            'notificationTextNode': $('.ohwait')
-        },
-        {
-            'prepareData': prepareBlankAction,
-            'processSuccess': function (data) {
-                return 'Анкета успешно отправлена в банк';
-            },
-            'processError': function (data) {
-                // передача обработки ошибки инициатору
-            }
-        }
-    );
-
-    function wzGetFormData(frm) {
-        var i =0;
-        var j = 0;
-        var data = {};
-
-        if (frm.elements && (typeof(frm.elements) != 'undefined') && (frm.elements.length > 0)) {
-            for (i = 0; i < frm.elements.length; i++) {
-                if (frm.elements[i].name) {
-                    if ((frm.elements[i].type == 'checkbox') || (frm.elements[i].type == 'radio')) {
-                        if (frm.elements[i].checked) {
-                            data[frm.elements[i].name] = frm.elements[i].value;
-                            j++;
-                        }
-                    } else {
-                        data[frm.elements[i].name] = frm.elements[i].value;
-                        j++;
-                    }
-                }
-            }
-
-        }
-
-        return data;
-    }
-});
-</script>
