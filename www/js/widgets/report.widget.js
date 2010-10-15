@@ -196,14 +196,12 @@ easyFinance.widgets.report = function(){
         showReports('graphs');
     }
 
-    function CreateDetailedRow(parentCategoryName, categoryName, date, accountName, type, money)
+    function CreateDetailedRow(categoryName, date, accountName, type, money)
     {
     	var row = 
         	'<tr><th>' +
-        	parentCategoryName +
+        	categoryName +
             '</th><td>' + 
-            categoryName + 
-            '</td><td>' +
             date + 
             '</td><td>' +
             accountName + 
@@ -257,7 +255,7 @@ easyFinance.widgets.report = function(){
 	        		
 	        		//проверяем, что какая-то предыдущая категория есть, т.е. мы не в начале массива
 	        		if(categoryId != null) {
-	        			parentCategoryContent += CreateDetailedRow('', categoryName, '', '', type, categorySum) +
+	        			parentCategoryContent += CreateDetailedRow(categoryName, '', '', type, categorySum) +
 		                    categoryContent;
 	        		}
 	        		categoryName = currentCategoryName;
@@ -272,7 +270,7 @@ easyFinance.widgets.report = function(){
 	        		
 	        		//проверяем, что есть предыдущая родительская категория, и тогда выводим все данные по ней
 	        		if(parentCategoryId != null) {
-	        			tableContent += CreateDetailedRow(parentCategoryName, '', '', '', type, parentCategorySum) +
+	        			tableContent += CreateDetailedRow(parentCategoryName, '', '', type, parentCategorySum) +
 	        			parentCategoryContent;
 	        		}
 	        		parentCategoryId = currentParentCategoryId;
@@ -289,7 +287,7 @@ easyFinance.widgets.report = function(){
         		parentCategorySum += currentMoney;
         		totalSum += currentMoney;
 	           
-	        	categoryContent += CreateDetailedRow('', '', currentDate, currentAccountName, type, currentMoney);
+	        	categoryContent += CreateDetailedRow('', currentDate, currentAccountName, type, currentMoney);
 	        }
 
 			//сформируем строку итоговой суммы для повторного использования
@@ -299,9 +297,9 @@ easyFinance.widgets.report = function(){
 			tableContent = 
 				totalRow +
 				tableContent +
-				CreateDetailedRow(parentCategoryName, '', '', '', type, parentCategorySum) +
+				CreateDetailedRow(parentCategoryName, '', '', type, parentCategorySum) +
 				parentCategoryContent +
-				CreateDetailedRow('', categoryName, '', '', type, categorySum) +
+				CreateDetailedRow(categoryName, '', '', type, categorySum) +
                 categoryContent +				
 				totalRow;			
 		}
