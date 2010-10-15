@@ -1,4 +1,5 @@
 <div class="b-review js-widget js-widget-review">
+    <h1>Обзор</h1>
     <p class="b-review-title">Эта страница всегда доступна из пункта меню &laquo;Помощь ➝ Обзор&raquo;</p>
     <div class="w-review-picture">
         <div class="b-review-clip b-review-clip__1" title="Обзор системы, настройка валют и смс">
