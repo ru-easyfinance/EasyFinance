@@ -22,6 +22,10 @@ class myAuthActions extends sfActions
             $form->bind($request->getPostParameters());
             if ($form->isValid()) {
                 $user->signIn($form->getUser());
+                if (!$this->checkSubscription()) {
+                    $user->signOut();
+                    return $this->raiseError('Subscription required');
+                }
 
                 return sfView::SUCCESS;
             }
@@ -44,6 +48,23 @@ class myAuthActions extends sfActions
         $this->setVar('message', $errorMessage);
 
         return sfView::ERROR;
+    }
+
+
+    protected function checkSubscription()
+    {
+        $subscription = Doctrine::getTable('ServiceSubscription')
+            ->getActiveUserServiceSubscription(
+                $this->getUser()->getUserRecord()->getId(),
+                Service::SERVICE_IPHONE
+            );
+
+        if (!$subscription) {
+            return false;
+        }
+
+        $this->setVar('subscribedTill', $subscription->getSubscribedTill());
+        return true;
     }
 
 }
