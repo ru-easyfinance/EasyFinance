@@ -1,5 +1,7 @@
 jquery/jquery.min.js
 jquery/jquery.common.js
+core.js
+controls/jquery.phonefield.js
 easyfinance.js
 models/calendar.cache.js
 jquery/ui.core.js
@@ -62,3 +64,4 @@ custom-tooltip.js
 custom-datatables.js
 custom-autocomplete.js
 custom-actionpanel.js
+citipage.js
