@@ -1,5 +1,5 @@
 <!--правая колонка-->
-    <div class="block3 ramka3">
+    <div class="block3 ramka3 b-rightpanel">
         <div class="ct head">
             <h2>Информер</h2>
             <ul class="action">

@@ -190,7 +190,7 @@ function decrypt($text, $key = CRYPT_KEY) {
     $text = base64_decode($text);
     $iv = substr(md5($key), 0,mcrypt_get_iv_size (MCRYPT_CAST_256,MCRYPT_MODE_CFB));
     $p_t = mcrypt_cfb (MCRYPT_CAST_256, $key, $text, MCRYPT_DECRYPT, $iv);
-    return unserialize(trim($p_t));
+    return @unserialize(trim($p_t));
 }
 
 /**

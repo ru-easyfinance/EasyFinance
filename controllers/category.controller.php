@@ -129,6 +129,7 @@ class Category_Controller extends _Core_Controller_UserCommon
         $errors = array();
 
         $categorys = Core::getInstance()->user->getUserCategory();
+        $category = null;
 
         if( array_key_exists( 0, $args ) && array_key_exists( $args[0], $categorys) )
         {

@@ -74,7 +74,15 @@ _ActivateDataGrid = {
             }
         });
         this.dataGrid.fnSort([[1, 'desc']]);
-        new FixedHeader(this.dataGrid);
+        new FixedHeader(
+            this.dataGrid,
+            {
+                zTop:    8,
+                zBottom: 7,
+                zLeft:   6,
+                zRight:  5,
+            }
+        );
         $('.fixedHeader').addClass('custom-grid-style');
 
         return {

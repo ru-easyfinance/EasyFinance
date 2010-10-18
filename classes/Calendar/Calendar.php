@@ -152,7 +152,7 @@ class Calendar
 
         // Квартал (сейчас не работает!)
         } elseif ( $event->getEvery() == 90) {
-            $arrayDays = $this->_repeat($event, 'quartal');
+            $arrayDays = $this->_repeat($event, '3 month');
 
         // Год
         } elseif ( $event->getEvery() == 365) {
@@ -199,7 +199,7 @@ class Calendar
 
         // Квартал (сейчас не работает!)
         } elseif ( $event->getEvery() == 90) {
-            $arrayDays = $this->_repeat($event, 'quartal');
+            $arrayDays = $this->_repeat($event, '3 month');
 
         // Год
         } elseif ( $event->getEvery() == 365) {

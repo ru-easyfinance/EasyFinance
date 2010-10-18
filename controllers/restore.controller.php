@@ -44,6 +44,7 @@ class Restore_Controller extends _Core_Controller
                 = explode('RfacztT', base64_decode($restoreHash));
         } else {
             $restoreTime = null;
+            $restoreHash = null;
         }
 
         // Тройная проверка ! Теперь на 43% страннее !
@@ -137,7 +138,7 @@ class Restore_Controller extends _Core_Controller
             header('Location: /restore');
         }
 
-        if( (strtotime($date) + 60 * 30) < time() )
+        if ( !isset($date) || (strtotime($date) + 60 * 30) < time() )
         {
             $_SESSION['errorMessage'] = 'Время действия ссылки восстановления пароля истекло! Пожалуйста, повторите запрос.';
             header('Location: /restore');
