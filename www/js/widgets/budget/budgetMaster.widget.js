@@ -6,60 +6,73 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     /**
      * дата используемая в 1ом листе мастера
      */
-    var _currentDate =new Date();
+    var _currentDate = new Date();
 
     /**
      * формирует данные для 2х последних страниц мастера
      * @param type {int} тип (доход == 1(р)/расход == 0(d))
      * @return void
      */
-    function _printMaster(type){
-        var prefix = (type == '1')? 'p':'d';
+    function _printMaster(type) {
+        var prefix = (type == '1') ? 'p' : 'd';
         var _data = model.returnList()[prefix]
-        var children, str = '', ret ='';
-        var k, key;
-        var categoryType, parentId, parentName, catId, catName, budget, plan;
+        var children,
+            str = '',
+            ret ='';
+
+        var categoryType,
+            parentId,
+            parentName,
+            catId,
+            catName,
+            budget,
+            plan;
+
         var _categories = easyFinance.models.category.getUserCategoriesTreeOrdered();
-        for (key in _categories){
+
+        for (var key in _categories){
             categoryType = _categories[key].type;
-            if( (type == 0 && categoryType < 1)||(type == 1 && categoryType > -1)){
+            if ( (type == 0 && categoryType < 1) || (type == 1 && categoryType > -1) ) {
                 parentId = _categories[key].id
                 parentName=_categories[key].name
                 children = _categories[key].children
                 str = '<table>';
-                for (k in children){
+                for (var k in children) {
                     categoryType = _categories[key].children[k].type;
-                    if( (type == 0 && categoryType < 1)||(type == 1 && categoryType > -1)){
+
+                    if ( (type == 0 && categoryType < 1) || (type == 1 && categoryType > -1) ) {
                         catId = _categories[key].children[k].id;
-                        catName=_categories[key].children[k].name;
-                        budget = _data[catId] ||{amount : 0, money : 0}
+                        catName = _categories[key].children[k].name;
+                        budget = _data[catId] || {amount: 0, money: 0}
                         plan = formatCurrency(budget['amount']);
-                        str += '<tr id="'+catId+'"><td class="w1"><a>';
-                        str += catName+'</a></td><td class="w2"><div class="cont">';
+
+                        str += '<tr id="' + catId + '"><td class="w1"><a>';
+                        str += catName + '</a></td><td class="w2"><div class="cont">';
                         str += '<input type="text" value="' + (plan == "0" ? '' : plan) + '"/></div></td>';
-                        str += '<td class="w4"><span>'+formatCurrency(budget['mean']||'0')+' </span></td>';
+                        str += '<td class="w4"><span>' + formatCurrency(budget['mean']||'0') + ' </span></td>';
                         str += '</tr>';
                     }
                 }
-                str+='</table>';
-                if (str=='<table></table>')
-                {
-                    ret += '<div class="line open nochild" id="'+parentId+'">';
-                    ret += '<a class="name nochild">'+parentName+'</a>';
-                    ret += '<div class="amount"><input type="text" value="'+formatCurrency(_data[parentId]?_data[parentId]['amount']:0)+'" /></div>\n\
-                            <span class="mean">'+formatCurrency(_data[parentId]?_data[parentId]['mean']:'0')+' </span></div>';
+
+                str += '</table>';
+
+                if (str == '<table></table>') {
+                    ret += '<div class="line open nochild" id="' + parentId + '">';
+                    ret += '<a class="name nochild">' + parentName + '</a>';
+                    ret += '<div class="amount"><input type="text" value="' + formatCurrency(_data[parentId] ? _data[parentId]['amount'] : 0) + '" /></div>\n\
+                            <span class="mean">' + formatCurrency(_data[parentId]?_data[parentId]['mean'] : '0') + ' </span></div>';
                 }
-                else
-                {
-                    ret += '<div class="line open" id="'+parentId+'">';//@todo
-                    ret += '<a class="name">'+parentName+'</a>';
-                    ret += '<div class="amount">'+formatCurrency(_data[parentId]?_data[parentId]['amount']:0)+'</div>'+str+'</div>';
+                else {
+                    ret += '<div class="line open" id="' + parentId + '">';//@todo
+                    ret += '<a class="name">' + parentName + '</a>';
+                    ret += '<div class="amount">' + formatCurrency(_data[parentId] ?_data[parentId]['amount'] : 0) + '</div>' + str + '</div>';
                 }
             }
         }
-        if (type){
+        if (type) {
             $('#master #step2 .list.body').html(ret)
-        }else{
+        }
+        else {
             $('#master #step3 .list.body').html(ret)
         }
     }
@@ -68,12 +81,12 @@ easyFinance.widgets.budgetMaster = function(model,widget){
      * @param step {str} 'step2'||'step3'
      * @return float
      */
-    function globalSum(step){
+    function globalSum(step) {
         var ret = 0;
-        $('#master #'+step+' div.amount').each(function(){
+        $('#master #' + step + ' div.amount').each(function() {
             var str = $(this).find('input').val() || $(this).text();
-            if(!isNaN(parseFloat(str.replace(/[^0-9\.]/gi,'')))){
-                ret += parseFloat(str.replace(/[^0-9\.]/gi,''));
+            if( !isNaN(parseFloat( str.replace(/[^0-9\.]/gi, '') )) ){
+                ret += parseFloat(str.replace(/[^0-9\.]/gi, ''));
             }
         })
         return ret;
@@ -87,12 +100,14 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     function fullSum(id,step){
         var tmp;
 
-        $('#master div.line').each(function(){
-            if (!$(this).find('.amount input').length){
+        $('#master div.line').each(function() {
+            if (!$(this).find('.amount input').length) {
                 var ret = 0;
-                $(this).find('input').each(function(){
-                    tmp = parseFloat($(this).val().toString().replace(/[^0-9\.]/gi,''))
-                    if (isNaN(tmp)){tmp = 0;}
+                $(this).find('input').each(function() {
+                    tmp = parseFloat( $(this).val().toString().replace(/[^0-9\.]/gi,'') )
+                    if (isNaN(tmp)) {
+                        tmp = 0;
+                    }
                     ret += tmp
                 })
                 $(this).find('.amount').text(formatCurrency(ret))
@@ -103,9 +118,10 @@ easyFinance.widgets.budgetMaster = function(model,widget){
         var drain = globalSum('step3')
         $('#master .waste b').text(formatCurrency(drain))
         $('#master .income b').text(formatCurrency(profit))
-        if (drain - profit > 0){
+        if (drain - profit > 0) {
             $('#master .rest b').css('color','#EB3C34')
-        }else{
+        }
+        else {
             $('#master .rest b').css('color','#309500')
         }
         $('#master .rest b').text(formatCurrency(profit - drain))
@@ -113,27 +129,29 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     }
 
     /**
-     * Компилирует джейсон для сообщения на сервер
+     * Компилирует JSON для сообщения на сервер
      */
-    function _compilReturnJSON(){
-        var tmp = {step3 : '', step2 : ''}
-        $('#master .waste_list input').each(function(){
+    function _compilReturnJSON() {
+        var tmp = {step3: '', step2: ''};
+
+        $('#master .waste_list input').each(function() {
             var parent = $(this).closest('tr')
-            if ($(parent).length === 0){
+            if (!$(parent).length) {
                 parent = $(this).closest('.line');
             }
-            var id = $(parent).attr('id').toString().replace(/[^0-9]/gi,'');
-            var val = $(this).val().toString().replace(/[^0-9\.]/,'','gi');
-            if (!isNaN(val)){
-                if ($(parent).closest('.step').attr('id') == 'step2'){
-                    tmp.step2+= '{"'+id+'": "'+val+'"},';
-                }else{
-                    tmp.step3+= '{"'+id+'": "'+val+'"},';
+            var id = $(parent).attr('id').toString().replace(/[^0-9]/gi, '');
+            var val = $(this).val().toString().replace(/[^0-9\.]/gi, '');
+            if (!isNaN(val)) {
+                if ($(parent).closest('.step').attr('id') == 'step2') {
+                    tmp.step2 += '{"' + id + '": "' + val + '"},';
+                }
+                else {
+                    tmp.step3 += '{"' + id + '": "' + val + '"},';
                 }
             }
         });
-        var ret = '{"d": ['+tmp.step3+'], "p": ['+tmp.step2+']}';
-        while(ret.indexOf('},]') != -1){
+        var ret = '{"d": [' + tmp.step3 + '], "p": [' + tmp.step2 + ']}';
+        while(ret.indexOf('},]') != -1) {
             ret = ret.replace('},]', '}]');
         }
         return ret;
@@ -150,12 +168,12 @@ easyFinance.widgets.budgetMaster = function(model,widget){
      * Форматирование на лету
      */
     $('#master .waste_list input')
-        .live('keypress',function(e){
-            if (e.keyCode == 13){
+        .live('keypress', function(e) {
+            if (e.keyCode == 13) {
                 $(this).val(calculate($(this).val()));
             }
         })
-        .live('click',function(){
+        .live('click',function() {
             if ($(this).val() == '0.00'){
                 $(this).val('');
             }
@@ -163,78 +181,88 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     );
 
     $('#step2 div.master.body div.list.head tr').html('<td class="w1">Категория</td>\n\
-        <td class="w2">Сумма, '+easyFinance.models.currency.getDefaultCurrencyText()+'</td>\n\
-        <td class="w4">Сред. доход, '+easyFinance.models.currency.getDefaultCurrencyText()+'</td>');
+        <td class="w2">Сумма, ' + easyFinance.models.currency.getDefaultCurrencyText() + '</td>\n\
+        <td class="w4">Сред. доход, ' + easyFinance.models.currency.getDefaultCurrencyText() + '</td>');
     $('#step3 div.master.body div.list.head tr').html('<td class="w1">Категория</td>\n\
-        <td class="w2">Сумма, '+easyFinance.models.currency.getDefaultCurrencyText()+'</td>\n\
-        <td class="w4">Сред. расход, '+easyFinance.models.currency.getDefaultCurrencyText()+'</td>');
+        <td class="w2">Сумма, ' + easyFinance.models.currency.getDefaultCurrencyText() + '</td>\n\
+        <td class="w4">Сред. расход, ' + easyFinance.models.currency.getDefaultCurrencyText() + '</td>');
 
     /**
      * Скрытие-раскрытие ветки дерева
      */
-    $('#master div.line a.name').live('click',function(){
+    $('#master div.line a.name').live('click', function() {
         $(this).closest('.line').toggleClass('open').toggleClass('close');
-//        return false;
     })
+
 
     /**
      * маска для инпута с годом
      */
-    $('#master #step1 input#year').keyup(function(){
+    $('#master #step1 input#year').keyup(function() {
         var str = $('#step1 input#year').val();
         $('#step1 input#year').val(str.match(/[0-9]{0,4}/)[0]);
     });
 
 
-
     /**
      * переходы по листам мастера
      */
-    $('#master .next,#master .prev').click(function(){
+    $('#master .next, #master .prev').click(function() {
         var id = $(this).attr('id');
         var loadDate;
-        switch(id){
+        switch(id) {
             case 'tostep1':
                 $('#master .step').hide();
                 $('#master #step1').show();
                 var tempDate = _currentDate;
                 _riseWizardToWindowTop();
                 break;
+
             case 'tostep2':
-                if (($(this).hasClass('next')) && (tempDate !== _currentDate))
-                {
+                if (($(this).hasClass('next')) && (tempDate !== _currentDate)) {
                     fullSum(0);
                     _currentDate.setDate(1)
                     _currentDate.setYear($('#master #step1 #year').val());
-                    _currentDate.setMonth($('#master #step1 #month').val()-1);
-                    if ($('#master #step1 input:[type="radio"][checked]').attr('plantype')=='new'){
+                    _currentDate.setMonth($('#master #step1 #month').val() - 1);
+                    if ($('#master #step1 input:[type="radio"][checked]').attr('plantype')=='new') {
                         loadDate = new Date(_currentDate);
-                    }else{
+                    }
+                    else{
                         loadDate = new Date();
                         loadDate.setDate(1)
                         loadDate.setYear($('#master #step1 #copy_year').val());
-                        loadDate.setMonth($('#master #step1 #copy_month').val()-1);
+                        loadDate.setMonth($('#master #step1 #copy_month').val() - 1);
                     }
-                    $('#master #step2 .master.head h4').text('Шаг 2 из 3. Доходы - Планирование бюджета на '+$('#master #step1 #month option[value="'+$('#master #step1 #month').val()+'"]').text() +' '+$('#master #step1 #year').val())
-                    $('#master #step3 .master.head h4').text('Шаг 3 из 3. Расходы - Планирование бюджета на '+$('#master #step1 #month option[value="'+$('#master #step1 #month').val()+'"]').text() +' '+$('#master #step1 #year').val())
-                    model.reload(loadDate,function(drain,profit){
+                    $('#master #step2 .master.head h4').text(
+                        'Шаг 2 из 3. Доходы &mdash; Планирование бюджета на ' +
+                        $('#master #step1 #month option[value="' + $('#master #step1 #month').val() + '"]').text() +
+                        ' ' + $('#master #step1 #year').val()
+                    )
+                    $('#master #step3 .master.head h4').text(
+                        'Шаг 3 из 3. Расходы &mdash; Планирование бюджета на ' +
+                        $('#master #step1 #month option[value="' + $('#master #step1 #month').val() + '"]').text() +
+                        ' ' + $('#master #step1 #year').val()
+                    )
+                    model.reload(loadDate, function(drain, profit) {
                         _printMaster(1);
                         _printMaster(0);
-                        var str = '<div class="income">Итого доходов: <span><b>'+formatCurrency(profit)+'</b> '+easyFinance.models.currency.getDefaultCurrencyText()+'</span></div>';
-                        str += '<div class="waste">Итого расходов: <span><b>'+formatCurrency(drain)+'</b> '+easyFinance.models.currency.getDefaultCurrencyText()+'</span></div>';
-                        str += '<div class="rest">Остаток: <span><b>'+formatCurrency(profit - drain)+'</b> '+easyFinance.models.currency.getDefaultCurrencyText()+'</span></div>';
+                        var str = '<div class="income">Итого доходов: <span><b>' + formatCurrency(profit) + '</b> ' + easyFinance.models.currency.getDefaultCurrencyText() + '</span></div>';
+                        str += '<div class="waste">Итого расходов: <span><b>' + formatCurrency(drain) + '</b> ' + easyFinance.models.currency.getDefaultCurrencyText() + '</span></div>';
+                        str += '<div class="rest">Остаток: <span><b>' + formatCurrency(profit - drain) + '</b> ' + easyFinance.models.currency.getDefaultCurrencyText() + '</span></div>';
                         $('#master .f_field3').html(str);
                         fullSum(0);
                     })
-                }else{
+                }
+                else{
                     fullSum(0);
                     $('#master .waste b').text(formatCurrency(globalSum('step3')))
-                    $('#master .rest b').text(formatCurrency(parseFloat($('#master  #step2 .income b').text().toString().replace(/[^0-9\.]/gi,'')) - globalSum('step3')))
+                    $('#master .rest b').text(formatCurrency(parseFloat($('#master  #step2 .income b').text().toString().replace(/[^0-9\.]/gi, '')) - globalSum('step3')))
                 }
                 $('#master .step').hide();
                 $('#master #step2').show();
                 _riseWizardToWindowTop();
                 break;
+
             case 'tostep3':
                 fullSum(0);
                 $('#master .income b').text(formatCurrency(globalSum('step2')))
@@ -243,6 +271,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                 $('#master #step3').show();
                 _riseWizardToWindowTop();
                 break;
+
             case 'tosave':
                 fullSum(0);
                 model.save(_compilReturnJSON(),_currentDate,function(date){widget.reload(date)});
@@ -264,39 +293,42 @@ easyFinance.widgets.budgetMaster = function(model,widget){
         resizable: false
     });
 
-    /**
-     * кнопочка для вызова мастера.
-     */
     function month(num){
         var str = num.toString();
         if (str.length == 1)
-            str = '0'+str;
+            str = '0' + str;
         return str;
     }
 
-    $('#btnBudgetWizard').click(function(_event) {
+    /**
+     * кнопочка для вызова мастера.
+     */
+    $('#btnBudgetWizard').click(function(e) {
         $('#master .step').hide();
         $('#master #step1').show();
+
         var tempDate = widget.getDate()
-        $('#step1 select#copy_month').val(month(tempDate.getMonth()+1));
-        $('#step1 #copy_year').val(tempDate.getFullYear());
-        tempDate.setMonth(tempDate.getMonth()+1);
-        $('#step1 select#month').val(month(tempDate.getMonth()+1));
-        $('#step1 #year').val(tempDate.getFullYear());
+        $('#step1 select#copy_month').val( month(tempDate.getMonth() + 1) );
+        $('#step1 #copy_year').val( tempDate.getFullYear() );
+        tempDate.setMonth( tempDate.getMonth() + 1 );
+
+        $('#step1 select#month').val( month(tempDate.getMonth() + 1) );
+        $('#step1 #year').val( tempDate.getFullYear() );
+
         $('#master').dialog('open');
         $('#master').closest('.ui-widget').find('#ui-dialog-title-master').html($('#master .step:visible .master.head').html());
 
         _riseWizardToWindowTop();
-        // preventing scroll to anchor
-        _event.preventDefault();
+
+        e.preventDefault(); // preventing scroll to anchor
         return false;
     });
 
     /**
-     * копировать - создать новый
+     * переключение между "копировать" и "создать из"
      */
-    $('#master #step1 input:[type="radio"]').click(function(){
-        if ($('#master #step1 input:[type="radio"][checked]').attr('plantype')=='new') {
+    $('#master #step1 input:[type="radio"]').click(function() {
+        if ($('#master #step1 input:[type="radio"][checked]').attr('plantype') == 'new') {
             $('#master #step1 .copy').addClass('hidden');
         }
         else {
@@ -307,23 +339,28 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     /**
      * Сумирование подкатегорий
      */
-    $('#master').live('click',function(){fullSum(0)});
+    $('#master').live('click', function() { fullSum(0) } );
+
     $('#master tr input').live('blur', function() {
-        fullSum($(this).closest('.line').attr('id'),$(this).closest('.step').attr('id'));
+        fullSum( $(this).closest('.line').attr('id'), $(this).closest('.step').attr('id') );
     });
 
-    $('#master .amount input').live('blur',function(){
-
+    $('#master .amount input').live('blur', function() {
         var profit = globalSum('step2');
         var drain = globalSum('step3');
+
         $('#master .waste b').text(formatCurrency(drain));
         $('#master .income b').text(formatCurrency(profit));
-        if (drain - profit > 0){
-            $('#master .rest b').css('color','#EB3C34');
-        }else{
-            $('#master .rest b').css('color','#309500');
+
+        if (drain - profit > 0) {
+            $('#master .rest b').css('color', '#EB3C34');
         }
+        else {
+            $('#master .rest b').css('color', '#309500');
+        }
+
         $('#master .rest b').text(formatCurrency(profit - drain));
     });
+
     return {};
 }
