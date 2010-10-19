@@ -1,4 +1,62 @@
 easyFinance.widgets.budget = function(data) {
+    // шаблоны
+    var tplSummary =
+    '<table>\
+        <tr class="profit">\
+            <td class="plan">\
+                <div><strong>План</strong> доходов:</div>\
+                <div class="right"><span>{%planProfit%} {%currencyName%}</span></div>\
+            </td>\
+            <td class="fact">\
+                <div><strong>Факт</strong> доходов:</div>\
+                <div class="right"><span>{%realProfit%} {%currencyName%}</span></div>\
+            </td>\
+            <td class="balance {%profitClassName%}">\
+                <div><strong>Разница</strong>:</div>\
+                <div class="right"><span>{%diffProfit%} {%currencyName%}</span></div>\
+            </td>\
+        </tr>\
+        <tr class="drain">\
+            <td class="plan">\
+                <div><strong>План</strong> расходов:</div>\
+                <div class="right"><span>{%planDrain%} {%currencyName%}</span></div>\
+            </td>\
+            <td class="fact">\
+                <div><strong>Факт</strong> расходов:</div>\
+                <div class="right"><span>{%realDrain%} {%currencyName%}</span></div>\
+            </td>\
+            <td class="balance {%drainClassName%}">\
+                <div><strong>Разница</strong>:</div>\
+                <div class="right"><span>{%diffDrain%} {%currencyName%}</span></div>\
+            </td>\
+        </tr>\
+    </table>'
+
+var tplBudgetRow =
+    '<tr id="{%id%}" class="{%className%}" type="{%type%}" {%parent%}>\
+        <td class="w1"><a>{%catName%}</a></td>\
+        <td class="w2">{%indicator%}</td>\
+        <td class="w3">\
+            <div class="cont">\
+                <span>{%strPlan%}</span>\
+                <input type="text" value="{%planValue%}"/>\
+            </div>\
+        </td>\
+        <td class="w5">{%factValue%}</td>\
+        <td class="w6 {%diffClass%}">{%diffValue%}{%diffMenu%}</td>\
+    </tr>';
+
+var tplbudgetHeader =
+    '<thead class="budget-header">\
+        <tr>\
+            <th class="w1">Категория</th>\
+            <th class="w2">Состояние</th>\
+            <th class="w3">План, {%currencyName%}</th>\
+            <th class="w5">Факт, {%currencyName%}</th>\
+            <th class="w6">Разница, {%currencyName%}</th>\
+        <tr>\
+    </thead>\
+    <tr><td style="height: 20px;"><!-- чтобы вместить линеечку от "1 ... 31 окт" --></td></tr>';
 
     var _model = data;
 
@@ -10,7 +68,7 @@ easyFinance.widgets.budget = function(data) {
     _updateElapsed();
     _updateTimeLine();
 
-    $(document).bind('accountsLoaded', function() { reload(_currentDate) }); // обновляем данные после добавления операций
+    $(document).bind('accountsLoaded', function() {reload(_currentDate)}); // обновляем данные после добавления операций
 
     function init(data) {
         _model = data;
@@ -54,22 +112,20 @@ easyFinance.widgets.budget = function(data) {
      */
     function _printInfo(){
         var _totalInfo =  _model.returnInfo();
-        var profitClassName = ( _totalInfo.plan_profit < _totalInfo.real_profit) ? 'green' : 'red';
-        var drainClassName = (_totalInfo.real_drain < _totalInfo.plan_drain) ? 'green' : 'red';
-        var table =
-            "<table>"+
-                "<tr class='profit'>"+
-                    "<td class='plan'><div><b>План</b> доходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.plan_profit, true, false)+" "+easyFinance.models.currency.getDefaultCurrencyText()+"</span><div></td>"+
-                    "<td class='fact'><div><b>Факт</b> доходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.real_profit, true, false)+" "+easyFinance.models.currency.getDefaultCurrencyText()+"</span><div></td>"+
-                    "<td class='balance " + profitClassName + "'><div><b>Разница</b>:</div><div class='right'><span>"+formatCurrency(_totalInfo.real_profit-_totalInfo.plan_profit, true, false)+" "+easyFinance.models.currency.getDefaultCurrencyText()+"</span><div></td>"+
-                "</tr>"+
-                "<tr class='drain'>"+
-                    "<td class='plan'><div><b>План</b> расходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.plan_drain, true, false)+" "+easyFinance.models.currency.getDefaultCurrencyText()+"</span><div></td>"+
-                    "<td class='fact'><div><b>Факт</b> расходов: </div><div class='right'><span>"+formatCurrency(_totalInfo.real_drain, true, false)+" "+easyFinance.models.currency.getDefaultCurrencyText()+"</span><div></td>"+
-                    "<td class='balance " + drainClassName + "'><div><b>Разница</b>:</div><div class='right'><span>"+formatCurrency(_totalInfo.plan_drain - _totalInfo.real_drain, true, false)+" "+easyFinance.models.currency.getDefaultCurrencyText()+"</span><div></td>"+
-                "</tr>"+
-            "</table>";
-        $('#budget .budget.info').html(table);
+
+        var vals = {
+            currencyName: easyFinance.models.currency.getDefaultCurrencyText(),
+            planProfit: formatCurrency(_totalInfo.plan_profit, true, false),
+            realProfit: formatCurrency(_totalInfo.real_profit, true, false),
+            diffProfit: formatCurrency(_totalInfo.real_profit - _totalInfo.plan_profit, true, false),
+            planDrain: formatCurrency(_totalInfo.plan_drain, true, false),
+            realDrain: formatCurrency(_totalInfo.real_drain, true, false),
+            diffDrain: formatCurrency(_totalInfo.plan_drain - _totalInfo.real_drain, true, false),
+            profitClassName: ( _totalInfo.plan_profit < _totalInfo.real_profit) ? 'green' : 'red',
+            drainClassName: (_totalInfo.real_drain < _totalInfo.plan_drain) ? 'green' : 'red'
+        }
+
+        $('#budget .budget.info').html(templetor(tplSummary, vals));
         return false;
     }
     _printInfo();
@@ -79,7 +135,7 @@ easyFinance.widgets.budget = function(data) {
     var elapsedPercent;
 
     function _printList(type, categories, parentId) { // 0 == drain
-        var prefix = (type == '1') ? 'p':'d';
+        var prefix = (type == '1') ? 'p' : 'd';
         var budgets = _model.returnList()[prefix];
         var temp = {},
             catId,
@@ -194,24 +250,11 @@ easyFinance.widgets.budget = function(data) {
             strPlan = (params.cls != 'parent open') ? '<FONT COLOR="#FF0000"> запланировать </FONT>' : '0';
         }
 
-        var tpl =
-            '<tr id="{%id%}" class="{%className%}" {%parent%}">\
-                <td class="w1"><a>{%catName%}</a></td>\
-                <td class="w2">{%indicator%}</td>\
-                <td class="w3">\
-                    <div class="cont">\
-                        <span>{%strPlan%}</span>\
-                        <input type="text" value="{%planValue%}"/>\
-                    </div>\
-                </td>\
-                <td class="w5">{%factValue%}</td>\
-                <td class="w6 {%diffClass%}">{%diffValue%}{%diffMenu%}</td>\
-            </tr>';
-
         var vals = {
             id: params.id,
-            className: params.className,
-            parent: params.parent ? 'parent="' + params.parent + '"' : '',
+            className: params.cls,
+            type: params.type,
+            parent: params.parent != undefined ? 'parent="' + params.parent + '"' : '',
             catName: shorter(params.cat, 20),
             indicator: _buildIndicatorString(color, params.drain),
             strPlan: strPlan,
@@ -221,31 +264,7 @@ easyFinance.widgets.budget = function(data) {
             diffValue: formatCurrency(diff, true, false),
             diffMenu: (params.cls == 'nochild' || params.cls == 'child') ? '<div class="menuwrapper"><div class="menu"><a title="Редактировать" class="edit">&nbsp;</a><a title="Удалить" class="remove">&nbsp;</a></div></div>' : ''
         }
-
-        return  templetor(tpl, vals);
-        /*return '<tr id="' + params.id
-                + '" type="' + params.type
-                + '" class="' + params.cls
-                + '" ' + (params.parent !== undefined ? 'parent="' + params.parent + '"' : '') + '>'
-                    + '<td class="w1">'
-                        + '<a>' + shorter(params.cat, 20) + '</a>'
-                    + '</td>'
-                    + '<td class="w2">'
-                        + _buildIndicatorString(color, params.drain)
-                    + '</td>'
-                    + '<td class="w3">'
-                        + '<div class="cont">'
-                            + '<span>' + strPlan + '</span>'
-                            + '<input type="text" value="' + formatCurrency(params.plan, true, false)+ '"/>'
-                        + '</div>'
-                    + '</td>'
-                    + '<td class="w5">'
-                        + formatCurrency(params.fact, true, false)
-                    + '</td>'
-                    + '<td class="w6 ' + diffClass + '">'
-                        + formatCurrency(diff, true, false) + ((params.cls == 'nochild' || params.cls == 'child') ? '<div class="menuwrapper"><div class="menu"><a title="Редактировать" class="edit">&nbsp;</a><a title="Удалить" class="remove">&nbsp;</a></div></div>' : '')
-                    + '</td>'
-                + '</tr>';*/
+        return templetor(tplBudgetRow, vals);
     }
 
     function _buildIndicatorString(color, drainPercent) {
@@ -290,7 +309,7 @@ easyFinance.widgets.budget = function(data) {
 
         var params = null,
             drainprc,
-            str='',
+            str = '',
             temp = _printList(1, _categories, 0);
 
         if (temp.totalAmount > 0) {
@@ -300,13 +319,7 @@ easyFinance.widgets.budget = function(data) {
             drainprc = 0;
         }
 
-        str = '<thead class="budget-header"><tr><th class="w1">Категория</th>'
-        + '<th class="w2">Состояние</th>'
-        + '<th class="w3">План, ' + easyFinance.models.currency.getDefaultCurrencyText() + '</th>'
-        + '<th class="w5">Факт, ' + easyFinance.models.currency.getDefaultCurrencyText() + '</th>'
-        + '<th class="w6">Разница, ' + easyFinance.models.currency.getDefaultCurrencyText() + '</th></tr></thead>'
-
-        str += '<tr><td style="height: 20px;"></td></tr>'
+        str = templetor(tplbudgetHeader, {currencyName: easyFinance.models.currency.getDefaultCurrencyText()})
 
         params = {
             id: "profit",
@@ -411,7 +424,7 @@ easyFinance.widgets.budget = function(data) {
     });
 
     $('#op_btn_Save').click(function() {
-        setTimeout(function(){ $('#budget li.cur').click(); }, 1000);
+        setTimeout(function(){$('#budget li.cur').click();}, 1000);
     });
 
     $('#budget .list tr[parent]').live('click', function() {
