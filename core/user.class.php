@@ -573,21 +573,17 @@ class oldUser
     {
         $user_tags = array();
 
-    if ($cloud)
-    {
-        $user_tags = $this->user_tags;
-    }
-    else
-    {
-                foreach ($this->user_tags as $v)
-                {
-            $user_tags[$v['name']] = $v['cnt'];
+        if ($cloud) {
+            $user_tags = $this->user_tags;
+        } else {
+            foreach ($this->user_tags as $v) {
+                $user_tags[$v['name']] = $v['cnt'];
+            }
+
+            $user_tags = array_keys($user_tags);
         }
 
-        $user_tags = array_keys($user_tags);
-    }
-
-    return $user_tags;
+        return $user_tags;
     }
 
     /**
