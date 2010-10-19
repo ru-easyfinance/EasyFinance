@@ -112,12 +112,16 @@ class ProjectConfiguration extends sfProjectConfiguration
     public static function getMyCurrencyExchange(sfEvent $event)
     {
         $params = $event->getParameters();
-        if ($params['method'] != 'getMyCurrencyExchange')
+        if ($params['method'] != 'getMyCurrencyExchange') {
             return false;
+        }
 
         if (!self::$myCurrencyExchange) {
-            $currencies = Doctrine::getTable('Currency')->createQuery()->execute(array(), Doctrine::HYDRATE_ARRAY);
             self::$myCurrencyExchange = new myCurrencyExchange();
+
+            $currencies = Doctrine::getTable('Currency')
+                ->createQuery()
+                ->execute(array(), Doctrine::HYDRATE_ARRAY);
 
             foreach ($currencies as $currency) {
                 // такого не должно быть по идее, но есть :-(

@@ -30,19 +30,24 @@ class api_sync_AuthTest extends myFunctionalTestCase
 
     /**
      * Авторизоваться
+     * Проверяем 2 ситуации:
+     *  - У пользователя есть подписка на услугу iphone, и она просрочена
+     *  - У пользователя есть действующая подписка
      */
     public function testAuthentificatedAndSubscribed()
     {
         $plan = array(
+            // Просроченная подписка
             array(
                 'subscribed_till' => date('Y-m-d', strtotime('- 2 days')),
-                'status_code' => 401,
+                'status_code' => 402,
                 'element' => array(
                     'selector' => 'response error',
                     'contents' => 'Subscription required'
                 ),
                 'is_authenticated' => false,
             ),
+            // Действующая подписка
             array(
                 'subscribed_till' => date('Y-m-d', strtotime('+ 2 days')),
                 'status_code' => 200,
@@ -126,8 +131,8 @@ class api_sync_AuthTest extends myFunctionalTestCase
                 ->isParameter("action", "login")
             ->end()
             ->with("response")->begin()
-                ->isStatusCode(401)
-                ->checkElement('response error', 'Subscription required')
+                ->isStatusCode(402)
+                ->checkElement('response error', 'Payment required')
             ->end()
             ->with("user")->isAuthenticated(false);
     }

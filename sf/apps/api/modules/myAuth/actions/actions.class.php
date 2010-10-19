@@ -13,6 +13,11 @@ class myAuthActions extends sfActions
 
         $user = $this->getUser();
         if ($user->isAuthenticated()) {
+                if (!$this->checkSubscription()) {
+                    $user->signOut();
+                    return $this->raiseError('Payment required', 402);
+                }
+
             return sfView::SUCCESS;
         }
 
@@ -24,7 +29,7 @@ class myAuthActions extends sfActions
                 $user->signIn($form->getUser());
                 if (!$this->checkSubscription()) {
                     $user->signOut();
-                    return $this->raiseError('Subscription required');
+                    return $this->raiseError('Payment required', 402);
                 }
 
                 return sfView::SUCCESS;
@@ -39,12 +44,12 @@ class myAuthActions extends sfActions
     }
 
 
-    protected function raiseError($errorMessage)
+    protected function raiseError($errorMessage, $code = 401)
     {
-        $this->getResponse()->setStatusCode(401);
+        $this->getResponse()->setStatusCode($code);
 
         $this->setTemplate('error', 'common');
-        $this->setVar('code',    401);
+        $this->setVar('code',    $code);
         $this->setVar('message', $errorMessage);
 
         return sfView::ERROR;
@@ -53,6 +58,8 @@ class myAuthActions extends sfActions
 
     protected function checkSubscription()
     {
+        $this->setVar('subscribedTill', date('Y-m-d', 0));
+
         $subscription = Doctrine::getTable('ServiceSubscription')
             ->getActiveUserServiceSubscription(
                 $this->getUser()->getUserRecord()->getId(),
