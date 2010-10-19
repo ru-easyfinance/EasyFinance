@@ -62,7 +62,7 @@ class myAuthActions extends sfActions
 
         $subscription = Doctrine::getTable('ServiceSubscription')
             ->getActiveUserServiceSubscription(
-                $this->getUser()->getUserRecord()->getId(),
+                $this->getUser()->getUserRecord(),
                 Service::SERVICE_IPHONE
             );
 

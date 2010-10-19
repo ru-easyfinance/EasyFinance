@@ -5,6 +5,6 @@
  */
 class Service extends BaseService
 {
-    const SERVICE_SMS = 1;
-    const SERVICE_IPHONE = 2;
+    const SERVICE_SMS    = 'sms';
+    const SERVICE_IPHONE = 'iphone';
 }

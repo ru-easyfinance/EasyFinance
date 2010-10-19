@@ -39,31 +39,31 @@ class robokassaActions extends sfActions
         $total = round( $term * $price, 2 );
         $transaction->setTotal( $total );
         $transaction->save();
-        
+
         $url = Robokassa::getScriptURL($transaction);
-       
-        
+
+
         $b = new sfWebBrowser();
         $b->get($url);
         $text = $b->getResponseText();
-        
+
         $matches = array();
-        
+
         preg_match_all("/^(.*)document.write\(\'(.*)\'\)/isu", $text, $matches);
 
         $return = array(
             "result" => array(
                 "script" => html_entity_decode(trim($matches[1][0])),
                 "html" => html_entity_decode(trim($matches[2][0]))
-            )            
+            )
         );
 
         $this->getResponse()->setHttpHeader('Content-Type', 'application/json');
-        
+
         return $this->renderText( json_encode($return) );
 
     }
-     
+
     /**
      * /robokassa/result
      * Отвечает на запрос робокассы, о результате операции
@@ -118,7 +118,11 @@ class robokassaActions extends sfActions
         $transaction->save();
 
         // Создаем либо обновляем сабскрипшн
-        $subscription = Doctrine::getTable('ServiceSubscription')->getUserServiceSubscription( $transaction->getUserId(), $transaction->getServiceId() );
+        $subscription = Doctrine::getTable('ServiceSubscription')
+            ->findOneByUserIdAndServiceId(
+                $transaction->getUserId(),
+                $transaction->getServiceId()
+            );
 
         // Если еще нет сабскрипшна на эту услугу - создаем
         if ( !$subscription ) {

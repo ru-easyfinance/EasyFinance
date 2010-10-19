@@ -19,7 +19,7 @@ class model_OperationNotificationTableTest extends myUnitTestCase
 
         // Создать услугу с захардкоженным ID
         $service = new Service();
-        $service->setId(Service::SERVICE_SMS);
+        $service->setKeyword(Service::SERVICE_SMS);
         $service->save();
     }
 
@@ -36,10 +36,12 @@ class model_OperationNotificationTableTest extends myUnitTestCase
 
         $date = new DateTime("{$daysShift}days");
 
+        $service = Doctrine::getTable('Service')
+            ->findOneByKeyword(Service::SERVICE_SMS);
         // Подписка
         $subscription = new ServiceSubscription();
         $subscription->setUser($user);
-        $subscription->setServiceId(Service::SERVICE_SMS);
+        $subscription->setService($service);
         $subscription->setSubscribedTill($date->format('Y-m-d 00:00:00'));
         $subscription->save();
 

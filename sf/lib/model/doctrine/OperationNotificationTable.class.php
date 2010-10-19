@@ -22,7 +22,8 @@ class OperationNotificationTable extends Doctrine_Table
                 ->andWhere("o.accepted = ?", Operation::STATUS_DRAFT)
             ->innerJoin("o.User u")
             ->innerJoin("u.ServiceSubscription ss")
-                ->andWhere('ss.service_id=? AND ss.subscribed_till > ?', array(Service::SERVICE_SMS,  date('Y-m-d')))
+            ->innerJoin("ss.Service s")
+                ->andWhere('s.keyword=? AND ss.subscribed_till > ?', array('sms',  date('Y-m-d')))
             ->limit(100);
 
         return $q;

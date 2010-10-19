@@ -68,7 +68,7 @@ class api_sync_AuthTest extends myFunctionalTestCase
         $user = $this->helper->makeUser($expected);
 
         $service = new Service();
-        $service->id = Service::SERVICE_IPHONE;
+        $service->keyword = Service::SERVICE_IPHONE;
         $service->price = 100;
         $service->name = "Уникальное имя услуги " . uniqid();
         $service->save();
@@ -76,7 +76,7 @@ class api_sync_AuthTest extends myFunctionalTestCase
         foreach ($plan as $case) {
             if (!isset($subscription)) {
                 $subscription = new ServiceSubscription();
-                $subscription->service_id = Service::SERVICE_IPHONE;
+                $subscription->service_id = $service->id;
                 $subscription->user_id = $user->getId();
             }
 

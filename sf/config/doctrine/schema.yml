@@ -274,6 +274,7 @@ Service:
   columns:
     id:                     { type: integer(4),    unsigned: true, primary: true,  autoincrement: true } # ID услуги
     name:                   { type: string(64), notnull: true }                                          # Наименование услуги
+    keyword:                { type: string(64), notnull: true }                                          # Строковый идентификатор услуги
     price:                  { type: float,      unsigned: true, notnull: true }                          # Стоимость услуги
   options:
     symfony:

@@ -151,7 +151,7 @@ class profileActions extends sfActions
         $user = $this->getUser()->getUserRecord();
 
         $subscribtion = Doctrine::getTable('ServiceSubscription')->getActiveUserServiceSubscription(
-            $user->getId(),
+            $user,
             Service::SERVICE_SMS
         );
 
