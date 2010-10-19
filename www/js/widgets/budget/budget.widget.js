@@ -10,10 +10,9 @@ easyFinance.widgets.budget = function(data) {
     _updateElapsed();
     _updateTimeLine();
 
-    // #1388. обновляем данные после добавления операций
-    $(document).bind('accountsLoaded', function() { reload(_currentDate) });
+    $(document).bind('accountsLoaded', function() { reload(_currentDate) }); // обновляем данные после добавления операций
 
-    function init(data){
+    function init(data) {
         _model = data;
     }
 
@@ -32,7 +31,7 @@ easyFinance.widgets.budget = function(data) {
     /**
      * Возвращает используюмую дату в сторонние виджеты
      */
-    function getDate(){
+    function getDate() {
         return new Date(_currentDate);
     }
 
@@ -75,13 +74,9 @@ easyFinance.widgets.budget = function(data) {
     }
     _printInfo();
 
-    ///////////////////////////////////////////////////////////////////////////
-    //                          list                                         //
-    ///////////////////////////////////////////////////////////////////////////
     var _categories = easyFinance.models.category.getUserCategoriesTreeOrdered();
 
     var elapsedPercent;
-
 
     function _printList(type, categories, parentId) { // 0 == drain
         var prefix = (type == '1') ? 'p':'d';
@@ -199,7 +194,36 @@ easyFinance.widgets.budget = function(data) {
             strPlan = (params.cls != 'parent open') ? '<FONT COLOR="#FF0000"> запланировать </FONT>' : '0';
         }
 
-        return '<tr id="' + params.id
+        var tpl =
+            '<tr id="{%id%}" class="{%className%}" {%parent%}">\
+                <td class="w1"><a>{%catName%}</a></td>\
+                <td class="w2">{%indicator%}</td>\
+                <td class="w3">\
+                    <div class="cont">\
+                        <span>{%strPlan%}</span>\
+                        <input type="text" value="{%planValue%}"/>\
+                    </div>\
+                </td>\
+                <td class="w5">{%factValue%}</td>\
+                <td class="w6 {%diffClass%}">{%diffValue%}{%diffMenu%}</td>\
+            </tr>';
+
+        var vals = {
+            id: params.id,
+            className: params.className,
+            parent: params.parent ? 'parent="' + params.parent + '"' : '',
+            catName: shorter(params.cat, 20),
+            indicator: _buildIndicatorString(color, params.drain),
+            strPlan: strPlan,
+            planValue: formatCurrency(params.plan, true, false),
+            factValue: formatCurrency(params.fact, true, false),
+            diffClass: diffClass,
+            diffValue: formatCurrency(diff, true, false),
+            diffMenu: (params.cls == 'nochild' || params.cls == 'child') ? '<div class="menuwrapper"><div class="menu"><a title="Редактировать" class="edit">&nbsp;</a><a title="Удалить" class="remove">&nbsp;</a></div></div>' : ''
+        }
+
+        return  templetor(tpl, vals);
+        /*return '<tr id="' + params.id
                 + '" type="' + params.type
                 + '" class="' + params.cls
                 + '" ' + (params.parent !== undefined ? 'parent="' + params.parent + '"' : '') + '>'
@@ -221,7 +245,7 @@ easyFinance.widgets.budget = function(data) {
                     + '<td class="w6 ' + diffClass + '">'
                         + formatCurrency(diff, true, false) + ((params.cls == 'nochild' || params.cls == 'child') ? '<div class="menuwrapper"><div class="menu"><a title="Редактировать" class="edit">&nbsp;</a><a title="Удалить" class="remove">&nbsp;</a></div></div>' : '')
                     + '</td>'
-                + '</tr>';
+                + '</tr>';*/
     }
 
     function _buildIndicatorString(color, drainPercent) {
