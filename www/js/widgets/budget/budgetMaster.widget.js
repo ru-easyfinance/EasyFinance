@@ -1,6 +1,3 @@
-/**
- * @author Alexander *rewle* Ilichov
- */
 easyFinance.widgets.budgetMaster = function(model,widget){
 
     /**
@@ -177,7 +174,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     /**
      * Компилирует JSON для сообщения на сервер
      */
-    function _compilReturnJSON() {
+    function compileJSONRequest() {
         var tmp = {step3: '', step2: ''};
 
         $('#master .waste_list input').each(function() {
@@ -206,7 +203,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     /**
      * Центрирование окна мастера
      */
-     function _riseWizardToWindowTop() {
+     function recenterDialog() {
         $('#master').dialog('option', 'position', ['center', 60]);
      }
 
@@ -261,7 +258,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                 $('#master .step').hide();
                 $('#master #step1').show();
                 var tempDate = _currentDate;
-                _riseWizardToWindowTop();
+                recenterDialog();
                 break;
 
             case 'tostep2':
@@ -315,7 +312,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                 }
                 $('#master .step').hide();
                 $('#master #step2').show();
-                _riseWizardToWindowTop();
+                recenterDialog();
                 break;
 
             case 'tostep3':
@@ -324,12 +321,12 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                 $('#master .rest b').text(formatCurrency(globalSum('step2') - parseFloat($('#master #step2 .waste b').text().toString().replace(/[^0-9\.]/gi,''))))
                 $('#master .step').hide();
                 $('#master #step3').show();
-                _riseWizardToWindowTop();
+                recenterDialog();
                 break;
 
             case 'tosave':
                 fullSum(0);
-                model.save(_compilReturnJSON(),_currentDate,function(date){widget.reload(date)});
+                model.save(compileJSONRequest(),_currentDate,function(date){widget.reload(date)});
                 $('#master').dialog('close');
                 break;
         }
@@ -372,7 +369,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
         $('#master').dialog('open');
         $('#master').closest('.ui-widget').find('#ui-dialog-title-master').html($('#master .step:visible .master.head').html());
 
-        _riseWizardToWindowTop();
+        recenterDialog();
 
         e.preventDefault(); // preventing scroll to anchor
         return false;
