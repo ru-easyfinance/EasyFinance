@@ -97,14 +97,15 @@ var tplbudgetHeader =
      * Возвращает число дней в месяце
      */
     function _getMonthDays(d) {
-        var m = d.getMonth()
+        var m = d.getMonth();
+        var t = new Date(d);
         for (var i = 29; i < 32; i++) {
-            d.setDate(i)
-            if (m != d.getMonth()) {
-                return (i - 1)
+            t.setDate(i);
+            if (m != t.getMonth()){
+                return (i-1)
             }
         }
-        return (i)
+        return (i);
     }
 
     /**
