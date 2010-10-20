@@ -47,7 +47,7 @@
         <div class="w-feedback" style="padding: 1em 1em 0 1em;">
             <p>Оставьте отзыв о системе управления личными финансами.</p>
 
-            <label for="ftheme" class="w-feedback-title ">Тема<br/>
+            <label for="ftheme" class="w-feedback-title">Тема<br/>
                 <input type="text" id="ftheme" class="b-feedback-title js-feedback-title" style="width: 340px;"/>
             </label>
             <br/>
