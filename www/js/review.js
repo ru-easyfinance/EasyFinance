@@ -10,22 +10,19 @@ var wdgtReview = (function() {
         var trgt = $(evt.target).closest('.b-review-clip');
         var title = trgt.attr('title');
 
-        var index = trgt.siblings().length;
+        var index = trgt.prevAll().length + 1;
         dialog.dialog('open').dialog('option', 'title', title);
         playClip(index);
     }
 
     function playClip(index) {
-        if (!player) {
-            player = flowplayer(playerContainer.attr('id'), "/swf/flowplayer-3.1.5.swf", {
-                clip: {
-                    autoPlay: false,
-                    autoBuffering: false
-                }
-            })
-        }
-
-        player.play(URL_PREFIX + index + '.mp4');
+        player = flowplayer(playerContainer.attr('id'), "/swf/flowplayer-3.1.5.swf", {
+            clip: {
+                url: URL_PREFIX + index + '.mp4',
+                autoPlay: true,
+                autoBuffering: false
+            }
+        })
     }
 
     function init() {
