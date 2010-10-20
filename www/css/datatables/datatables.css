@@ -452,3 +452,11 @@ table.display tr.odd.row_selected td {
 .b-tooltip-container .TableTools {
     display: block;
 }
+
+.b-print-dialog {
+    min-height:0 !important;
+    font-size:15px;
+    text-align:center;
+    margin-top:20px;
+    overflow:hidden !important;
++}

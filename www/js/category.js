@@ -65,10 +65,27 @@ $(document).ready(function() {
         $('form').attr('action','/category/edit/');
 
     });
-    $('.categories li.del').live('click',function(){
-        if (confirm('Удалить категорию?')) {
-            delCategory($(this).closest('tr,.line').attr('id').split("_", 2)[1]);
-        }
+    $('.categories li.del').live('click', function() {
+        $('<div>').addClass('b-category-del-dialog hidden').attr('title', 'Удаление категории').html('Удалить категорию?').appendTo('body');
+        var el = $(this),
+            dialog = $('.b-category-del-dialog'),
+            del = function(el) {
+                el.dialog('close');
+                dialog.remove();
+            };
+        dialog.dialog({
+            resizable: false,
+            modal: true,
+            buttons: {
+                Ok: function() {
+                    delCategory(el.closest('tr,.line').attr('id').split("_", 2)[1]);
+                    del($(this));
+                },
+                Cancel: function() {
+                    del($(this));
+                }
+            }
+        });
     });
     $('.categories li.add').live('click',function(){
         clearForm();

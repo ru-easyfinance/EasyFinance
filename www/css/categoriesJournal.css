@@ -219,4 +219,5 @@
 .categories table td div.cont ul {
     top: 0;
     right: -67px;
+    margin-top: 0 !important;
 }
