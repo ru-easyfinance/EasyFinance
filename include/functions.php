@@ -379,7 +379,11 @@ function include_partial($templateName, $vars = array()) {
     if (false === strpos($templateName, 'global/')) {
         throw new Exception("Только глобальные партиалы из frontend'а");
     }
-
+    foreach($vars as $kk => $vv) {
+        if (preg_match('/^[a-z_]\w+$/i', $kk)) {
+            $$kk = $vv;
+        }
+    }
     $templateName = str_ireplace('global/', '', $templateName);
 
     include(SYS_DIR_ROOT . "/sf/apps/frontend/templates/_" . $templateName . ".php");

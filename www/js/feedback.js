@@ -1,5 +1,8 @@
 var feedback = (function(selector) {
-    var container;
+    var container,
+        dialog, // i hate jquery.ui and strive for destroy it
+        that = this,
+        frm;
 
 
 
@@ -43,10 +46,47 @@ var feedback = (function(selector) {
         return str;
     }
 
+    function onSubmit(e) {
+        e.preventDefault();
+
+        var displayMods = getClientDisplayMods();
+        for (var key in displayMods) {
+            frm[0][key] = displayMods[key]
+        }
+        frm[0]["plugins"] = getClientPlugins();
+
+        utils.ajaxForm(frm, false, false, false, 'json');
+
+        return false;
+    }
+
 
     function init() {
         container = $(selector || '.js-widget-feedback');
         utils.initControls(container);
+
+        dialog = container.find('.js-feedback-dialogue');
+
+        if ('user' in res && 'name' in res.user) {log(container.find('input[name="email"]').closest('.b-row'))
+            container.find('input[name="email"]').closest('.b-row').remove();
+        }
+
+        frm = dialog.find('form');
+        frm.bind('submit', onSubmit)
+
+        $('#btnFeedback, #footerAddMessage, #linkMainMenuFeedback').bind('click', function() {
+            document.write = function(){};
+            dialog.prompt(utils.getParams(dialog));
+            dialog.dialog('open');
+        });
+
+        container.bind('widget.ok', function() {
+            frm.trigger('submit');
+        });
+        container.bind('widget.cancel', function() {
+            dialog.dialog('close');
+
+        })
     }
 
     $(init);

@@ -54,7 +54,7 @@ class Feedback_Controller extends _Core_Controller
          $feedback = new Feedback($message, $title, $param);
 
          if ( $feedback->add_message() ) {
-            $this->tpl->assign( 'result', array('text'=>"Отзыв успешно добавлен.") );
+            $this->tpl->assign( 'result', array('text'=>"Заявка успешно отправлена.") );
          } else {
             $this->tpl->assign( 'error', array('text'=> implode(" \n", $feedback->errorData) ) );
          }
