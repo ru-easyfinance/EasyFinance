@@ -159,6 +159,8 @@ class Login_Controller extends _Core_Controller
                 $data['email'],
                 $data['name']
             );
+
+            $data['redirectUrl'] = '/my/review/';
             $user->initUser($ramblerLogin, sha1($ramblerLogin));
             setCookie("guide", "uyjsdhf", 0, COOKIE_PATH, COOKIE_DOMEN, false);
         }

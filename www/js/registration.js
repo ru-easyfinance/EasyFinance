@@ -17,7 +17,7 @@ $(document).ready(function() {
                     // после обновления страницы нужные данные будут в res
                     window.location.reload();
                 } else {
-                    $("#lblRegistrationStatus").append("<br>Регистрация успешно завершена! Теперь Вы можете <a href=\"/info\">войти в систему</a>.<br>(Вы будете автоматически направлены в личный кабинет через несколько секунд)");
+                    $("#lblRegistrationStatus").append("<br>Регистрация успешно завершена! Теперь Вы можете <a href=\"/my/review/\">войти в систему</a>.<br>(Вы будете автоматически направлены на страницу &laquo;Обзор&raquo; через несколько секунд)");
 
                     if (data.result.redirect)
                         setTimeout(function(){window.location.href = data.result.redirect;},3000);
