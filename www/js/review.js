@@ -1,5 +1,5 @@
 var wdgtReview = (function() {
-    var URL_PREFIX = "/upload/video/review";
+    var URL_PREFIX = "/upload/video/review/";
 
     var container,
         dialog,
