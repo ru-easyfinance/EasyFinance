@@ -26,8 +26,9 @@ class BudgetCategoryTable extends Doctrine_Table
      *
      * @param User $user
      * @param string $start
+     * @param float $rate курс валюты пользователя по-умолчанию
      */
-    public function getBudget(User $user, $start)
+    public function getBudget(User $user, $start, $rate = 1)
     {
         $alias  = 'b';
         $userId = $user->getId();

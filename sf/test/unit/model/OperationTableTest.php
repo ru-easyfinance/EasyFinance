@@ -404,6 +404,7 @@ class model_OperationTableTest extends myUnitTestCase
 
         $expected = 0;
 
+        // Создаём операции в разных валютах в одной категории
         foreach (array(myMoney::RUR, myMoney::USD, myMoney::EUR) as $currency) {
             $amount  = 100;
             $rate    = $exchange->getRate($currency, $defaultCurrancy);
@@ -435,6 +436,10 @@ class model_OperationTableTest extends myUnitTestCase
     {
         $user = $this->helper->makeUser();
         $expected = $this->makeFixturesForGetSumByCategory($user);
+
+        $rate = $this->getContext()->getMyCurrencyExchange()
+            ->getRate($user->getCurrencyId());
+
         $monthCount = 5;
         $expected = $expected / $monthCount;
 
@@ -461,9 +466,11 @@ class model_OperationTableTest extends myUnitTestCase
     {
         $user = $this->helper->makeUser();
         $expected = $this->makeFixturesForGetSumByCategory($user);
+        $rate = $this->getContext()->getMyCurrencyExchange()
+            ->getRate($user->getCurrencyId());
 
         $result = Doctrine::getTable("Operation")
-            ->getFactByCategory($user, date('Y-m-d'));
+            ->getFactByCategory($user, date('Y-m-d'), $rate);
 
         $this->assertEquals(
             $expected,

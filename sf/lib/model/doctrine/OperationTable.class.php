@@ -64,40 +64,91 @@ class OperationTable extends Doctrine_Table
      *
      * @param  sfUser $user
      * @param  string $date
+     * @param  string $rate курс пользовательской валюты
      * @param  string $monthCount
      * @return array
      */
-    public function getMeanByCategory(User $user, $date, $monthCount = 3)
+    public function getMeanByCategory(
+        User $user, $date, $rate = 1, $monthCount = 3
+    )
     {
-        $monthCount = (int) $monthCount ? (int) $monthCount : 3 ;
-        # TODO: убить контекст в модели (опасно для tasks)
-        $rate = sfContext::getInstance()
-            ->getMyCurrencyExchange()->getRate($user->getCurrencyId());
+        $alias = 'foo';
 
-        $alias = 'foo'; # TODO: нормальные альясы
-
-        $query = $this->querySumByCategory($user, $alias)
-            ->select("category_id, sum(amount*cu.rate/{$rate})/{$monthCount} AS mean")
-            ->andWhere("{$alias}.date > ADDDATE('{$date}', INTERVAL -{$monthCount} MONTH)")
-            ->andWhere("{$alias}.date < '{$date}'");
+        $query = $this->querySumByCategory($user, $rate, $alias)
+            ->select("category_id, sum(amount*cu.rate/$rate)/$monthCount AS mean")
+            ->andWhere("{$alias}.accepted = 1")
+            ->andWhere("{$alias}.date > ADDDATE('$date',
+                INTERVAL -$monthCount MONTH)")
+            ->andWhere("{$alias}.date < '$date'");
 
         $data = $query->execute(array(), 'FetchPair');
 
         return $data;
     }
 
+
     /**
      * Посчитать фактический расход по категориям за месяц
      *
      * @param  sfUser $user
      * @param  string $date дата начала месяца
+     * @param  string $rate курс пользовательской валюты
      * @return array
      */
-    public function getFactByCategory(User $user, $date)
+    public function getFactByCategory(User $user, $date, $rate = 1)
+    {
+        $alias = 'foo';
+
+        $query = $this->querySumByCategory($user, $rate, $alias)
+            ->andWhere("{$alias}.accepted = 1")
+            ->andWhere("{$alias}.date >= ?", $date)
+            ->andWhere("{$alias}.date <= LAST_DAY('$date')");
+
+        $data = $query->execute(array(), 'FetchPair');
+
+        return $data;
+    }
+
+
+    /**
+     * Расход по по категориям для операций из календаря
+     *
+     * @param  sfUser $user
+     * @param  string $date дата начала месяца
+     * @param  string $rate курс пользовательской валюты
+     * @return array
+     */
+    public function getCalendarPlanByCategory(User $user, $date, $rate = 1)
     {
         $alias = 'foo'; # TODO: нормальные альясы
 
-        $query = $this->querySumByCategory($user, $alias)
+        $query = $this->querySumByCategory($user, $rate, $alias)
+            ->andWhere("{$alias}.chain_id IS NOT NULL")
+            ->andWhere("{$alias}.chain_id <> 0")
+            ->andWhere("{$alias}.date >= ?", $date)
+            ->andWhere("{$alias}.date <= LAST_DAY('$date')");
+
+        $data = $query->execute(array(), 'FetchPair');
+
+        return $data;
+    }
+
+
+    /**
+     * Расход по операциям из календаря
+     *
+     * @param  sfUser $user
+     * @param  string $date дата начала месяца
+     * @param  string $rate курс пользовательской валюты
+     * @return array
+     */
+    public function getNotCalendarPlanByCategory(User $user, $date, $rate = 1)
+    {
+        $alias = 'foo';
+
+        $query = $this->querySumByCategory($user, $rate, $alias)
+            ->andWhere("{$alias}.chain_id IS NULL OR {$alias}.chain_id = 0")
+            ->andWhere("{$alias}.accepted = 1")
             ->andWhere("{$alias}.date >= ?", $date)
             ->andWhere("{$alias}.date <= LAST_DAY('$date')");
 
@@ -112,20 +163,17 @@ class OperationTable extends Doctrine_Table
      *
      * @param  sfUser $user
      * @param  string $alias
+     * @param  string $rate курс пользовательской валюты
      * @return Doctrine_Query
      */
-    public function querySumByCategory(User $user, $alias = 'o')
+    public function querySumByCategory(User $user, $rate = 1, $alias = 'o')
     {
-        $rate = sfContext::getInstance()
-            ->getMyCurrencyExchange()->getRate($user->getCurrencyId());
-
         $query = $this->createQuery("{$alias}")
             ->select("category_id, sum(amount*cu.rate/$rate) AS fact")
             ->innerJoin("{$alias}.Category c")
             ->innerJoin("{$alias}.Account a")
             ->innerJoin("{$alias}.Account.Currency cu")
             ->where("{$alias}.user_id = ?", $user->getId())
-            ->andWhere("{$alias}.accepted = 1")
             ->groupBy("{$alias}.category_id");
 
         return $query;

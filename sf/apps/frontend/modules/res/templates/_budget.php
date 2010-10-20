@@ -18,7 +18,9 @@ foreach ($budgetCategories as $budgetEntry) {
     $budget['list'][$drainOrProfit][$budgetEntry->getCategoryId()] = array(
         'amount' => $budgetEntry->getAmount(),
         'money'  => $budgetEntry->getFact(),
-        'mean'   => $budgetEntry->getThreeMonthMean()
+        'mean'   => $budgetEntry->getThreeMonthMean(),
+        'calendar_plan' => $budgetEntry->getCalendarPlan(),
+        'not_calendar_plan' => $budgetEntry->getNotCalendarPlan()
     );
 }
 

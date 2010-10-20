@@ -14,22 +14,39 @@ class Budget
      * @var array
      */
     private $_threeMonthMean = array();
+    /**
+     * Запланированный расход по категориям
+     * @var array
+     */
+    private $_calendarPlan = array();
+    /**
+     * Незапланированный расход по категориям
+     * @var array
+     */
+    private $_notCalendarPlan = array();
 
     /**
      * Загружает список статей бюджета
      * @param User $user
      * @param string $startDate
+     * @param float $rate курс пользовательской валюты
      */
-    public function load($user, $startDate)
+    public function load($user, $startDate, $rate = 1)
     {
         $plan = Doctrine::getTable('BudgetCategory')
             ->getBudget($user, $startDate);
 
         $this->_threeMonthMean = Doctrine::getTable('Operation')
-            ->getMeanByCategory($user, $startDate);
+            ->getMeanByCategory($user, $startDate, $rate);
 
         $this->_fact = Doctrine::getTable('Operation')
-            ->getFactByCategory($user, $startDate);
+            ->getFactByCategory($user, $startDate, $rate);
+
+        $this->_calendarPlan = Doctrine::getTable('Operation')
+            ->getCalendarPlanByCategory($user, $startDate, $rate);
+
+        $this->_notCalendarPlan = Doctrine::getTable('Operation')
+            ->getNotCalendarPlanByCategory($user, $startDate, $rate);
 
         $budgetCategories = array();
 
@@ -62,6 +79,18 @@ class Budget
     {
         return isset($this->_fact[$categoryId]) ?
             abs($this->_fact[$categoryId]) : 0;
+    }
+
+    public function getCalendarPlan($categoryId)
+    {
+        return isset($this->_calendarPlan[$categoryId]) ?
+            $this->_calendarPlan[$categoryId] : 0;
+    }
+
+    public function getNotCalendarPlan($categoryId)
+    {
+        return isset($this->_notCalendarPlan[$categoryId]) ?
+            $this->_notCalendarPlan[$categoryId] : 0;
     }
 
     public function getThreeMonthMean($categoryId)
