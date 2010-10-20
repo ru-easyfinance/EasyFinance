@@ -43,29 +43,7 @@
 
 <div id="jsRelated" style="z-index: 10; height: 0; border: 0;">
 
-    <div id="sendFeedBack" style="display: none;" class="">
-        <div class="w-feedback" style="padding: 1em 1em 0 1em;">
-            <p>Оставьте отзыв о системе управления личными финансами.</p>
-
-            <label for="ftheme" class="w-feedback-title">Тема<br/>
-                <input type="text" id="ftheme" class="b-feedback-title js-feedback-title" style="width: 340px;"/>
-            </label>
-            <br/>
-            <br/>
-
-            <label for="ffmes" class="w-feedback-msg">Ваш отзыв<br/>
-                <textarea id="ffmes" class="b-feedback-msg js-feedback-msg" style="width: 340px; height: 110px;"></textarea>
-            </label>
-            <br/>
-            <br/>
-
-            <?php if (!$sf_user->isAuthenticated() && IS_DEMO == true) : ?>
-                <label for="fmail" class="w-feedback-mail">E-mail<br/>
-                    <input type="text" id="fmail" class="b-feedback-mail js-feedback-mail"/>
-                </label>
-            <?php endif; ?>
-        </div>
-    </div>
+    <?php include_partial('global/common/feedback', array())?>
 
     <div id="popupHelp" class="hidden">
         <div class="title"></div><br>
