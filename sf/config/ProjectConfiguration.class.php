@@ -35,6 +35,9 @@ class ProjectConfiguration extends sfProjectConfiguration
         // Событие на получение "из контекста" обменника валют
         // @see sfContext::__call
         $this->dispatcher->connect('context.method_not_found', array(__CLASS__, 'getMyCurrencyExchange'));
+
+        // Обработка события "конфигурация подключения"
+        $this->dispatcher->connect('doctrine.configure_connection', array(__CLASS__, 'doctrineConnectionConfigurationEvent'));
   }
 
 
@@ -117,7 +120,10 @@ class ProjectConfiguration extends sfProjectConfiguration
             self::$myCurrencyExchange = new myCurrencyExchange();
 
             foreach ($currencies as $currency) {
-                self::$myCurrencyExchange->setRate($currency['id'], $currency['rate'], myCurrencyExchange::BASE_CURRENCY);
+                // такого не должно быть по идее, но есть :-(
+                if ($currency['rate'] != 0) {
+                    self::$myCurrencyExchange->setRate($currency['id'], $currency['rate'], myCurrencyExchange::BASE_CURRENCY);
+                }
             }
         }
 
@@ -125,4 +131,19 @@ class ProjectConfiguration extends sfProjectConfiguration
         $event->setReturnValue(self::$myCurrencyExchange);
         return true;
     }
+
+
+    /**
+     * Обработка события после настройки конфигурации соединения (соединения еще не было!)
+     */
+    public static function doctrineConnectionConfigurationEvent(sfEvent $event)
+    {
+        // Листнер: параметры для ПДО
+        $eventListener = new myDoctrineConnectionListener($event['connection'], array(
+            'MYSQL_ATTR_USE_BUFFERED_QUERY' => true,
+        ));
+        // вешаем свой листнер на текущую конфигурацию коннекта
+        $event['connection']->addListener($eventListener, 'project_listener');
+    }
+
 }
