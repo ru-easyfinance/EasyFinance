@@ -35,6 +35,9 @@ class ProjectConfiguration extends sfProjectConfiguration
         // Событие на получение "из контекста" обменника валют
         // @see sfContext::__call
         $this->dispatcher->connect('context.method_not_found', array(__CLASS__, 'getMyCurrencyExchange'));
+
+        // см. ниже. Вообще это хак.
+        $this->dispatcher->connect('doctrine.configure_connection', array(__CLASS__, 'bufferedQueriesEnablerHack'));
   }
 
 
@@ -125,4 +128,14 @@ class ProjectConfiguration extends sfProjectConfiguration
         $event->setReturnValue(self::$myCurrencyExchange);
         return true;
     }
+
+
+    /**
+     * Хак, вешаем принудительно на коннект использование "буферов" =/
+     */
+    public static function bufferedQueriesEnablerHack(sfEvent $event)
+    {
+        $event['connection']->getDbh()->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+    }
+
 }
