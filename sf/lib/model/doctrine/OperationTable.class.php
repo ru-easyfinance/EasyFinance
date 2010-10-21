@@ -270,19 +270,31 @@ class OperationTable extends Doctrine_Table
      */
     public function getExpirienceByUser(User $user)
     {
-        $q = new Doctrine_RawSql();
-        $q->addComponent('op', 'Operation op')
-            ->select('{op.md}')
-            ->from("(SELECT
-                op.id, DATEDIFF(CURDATE(), IFNULL(MIN(op.date), CURDATE()))+1 AS md
-            FROM operation op
-            WHERE op.type != ?
-                AND op.accepted = 1
-                AND op.deleted_at IS NULL
-                AND op.user_id = ?
-        ) op");
+        $query = "
+            SELECT (DATEDIFF(CURDATE(), IFNULL(tbl.mindate, CURDATE())) + 1) AS cnt
+            FROM (
+                SELECT MIN(op.date) AS mindate
+                FROM operation op
+                WHERE op.type != :operation_type
+                    AND op.accepted = 1
+                    AND op.deleted_at IS NULL
+                    AND op.user_id = :user_id
+            ) AS tbl
+        ";
 
-        return (int) $q->execute(array(Operation::TYPE_BALANCE, $user->getId()), Doctrine::HYDRATE_SINGLE_SCALAR);
+        $pdoConn = Doctrine_Manager::getInstance()->getCurrentConnection()->getDbh();
+        $statement = $pdoConn->prepare($query);
+
+        $statement->execute(array(
+            'operation_type' => Operation::TYPE_BALANCE,
+            'user_id'        => (int) $user->getId(),
+        ));
+
+        $result = (int) $statement->fetchColumn(0);
+
+        $statement->closeCursor();
+
+        return $result;
     }
 
 
