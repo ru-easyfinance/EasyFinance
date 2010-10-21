@@ -120,7 +120,10 @@ class ProjectConfiguration extends sfProjectConfiguration
             self::$myCurrencyExchange = new myCurrencyExchange();
 
             foreach ($currencies as $currency) {
-                self::$myCurrencyExchange->setRate($currency['id'], $currency['rate'], myCurrencyExchange::BASE_CURRENCY);
+                // такого не должно быть по идее, но есть :-(
+                if ($currency['rate'] != 0) {
+                    self::$myCurrencyExchange->setRate($currency['id'], $currency['rate'], myCurrencyExchange::BASE_CURRENCY);
+                }
             }
         }
 
