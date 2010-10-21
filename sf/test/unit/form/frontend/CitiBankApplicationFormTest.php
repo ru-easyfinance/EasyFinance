@@ -32,15 +32,15 @@ class form_frontend_CitiBankApplicationFormTest extends myFormTestCase
     protected function getFields()
     {
         return array(
-            'city',
-            'employment',
-            'birthday',
-            'name',
-            'patronymic',
-            'surname',
-            'mobile_code',
-            'mobile_phone',
-            'email',
+            'city'         => array('required' => true),
+            'employment'   => array('required' => true),
+            'birthday'     => array('required' => true),
+            'name'         => array('required' => true),
+            'patronymic'   => array(),
+            'surname'      => array('required' => true),
+            'mobile_code'  => array('required' => true),
+            'mobile_phone' => array('required' => true),
+            'email'        => array('required' => true),
         );
     }
 
