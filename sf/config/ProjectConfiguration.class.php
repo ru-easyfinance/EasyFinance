@@ -36,8 +36,8 @@ class ProjectConfiguration extends sfProjectConfiguration
         // @see sfContext::__call
         $this->dispatcher->connect('context.method_not_found', array(__CLASS__, 'getMyCurrencyExchange'));
 
-        // см. ниже. Вообще это хак.
-        $this->dispatcher->connect('doctrine.configure_connection', array(__CLASS__, 'bufferedQueriesEnablerHack'));
+        // Обработка события "конфигурация подключения"
+        $this->dispatcher->connect('doctrine.configure_connection', array(__CLASS__, 'doctrineConnectionConfigurationEvent'));
   }
 
 
@@ -134,11 +134,16 @@ class ProjectConfiguration extends sfProjectConfiguration
 
 
     /**
-     * Хак, вешаем принудительно на коннект использование "буферов" =/
+     * Обработка события после настройки конфигурации соединения (соединения еще не было!)
      */
-    public static function bufferedQueriesEnablerHack(sfEvent $event)
+    public static function doctrineConnectionConfigurationEvent(sfEvent $event)
     {
-        $event['connection']->getDbh()->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+        // Листнер: параметры для ПДО
+        $eventListener = new myDoctrineConnectionListener($event['connection'], array(
+            'MYSQL_ATTR_USE_BUFFERED_QUERY' => true,
+        ));
+        // вешаем свой листнер на текущую конфигурацию коннекта
+        $event['connection']->addListener($eventListener, 'project_listener');
     }
 
 }
