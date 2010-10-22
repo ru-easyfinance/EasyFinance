@@ -35,7 +35,7 @@ define('URL_ROOT_MAIN',    "${project.url.root}/");
 define('URL_ROOT_DEMO',    "${demo.url.root}/");
 define('URL_ROOT_IFRAME',  "iframe." . URL_ROOT_MAIN);
 define('URL_ROOT_RAMBLER', "rambler." . URL_ROOT_MAIN);
-if (strpos($_SERVER['HTTP_HOST'], 'rambler') === false) {
+if (!isset($_SERVER['HTTP_HOST']) || strpos($_SERVER['HTTP_HOST'], 'rambler') === false) {
     define('URL_ROOT_WIKI', URL_ROOT_MAIN . 'my/wikiwrapper/');
 } else {
     define('URL_ROOT_WIKI', URL_ROOT_RAMBLER . 'my/wikiwrapper/');
