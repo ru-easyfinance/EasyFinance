@@ -41,7 +41,9 @@
                     </script>
                     <div class="poxupih_center">
                         <script type="text/javascript" language="JavaScript" src="http://widget.reformal.ru/tabn3v4.js"></script>
-                        <div class="drsdtf">на платформе <a href="http://reformal.ru" target="_blank" title="Reformal.ru">Reformal.ru</a></div></div>
+                        <div class="drsdtf">на платформе <a href="http://reformal.ru" target="_blank" title="Reformal.ru">Reformal.ru</a></div>
+                    </div>
+                    <p class="b-feedback-switchtext">Есть срочная проблема? <span class="pseudo-active js-switchtabs" title="Поддержка — решение Ваших проблем">Обратитесь в службу поддержки</span> — поможем оперативно и вежливо.</p>
                 </div>
                 <div id="feedbacktabs-2">
                     <form class="b-form-skeleton" action="/feedback/add_message/?responseMode=json" method="post">
@@ -74,8 +76,9 @@
                         <input type="hidden" name="colors"/>
                         <input type="hidden" name="plugins"/>
                     </form>
+                    <p class="b-feedback-switchtext">Есть идея или отзыв? <span class="pseudo-active js-switchtabs" title="Идеи и отзывы">Выскажитесь</span> &mdash; мы учтем их в работе.</p>
                 </div>
-                <ul class="b-feedback-tabs-switchers">
+                <ul class="b-feedback-tabs-switchers hidden">
                     <li><a href="#feedbacktabs-1">«Хочу предложить вам…»</a></li>
                     <li><a href="#feedbacktabs-2">У меня проблема</a></li>
                 </ul>

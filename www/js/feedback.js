@@ -3,7 +3,8 @@ var feedback = (function(selector) {
         dialog, // i hate jquery.ui and strive for destroy it
         that = this,
         frm,
-        tabs;
+        tabs,
+        tabsSwitches;
 
 
 
@@ -61,8 +62,14 @@ var feedback = (function(selector) {
         return false;
     }
 
-    function onTabs(e, ui) {
-       dialog.dialog('option', 'title', $(ui.tab).text());
+    function onTabs(e) {
+       if (tabs.tabs('option', 'selected') == 0) {
+           tabs.tabs('select', 1);
+       }
+       else {
+           tabs.tabs('select', 0)
+       }
+       dialog.dialog('option', 'title', $(e.target).attr('title'));
     }
 
 
@@ -94,7 +101,8 @@ var feedback = (function(selector) {
         });
 
         tabs = dialog.find('.js-control-tabs');
-        tabs.bind('tabsselect', onTabs);
+        tabsSwitches = dialog.find('.js-switchtabs');
+        tabsSwitches.bind('click', onTabs);
     }
 
     $(init);

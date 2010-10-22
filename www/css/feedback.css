@@ -28,3 +28,8 @@
         .b-feedback-tabs .b-feedback-message {
             height: 350px;
         }
+
+        .b-feedback-tabs .b-feedback-switchtext {
+            padding-top: .5em;
+            color: #EB6B44;
+        }
