@@ -12,21 +12,14 @@ class currenciesComponent extends sfComponent
      */
     public function execute($request)
     {
-        #Max: пля, ну сделай ты $user->getCurrencies() с проксированием к таблице
-        #     и маппингу полей здесь или во вью
-        $_data = Doctrine_Query::create()
-            ->select('user_currency_list AS list, user_currency_default AS default')
-            ->from('User a')
-            ->andWhere('a.id = ?', $user = $this->getUser()->getUserRecord()->getId())
-            ->limit(1)
-            ->fetchOne(array(), Doctrine_Core::HYDRATE_ARRAY);
+        $user = $this->getUser()->getUserRecord();
 
         $data = array(
-            'default' => (int)$_data['default'],
+            'default' => (int) $user->getCurrencyId(),
         );
 
         // массив PK используемых пользователем валют
-        $currencies = unserialize($_data['list']);
+        $currencies = unserialize($user->getCurrencyList());
 
         $toChange = Doctrine_Query::create()
             ->select('q.id, q.symbol, q.code, q.rate')
@@ -34,11 +27,7 @@ class currenciesComponent extends sfComponent
             ->whereIn('q.id', $currencies)
             ->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
 
-        # Вообще это глобальная вещь, и по хорошему надо инициализировать onDemand в конфиге и класть в контекст
-        # Но давай пока оставим здесь, если нельзя быстро переделать
-        # Сделал глобальную загрузку по событию, но не нравится. Контекст пока не нравится больше.
-        $this->dispatcher->notifyUntil($event = new sfEvent($this, 'app.myCurrencyExchange', array()));
-        $exchange = $event->getReturnValue();
+        $exchange = sfContext::getInstance()->getMyCurrencyExchange();
         foreach ($toChange as $row) {
             $exchange->setRate($row['id'], $row['rate'], myCurrencyExchange::BASE_CURRENCY);
         }

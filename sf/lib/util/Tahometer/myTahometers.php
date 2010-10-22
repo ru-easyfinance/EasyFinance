@@ -178,8 +178,7 @@ class myTahometers
     protected function getExchanger()
     {
         if (!$this->myCurrencyExchange) {
-            $this->dispatcher->notifyUntil($event = new sfEvent($this, 'app.myCurrencyExchange', array()));
-            $this->myCurrencyExchange = $event->getReturnValue();
+            $this->myCurrencyExchange = sfContext::getInstance()->getMyCurrencyExchange();
         }
 
         return $this->myCurrencyExchange;
