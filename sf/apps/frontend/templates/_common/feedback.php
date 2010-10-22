@@ -14,7 +14,7 @@
     )
 ?>
 <div class="b-feedback js-widget js-widget-feedback hidden">
-    <div class="js-feedback-dialogue" ondblclick="return {width: 750, height: 620}">
+    <div class="js-feedback-dialogue" ondblclick="return {width: 750, height: 620, title: '«Хочу предложить вам…»'}">
         <div style="margin-top: 1em;">
             <div id="feedbacktabs" class="b-feedback-tabs js-control js-control-tabs">
                 <div id="feedbacktabs-1">
@@ -74,7 +74,7 @@
                     </form>
                 </div>
                 <ul class="b-feedback-tabs-switchers">
-                    <li><a href="#feedbacktabs-1">&laquo;Хочу предложить вам&hellip;&raquo;</a></li>
+                    <li><a href="#feedbacktabs-1">«Хочу предложить вам…»</a></li>
                     <li><a href="#feedbacktabs-2">У меня проблема</a></li>
                 </ul>
             </div>

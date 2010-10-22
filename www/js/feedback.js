@@ -2,7 +2,8 @@ var feedback = (function(selector) {
     var container,
         dialog, // i hate jquery.ui and strive for destroy it
         that = this,
-        frm;
+        frm,
+        tabs;
 
 
 
@@ -60,6 +61,10 @@ var feedback = (function(selector) {
         return false;
     }
 
+    function onTabs(e, ui) {
+       dialog.dialog('option', 'title', $(ui.tab).text());
+    }
+
 
     function init() {
         container = $(selector || '.js-widget-feedback');
@@ -67,7 +72,7 @@ var feedback = (function(selector) {
 
         dialog = container.find('.js-feedback-dialogue');
 
-        if ('user' in res && 'name' in res.user) {log(container.find('input[name="email"]').closest('.b-row'))
+        if ('user' in res && 'name' in res.user) {
             container.find('input[name="email"]').closest('.b-row').remove();
         }
 
@@ -83,10 +88,13 @@ var feedback = (function(selector) {
         container.bind('widget.ok', function() {
             frm.trigger('submit');
         });
+
         container.bind('widget.cancel', function() {
             dialog.dialog('close');
+        });
 
-        })
+        tabs = dialog.find('.js-control-tabs');
+        tabs.bind('tabsselect', onTabs);
     }
 
     $(init);
