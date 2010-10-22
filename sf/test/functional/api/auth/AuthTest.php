@@ -43,7 +43,7 @@ class api_sync_AuthTest extends myFunctionalTestCase
                 'status_code' => 402,
                 'element' => array(
                     'selector' => 'response error',
-                    'contents' => 'Subscription required'
+                    'contents' => 'Payment required'
                 ),
                 'is_authenticated' => false,
             ),
