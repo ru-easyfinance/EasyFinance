@@ -14,7 +14,7 @@
     )
 ?>
 <div class="b-feedback js-widget js-widget-feedback hidden">
-    <div class="js-feedback-dialogue" ondblclick="return {width: 750, height: 620, title: '«Хочу предложить вам…»'}">
+    <div class="js-feedback-dialogue" ondblclick="return {width: 750, height: 630, title: '«Хочу предложить вам…»'}">
         <div style="margin-top: 1em;">
             <div id="feedbacktabs" class="b-feedback-tabs js-control js-control-tabs">
                 <div id="feedbacktabs-1">
@@ -39,7 +39,9 @@
                     reformal_wdg_tbcolor  = "#FFFFFF";
                     //-->
                     </script>
-                    <div class="poxupih_center"><script type="text/javascript" language="JavaScript" src="http://widget.reformal.ru/tabn3v4.js"></script><div class="drsdtf">на платформе <a href="http://reformal.ru" target="_blank" title="Reformal.ru">Reformal.ru</a></div></div>
+                    <div class="poxupih_center">
+                        <script type="text/javascript" language="JavaScript" src="http://widget.reformal.ru/tabn3v4.js"></script>
+                        <div class="drsdtf">на платформе <a href="http://reformal.ru" target="_blank" title="Reformal.ru">Reformal.ru</a></div></div>
                 </div>
                 <div id="feedbacktabs-2">
                     <form class="b-form-skeleton" action="/feedback/add_message/?responseMode=json" method="post">
