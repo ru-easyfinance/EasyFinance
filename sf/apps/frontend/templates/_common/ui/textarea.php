@@ -25,7 +25,7 @@
     }
 
     $render['taClass'] = '';
-    if (isset($inputClass)) {
+    if (isset($taClass)) {
         $render['taClass'] = $taClass;
     }
 

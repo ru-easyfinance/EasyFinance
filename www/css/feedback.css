@@ -1,0 +1,30 @@
+.b-feedback {
+
+}
+    .b-feedback-tabs .gertuik { /* скрываем заголовок реформала */
+        display: none;
+    }
+
+    .b-feedback-tabs .poxupih_center {
+        min-height: 460px;
+    }
+    
+    .b-feedback-tabs {
+
+    }
+        .b-feedback-tabs .b-feedback-tabs-switchers .ui-state-focus,
+        .b-feedback-tabs .b-feedback-tabs-switchers .ui-state-focus a {
+            outline: none;
+            border: none;
+        }
+        .b-feedback-tabs .b-feedback-tabs-switchers .ui-state-active {
+            display: none;
+        }
+            .b-feedback-tabs .b-feedback-tabs-switchers .ui-state-default a {
+                border-bottom: 1px dashed;
+                font-size: 120%;
+            }
+
+        .b-feedback-tabs .b-feedback-message {
+            height: 350px;
+        }
