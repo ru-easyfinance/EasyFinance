@@ -28,10 +28,6 @@ class currenciesComponent extends sfComponent
             ->execute(array(), Doctrine_Core::HYDRATE_ARRAY);
 
         $exchange = sfContext::getInstance()->getMyCurrencyExchange();
-        foreach ($toChange as $row) {
-            $exchange->setRate($row['id'], $row['rate'], myCurrencyExchange::BASE_CURRENCY);
-        }
-        unset($row);
 
         #Max: мапишь? а может лучше в шаблоне
         foreach ($toChange as $row) {
