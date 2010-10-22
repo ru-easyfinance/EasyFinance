@@ -391,6 +391,7 @@ class model_OperationTableTest extends myUnitTestCase
      *
      * @param User $user
      * @return float сумма по добавленным операциям с учётом валюты
+     * TODO: использовать статичные псевдо-курсы валют, не трогать контекст
      */
     private function makeFixturesForGetSumByCategory(User $user)
     {
@@ -416,14 +417,14 @@ class model_OperationTableTest extends myUnitTestCase
                 array(
                     'amount' => $amount,
                     'date'   => date('Y-m-d'),
-                    'category_id' => $category->getId()
+                    'category_id' => $category->getId(),
                 )
             );
 
             $expected += $amount * $rate;
         }
 
-        return $expected;
+        return $expected * -1;
     }
 
 
@@ -442,9 +443,9 @@ class model_OperationTableTest extends myUnitTestCase
 
         $this->assertEquals(
             $expected,
-            array_pop($result),
+            (float) array_pop($result),
             'Средний расход с учётом валют',
-            $expected * 0.01
+            0.001
         );
     }
 
@@ -462,9 +463,9 @@ class model_OperationTableTest extends myUnitTestCase
 
         $this->assertEquals(
             $expected,
-            array_pop($result),
+            (float) array_pop($result),
             'Фактический расход с учётом валют',
-            $expected * 0.01
+            0.001
         );
     }
 
