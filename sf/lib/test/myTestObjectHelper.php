@@ -308,6 +308,7 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
     public function makeTarget(Account $account = null, array $props = array(), $save = true)
     {
         $defaultProps = array(
+            'category_id'   => 1,
             'title'         => $this->makeText(sprintf('Название цели %d', $this->getUniqueCounter())),
             'type'          => 'r',
             'amount'        => rand(10000, 100000) + 0.05,
@@ -331,12 +332,15 @@ class myTestObjectHelper extends sfPHPUnitObjectHelper
 
         $user = $account->getUser();
         # Svel: что-то я перестал понимать, какие категории для чего :/
-        $category = $this->makeCategory($user, array(), $save);
+        # Anton Minin: не для того эти категории
+        # TODO сделать категории для финцелей, а пока я воспользуюсь отсутствием
+        # ограничений на внешнем ключе
+        //$category = $this->makeCategory($user, array(), $save);
 
         $ob = $this->makeModel('Target', $props, false);
         $ob->setUser($user);
         $ob->setAccount($account);
-        $ob->setCategory($category);
+        //$ob->setCategory($category);
 
         if ($save) {
             $ob->save();
