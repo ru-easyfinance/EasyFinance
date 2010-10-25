@@ -165,53 +165,9 @@ table.display td.center {
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * DataTables row classes
  */
-table.display tr.odd.gradeA {
-    background-color: #ddffdd;
-}
-
-table.display tr.even.gradeA {
-    background-color: #eeffee;
-}
-
-
-
-
-table.display tr.odd.gradeA {
-    background-color: #ddffdd;
-}
-
-table.display tr.even.gradeA {
-    background-color: #eeffee;
-}
-
-table.display tr.odd.gradeC {
-    background-color: #ddddff;
-}
-
-table.display tr.even.gradeC {
-    background-color: #eeeeff;
-}
-
-table.display tr.odd.gradeX {
-    background-color: #ffdddd;
-}
-
-table.display tr.even.gradeX {
-    background-color: #ffeeee;
-}
-
-table.display tr.odd.gradeU {
-    background-color: #ddd;
-}
-
-table.display tr.even.gradeU {
-    background-color: #eee;
-}
-
-
 tr.odd td {
-    border:1px #e9f7e2 solid;
-    background-color: #e9f7e2;
+    border:1px #f2faee solid;
+    background-color: #f2faee;
 }
 
 tr.even td {
@@ -307,148 +263,6 @@ table.display tr.odd.row_selected td {
 
 
 /*
- * Sorting classes for columns
- */
-/* For the standard odd/even */
-tr.odd td.sorting_1 {
-    border:1px #c7e5b8 solid;
-    background-color: #c7e5b8;
-}
-
-tr.odd td.sorting_2 {
-    border:1px #DADCFF solid;
-    background-color: #DADCFF;
-}
-
-tr.odd td.sorting_3 {
-    border:1px #E0E2FF solid;
-    background-color: #E0E2FF;
-}
-
-tr.even td.sorting_1 {
-    border:1px #e4f0df solid;
-    background-color: #e4f0df;
-}
-
-tr.even td.sorting_2 {
-    border:1px #F2F3FF solid;
-    background-color: #F2F3FF;
-}
-
-tr.even td.sorting_3 {
-    border:1px #F9F9FF solid;
-    background-color: #F9F9FF;
-}
-
-
-/* For the Conditional-CSS grading rows */
-/*
-    Colour calculations (based off the main row colours)
-  Level 1:
-        dd > c4
-        ee > d5
-    Level 2:
-      dd > d1
-      ee > e2
- */
-tr.odd.gradeA td.sorting_1 {
-    background-color: #c4ffc4;
-}
-
-tr.odd.gradeA td.sorting_2 {
-    background-color: #d1ffd1;
-}
-
-tr.odd.gradeA td.sorting_3 {
-    background-color: #d1ffd1;
-}
-
-tr.even.gradeA td.sorting_1 {
-    background-color: #d5ffd5;
-}
-
-tr.even.gradeA td.sorting_2 {
-    background-color: #e2ffe2;
-}
-
-tr.even.gradeA td.sorting_3 {
-    background-color: #e2ffe2;
-}
-
-tr.odd.gradeC td.sorting_1 {
-    background-color: #c4c4ff;
-}
-
-tr.odd.gradeC td.sorting_2 {
-    background-color: #d1d1ff;
-}
-
-tr.odd.gradeC td.sorting_3 {
-    background-color: #d1d1ff;
-}
-
-tr.even.gradeC td.sorting_1 {
-    background-color: #d5d5ff;
-}
-
-tr.even.gradeC td.sorting_2 {
-    background-color: #e2e2ff;
-}
-
-tr.even.gradeC td.sorting_3 {
-    background-color: #e2e2ff;
-}
-
-tr.odd.gradeX td.sorting_1 {
-    background-color: #ffc4c4;
-}
-
-tr.odd.gradeX td.sorting_2 {
-    background-color: #ffd1d1;
-}
-
-tr.odd.gradeX td.sorting_3 {
-    background-color: #ffd1d1;
-}
-
-tr.even.gradeX td.sorting_1 {
-    background-color: #ffd5d5;
-}
-
-tr.even.gradeX td.sorting_2 {
-    background-color: #ffe2e2;
-}
-
-tr.even.gradeX td.sorting_3 {
-    background-color: #ffe2e2;
-}
-
-tr.odd.gradeU td.sorting_1 {
-    background-color: #c4c4c4;
-}
-
-tr.odd.gradeU td.sorting_2 {
-    background-color: #d1d1d1;
-}
-
-tr.odd.gradeU td.sorting_3 {
-    background-color: #d1d1d1;
-}
-
-tr.even.gradeU td.sorting_1 {
-    background-color: #d5d5d5;
-}
-
-tr.even.gradeU td.sorting_2 {
-    background-color: #e2e2e2;
-}
-
-tr.even.gradeU td.sorting_3 {
-    background-color: #e2e2e2;
-}
-
-
-/*
  * Row highlighting example
  */
 .ex_highlight #example tbody tr.even:hover, #example tbody tr.even td.highlighted {
@@ -528,135 +342,113 @@ tr.even.gradeU td.sorting_3 {
  * Custom styles
  */
 .custom-grid-style {
-    display:block;
+    display: block;
 }
 .custom-grid-style.loading {
-    background:url(../../img/i/spinner.gif) 50% 50% no-repeat;
+    background: url(../../img/i/spinner.gif) 50% 50% no-repeat;
 }
 .custom-grid-style.small-spinner {
-    background:none;
+    background: none;
 }
 .small-spinner.loading .b-preloader {
-    float:left;
-    width:16px;
-    height:16px;
-    background:url(../../img/i/spinner-small.gif) 50% 50% no-repeat;
-    display:block;
+    float: left;
+    width: 16px;
+    height: 16px;
+    background: url(../../img/i/spinner-small.gif) 50% 50% no-repeat;
+    display: block;
 }
 
 .custom-grid-style {
-    margin-top:20px;
-    display:block;
+    margin-top: 20px;
+    display: block;
 }
 .custom-grid-style.fixedHeader {
-    margin-top:0;
+    margin-top: 0;
 }
 .custom-grid-style table {
-    width:100%;
-    border-collapse:collapse;
-    display:table; /* Safari и Google Chrome негодуют от display: block */
+    width: 100%;
+    border-collapse: collapse;
+    display: table; /* Safari и Google Chrome негодуют от display: block */
 }
 .custom-grid-style table th {
-    text-align:left;
-    vertical-align:middle;
-    padding:5px 16px 5px 5px;
-    cursor:pointer;
+    text-align: left;
+    vertical-align: middle;
+    padding: 5px 16px 5px 5px;
+    cursor: pointer;
 }
 .custom-grid-style table th.no-trigger {
-    padding:5px;
+    padding: 5px;
 }
 .custom-grid-style table th,
 .custom-grid-style table td {
-    font-size:11px;
-    vertical-align:middle;
+    font-size:  12px;
+    vertical-align:  middle;
 }
 .custom-grid-style table th {
-    white-space:nowrap;
+    white-space: nowrap;
 }
 .custom-grid-style table td {
-    padding:5px;
-    cursor:pointer;
+    padding: 5px;
+    cursor: pointer;
 }
 .custom-grid-style table td:first-child {
-    cursor:default;
+    cursor: default;
 }
 .custom-grid-style table td .b-icon {
-    width:15px;
-    height:15px;
-    background:url(../../img/i/iconsOperation.gif) no-repeat;
-    margin:0 auto;
-    display:block;
+    width: 15px;
+    height: 15px;
+    background: url(../../img/i/iconsOperation.gif) no-repeat;
+    margin: 0 auto;
+    display: block;
 }
 .custom-grid-style table td .b-icon.outcome {
-    background-position:-16px 0;
+    background-position: -16px 0;
 }
 .custom-grid-style table td .b-icon.transfer {
-    width:16px;
-    height:16px;
-    background-position:-32px 0;
+    width: 16px;
+    height: 16px;
+    background-position: -32px 0;
 }
 .custom-grid-style table td .b-icon.target {
-    width:15px;
-    height:16px;
-    background-position:-49px 0;
+    width: 15px;
+    height: 16px;
+    background-position: -49px 0;
 }
-/*.custom-grid-style table td .b-icon {
-    width:14px;
-    height:14px;
-    background:url(../../img/i/operation-icons.png) no-repeat;
-    margin:0 auto;
-    display:block;
-}
-.custom-grid-style table td .b-icon.outcome {
-    background-position:-14px 0;
-}
-.custom-grid-style table td .b-icon.transfer {
-    background-position:-28px 0;
-}
-.custom-grid-style table td .b-icon.target {
-    width:16px;
-    height:15px;
-    background-position:-42px 0;
-}*/
 
 .custom-grid-style table tr:hover td {
-    border:1px #f7f9d5 solid;
-    background-color:#f7f9d5 !important;
-}
-.custom-grid-style table tr:hover td.sorting_1 {
-    border:1px #cfeebd solid;
-    background-color: #cfeebd !important;
+    border: 1px #f7f9d5 solid;
+    background-color: #f7f9d5 !important;
 }
 .custom-grid-style table td.l-right {
-    text-align:right;
+    text-align: right;
 }
 .custom-grid-style table td.l-center {
-    text-align:center;
+    text-align: center;
 }
 .custom-grid-style table .css_right {
-    float:right;
-    margin-right:-16px;
+    float: right;
+    margin-right: -16px;
 }
 .custom-grid-style .custom-sort span {
-    background-position:-50px -80px;
+    background-position: -50px -80px;
 }
 .custom-grid-style .paging_full_numbers em {
-    font-size:.916em;
-    font-weight:400;
-    font-style:normal;
-    color:#0085bc;
-    margin-left:5px;
+    font-size: .916em;
+    font-weight: 400;
+    font-style: normal;
+    color: #0085bc;
+    margin-left: 5px;
 }
 .custom-grid-style .paging_full_numbers em.b-pagination {
-    margin-right:5px;
+    margin-right: 5px;
 }
 
 .TableTools {
-    display:none;
-    float:none;
-    height:34px;
-    margin:0;
+    display: none;
+    float: none;
+    height: 34px;
+    margin: 0;
 }
 .b-tooltip-container .TableTools {
-    display:block;
+    display: block;
 }
