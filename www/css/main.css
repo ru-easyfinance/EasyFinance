@@ -186,6 +186,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
     min-height: 100%;
     display: block;
     overflow: hidden;
+    z-index: 10;
 }
 
 #container1.iframe { width: 570px; }
