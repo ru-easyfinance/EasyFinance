@@ -81,10 +81,10 @@ thead.budget-header {
 .heightLarge .budget#budget .list .list.body {
     overflow-y: auto;
     overflow-x: hidden;
-    height: 460px;
-    max-height: 460px;
+    height: auto !important;
+    max-height: none !important;
     position: relative;
-    width: auto
+    width: auto;
 }
 
 .budget#budget .list .list table tr {
