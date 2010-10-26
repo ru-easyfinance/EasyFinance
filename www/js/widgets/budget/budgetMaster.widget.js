@@ -69,10 +69,10 @@ easyFinance.widgets.budgetMaster = function(model,widget){
             catId: category.id,
             catName: category.name,
             planValue: '',
-            budgetMean: '',
+            budgetMean: '0',
             calendarPlanned: ''
         };
-        
+
         bdgt = $.extend({}, bdgt);
 
         if ("amount" in bdgt) {
@@ -104,13 +104,9 @@ easyFinance.widgets.budgetMaster = function(model,widget){
         var categoryType,
             parentId,
             parentName,
-            catId,
-            catName,
-            budget,
-            plan,
-            bdgt,
 
             cat_rows = [],
+            row = '',
             vals = {};
 
         var _categories = easyFinance.models.category.getUserCategoriesTreeOrdered();
@@ -123,24 +119,10 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                 children = _categories[key].children
 
                 for (var k in children) {
-                    cat_rows.push( _printMasterRow(children[k], _data[children[k].id], type == 0) )
-//                    categoryType = _categories[key].children[k].type;
-//
-//                    if ( (type == 0 && categoryType < 1) || (type == 1 && categoryType > -1) ) {
-//                        catId = _categories[key].children[k].id;
-//
-//                        bdgt = $.extend({amount: 0, mean: 0}, _data[catId]);
-//
-//                        vals = {
-//                            catId: catId,
-//                            catName: _categories[key].children[k].name,
-//                            planValue: formatCurrency( bdgt.amount ),
-//                            budgetMean: formatCurrency( bdgt.mean ),
-//                            calendarPlanned: ("calendar_plan" in bdgt) ? '<small>' + formatCurrency( bdgt.calendar_plan ) + '</small>' : ''
-//                        }
-//
-//                        cat_rows.push(templetor(tplCategoryRow, vals));
-//                    }
+                    row = _printMasterRow(children[k], _data[children[k].id], type == 0)
+                    if (row.length) {
+                        cat_rows.push(row);
+                    }
                 }
 
                 if (!cat_rows.length) {
@@ -277,7 +259,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
 
     $('#step2 div.master.body div.list.head tr').html(templetor(tplTableCaptionProfit, {defaultCurrency: easyFinance.models.currency.getDefaultCurrencyText()}));
     $('#step3 div.master.body div.list.head tr').html(templetor(tplTableCaptionDrain, {defaultCurrency: easyFinance.models.currency.getDefaultCurrencyText()}));
-    
+
 
     /**
      * Скрытие-раскрытие ветки дерева
