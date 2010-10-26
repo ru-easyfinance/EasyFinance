@@ -33,7 +33,7 @@ easyFinance.widgets.budget = function(data) {
     </table>'
 
 var tplBudgetRow =
-    '<tr id="{%id%}" class="{%className%}" type="{%type%}" {%parent%}>\
+    '<tr id="{%id%}" class="{%className%} js-tooltipped" type="{%type%}" {%parent%} title="{%title%}">\
         <td class="w1"><a>{%catName%}</a></td>\
         <td class="w2">{%indicator%}</td>\
         <td class="w3">\
@@ -136,24 +136,35 @@ var tplbudgetHeader =
     var elapsedPercent;
 
     function _printList(type, categories, parentId) { // 0 == drain
-        var prefix = (type == '1') ? 'p' : 'd';
-        var budgets = _model.returnList()[prefix];
+        var prefix = (type == 1) ? 'p' : 'd'; // profit / drain
+
+        var budgets = _model.returnList()[prefix],
+            budget;
+
         var temp = {},
+            dhtml = '',
+
             catId,
             catName,
             catType,
+
             amount,
             money,
             totalAmount = 0,
             totalMoney = 0,
-            dhtml = '';
+            totalCalendarPlan = 0,
+            totalNotCalendarPlan = 0,
+            calendarPlan = 0,
+            notCalendarPlan = 0;
 
         for (var key in categories) {
             catType = categories[key].type;
 
-            if ((type === 0 && catType < 1) || (type == 1 && catType > -1)) {
+            if ((type == 0 && catType < 1) || (type == 1 && catType > -1)) {
                 catId = categories[key].id;
                 catName = categories[key].name;
+
+                budget = budgets[catId];
 
                 if (categories[key].children.length) {
                     temp = _printList(type, categories[key].children, catId);
@@ -162,11 +173,30 @@ var tplbudgetHeader =
                     temp = {};
                 }
 
-                totalAmount += parseFloat(isNaN(temp.totalAmount)?0:temp.totalAmount) + parseFloat((budgets[catId]?Math.abs(budgets[catId].amount):0));
-                totalMoney += parseFloat(isNaN(temp.totalMoney)?0:temp.totalMoney) + parseFloat((budgets[catId]?Math.abs(budgets[catId].money):0));
+                totalAmount += parseFloat(isNaN(temp.totalAmount) ? 0 : temp.totalAmount)
+                    + parseFloat(budget ? Math.abs(budget.amount) : 0);
 
-                amount =  parseFloat(isNaN(temp.totalAmount)?0:temp.totalAmount) + parseFloat((budgets[catId]?Math.abs(budgets[catId].amount):0));
-                money = parseFloat(isNaN(temp.totalMoney)?0:temp.totalMoney) + parseFloat((budgets[catId]?Math.abs(budgets[catId].money):0));
+                totalMoney += parseFloat(isNaN(temp.totalMoney) ? 0 : temp.totalMoney)
+                    + parseFloat(budget ? Math.abs(budget.money) : 0);
+
+                totalCalendarPlan += parseFloat(isNaN(temp.totalCalendarPlan) ? 0 : temp.totalCalendarPlan)
+                	+ parseFloat(budget ? Math.abs(budget.calendar_plan) : 0);
+
+                totalNotCalendarPlan += parseFloat(isNaN(temp.totalNotCalendarPlan) ? 0 : temp.totalNotCalendarPlan)
+                	+ parseFloat(budget ? Math.abs(budget.not_calendar_plan) : 0);
+
+                amount = parseFloat(isNaN(temp.totalAmount) ? 0 : temp.totalAmount)
+                    + parseFloat(budget ? Math.abs(budget.amount) : 0);
+
+                money = parseFloat(isNaN(temp.totalMoney) ? 0 : temp.totalMoney)
+                    + parseFloat(budget ? Math.abs(budget.money):0);
+
+                calendarPlan = parseFloat(isNaN(temp.totalCalendarPlan) ? 0 : temp.totalCalendarPlan)
+                	+ parseFloat(budget ? Math.abs(budget.calendar_plan) : 0);
+
+                notCalendarPlan = parseFloat(isNaN(temp.notCalendarPlan) ? 0 : temp.notCalendarPlan)
+                	+ parseFloat(budget ? Math.abs(budget.not_calendar_plan) : 0);
+
                 if (amount > 0 || money !== 0) {
                     var drainprc = Math.abs(Math.round(money*100/amount));
 
@@ -186,6 +216,8 @@ var tplbudgetHeader =
                         plan: amount,
                         fact: money,
                         diff: Math.abs(Math.abs(amount) - Math.abs(money)),
+                        calendarPlan: calendarPlan,
+                        notCalendarPlan: notCalendarPlan,
                         drain: drainprc
                     };
 
@@ -201,7 +233,13 @@ var tplbudgetHeader =
         if (isNaN(totalMoney)){
             totalMoney = 0
         }
-        return {xhtml: dhtml, totalAmount: totalAmount, totalMoney: totalMoney};
+        return {
+            xhtml: dhtml,
+            totalAmount: totalAmount,
+            totalMoney: totalMoney,
+        	totalCalendarPlan: totalCalendarPlan,
+        	totalNotCalendarPlan: totalNotCalendarPlan
+        };
     }
 
     function _buildTableRow(params) {
@@ -210,37 +248,39 @@ var tplbudgetHeader =
             diffClass = '',
             strPlan = '';
 
-        params.plan = parseInt(params.plan);
-        params.fact = parseInt(params.fact);
+        var title;
+
+        params.plan = parseFloat(params.plan);
+        params.fact = parseFloat(params.fact);
+        params.calendarPlan = parseFloat(params.calendarPlan);
+        params.notCalendarPlan = parseFloat(params.notCalendarPlan);
         
 
         // определяем цвет ползунков
         if (params.type == "p") { // для доходов
             diff = params.fact - params.plan;
 
-            if (elapsedPercent <= params.drain) {
+            if (0 >= _calculateIsOverrun(params.plan, params.calendarPlan, params.notCalendarPlan)) {
                 color = 'green';
+                diffClass = 'sumGreen';
+                title = 'Сохраняя текущий уровень доходов, вы не выйдете за рамки бюджета.'
             }
             else {
                 color = 'red';
-            }
-
-            if (elapsedPercent < params.drain) { // при превышении доходов
-                diffClass = 'sumGreen';
+                title = 'Сохраняя текущий уровень доходов, вы не уложитесь в бюджет.'
             }
         }
         else { // для расходов
             diff = params.plan - params.fact;
 
-            if (elapsedPercent >= params.drain) {
+            if (0 <= _calculateIsOverrun(params.plan, params.calendarPlan, params.notCalendarPlan)) {
                 color = 'green';
+                title = 'Сохраняя текущий уровень расходов, вы не выйдете за рамки бюджета.'
             }
             else {
                 color = 'red';
-            }
-
-            if (elapsedPercent < params.drain) { // при превышении расходов
                 diffClass = 'sumRed';
+                title = 'Сохраняя текущий уровень расходов, вы не уложитесь в бюджет.'
             }
         }
 
@@ -263,7 +303,8 @@ var tplbudgetHeader =
             factValue: formatCurrency(params.fact, true, false),
             diffClass: diffClass,
             diffValue: formatCurrency(diff, true, false),
-            diffMenu: (params.cls == 'nochild' || params.cls == 'child') ? '<div class="menuwrapper"><div class="menu"><a title="Редактировать" class="edit">&nbsp;</a><a title="Удалить" class="remove">&nbsp;</a></div></div>' : ''
+            diffMenu: (params.cls == 'nochild' || params.cls == 'child') ? '<div class="menuwrapper"><div class="menu"><a title="Редактировать" class="edit">&nbsp;</a><a title="Удалить" class="remove">&nbsp;</a></div></div>' : '',
+            title: title
         }
         return templetor(tplBudgetRow, vals);
     }
@@ -274,6 +315,26 @@ var tplbudgetHeader =
         return '<div class="indicator">'
                     + '<div class="' + color + '" style="width: ' + drainPercent + '%;"></div>' +
                 '</div>';
+    }
+
+    /**
+     * @param plan сумма запанированная в бюджете
+     * @param calendarPlan сумма запанированная в календаре
+     * @param notCalendarPlan сумма не запанированная в бюджете, но потраченная
+     * @return -1 если план меньше факта, 0 если равен и 1 если больше
+     */
+    function _calculateIsOverrun(plan, calendarPlan, notCalendarPlan) {
+    	var elapsed = 0;
+    	if (_currentDate.getMonth() == date.getMonth()) {
+            elapsed = date.getDate() / _getMonthDays(date);
+        }
+        else {
+            elapsed = (_currentDate > date) ? 0 : 1;
+        }
+
+    	var a = (plan - calendarPlan) * elapsed;
+    	var b = notCalendarPlan;
+    	return (a == b ? 0 : (a < b ? -1 : 1) );
     }
 
     function _updateElapsed() {
@@ -360,7 +421,7 @@ var tplbudgetHeader =
 
         $("#budgetTimeLine").show();
 
-        $budgetBody.html('<table style="width: 100%;">' + str + '</table>');
+        $budgetBody.html('<table style="width: 100%;" class="efTableWithTooltips">' + str + '</table>');
 
         _updateTimeLine();
     }
@@ -442,7 +503,7 @@ var tplbudgetHeader =
         }
     });
     
-    $('#budget .list tr input').live('keypress',function(e){
+    $('#budget .list tr input').live('keypress', function(e){
         if (e.keyCode == 13){
             var id = $(this).closest('tr').attr('id');
             var type = $(this).closest('tr').attr('type');

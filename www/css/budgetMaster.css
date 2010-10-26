@@ -42,7 +42,7 @@
 
 .budget#master .waste_list table {
     position: relative;
-    width: 502px;
+    width: 100%;
 }
 
 .budget#master .waste_list table td {
@@ -51,7 +51,6 @@
 }
 
 .budget#master .waste_list table td.w1 {
-    width: 199px;
     padding-right: 5px;
     overflow: hidden;
 }
@@ -62,13 +61,11 @@
 }
 
 .budget#master .waste_list table td.w2 {
-    width: 103px;
     padding-top: 4px;
     z-index: 10;
 }
 
 .budget#master .waste_list .list.body table td.w4 {
-    width: 160px;
     text-align: right;
     padding-right: 10px;
 }
@@ -76,7 +73,7 @@
 .budget#master .waste_list .line .amount {
     position: absolute;
     top: 7px;
-    right: 196px;
+    left: 320px;
     font-weight: bold;
 }
 
@@ -93,7 +90,6 @@
 
 .budget#master .waste_list .line {
     position: relative;
-    width: 502px;
     padding: 7px 0 5px 0;
     overflow: hidden;
     background: url('/img/i/point_x.gif') repeat-x bottom left;
@@ -199,3 +195,33 @@
     font-size: 14px;
     margin: 5px
 }
+
+.b-budgetwizard {
+
+}
+    .b-budgetwizard .b-budgetwizard-table {
+        table-layout: fixed;
+    }
+
+        .b-budgetwizard-table .b-budgetwizard-columns__catname {
+            width: 34%;
+        }
+        .b-budgetwizard-table .b-budgetwizard-columns__amount {
+            width: 19%;
+        }
+        .b-budgetwizard-table .b-budgetwizard-columns__mean {
+            width: 20%;
+        }
+        .b-budgetwizard-table .b-budgetwizard-columns__calendar {
+            width: 20%;
+        }
+            .b-budgetwizard-table__content .b-budgetwizard-cell__catname {
+                display: block;
+                margin-left: 25px;
+            }
+            .b-budgetwizard-table__content .b-budgetwizard-cell__mean {
+                text-align: right;
+            }
+            .b-budgetwizard-table__content .b-budgetwizard-cell__calendar {
+                text-align: right;
+            }

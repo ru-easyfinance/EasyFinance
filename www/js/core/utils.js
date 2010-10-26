@@ -74,6 +74,9 @@ var utils = (function() {
         },
         control: function (node) { // would return 'datepicker' for 'js-control js-control-datepicker';
             return normalizeNode(node).className.match(/js-control-(\w*)/)[1];
+        },
+        command: function(node) {
+            return normalizeNode(node).className.match(/js-cmd-(\w*)/)[1];
         }
     }
 
@@ -273,11 +276,18 @@ var utils = (function() {
         });
     }
 
+    function proxy(fn, ctx) {
+        return function() {
+            fn.apply(ctx, [].slice.call(arguments, 0))
+        }
+    }
+
     return {
         // variuos utils
         toPhone: toPhone,
         templator: templator,
         log: log,
+        proxy: proxy,
 
         // controls and widgets
         getParams: getParams,
@@ -294,3 +304,4 @@ var utils = (function() {
         ajaxUpload: ajaxUpload
     }
 })();
+

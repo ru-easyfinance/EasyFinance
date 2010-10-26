@@ -10,42 +10,50 @@ easyFinance.models.budget = function(){
          */
         var _data;
         function load (data) {
-            var key, real={p:0,d:0}, plan ={p:0,d:0};
-            for(key in data.list.p){
+            var real = {p: 0, d: 0},
+                plan = {p: 0, d: 0};
+
+            for (var key in data.list.p) {
                 plan.p += Math.abs(parseFloat(data.list.p[key].amount))
                 real.p += Math.abs(parseFloat(data.list.p[key].money))
             }
-            for(key in data.list.d){
+            for (key in data.list.d) {
                 plan.d += Math.abs(parseFloat(data.list.d[key].amount))
                 real.d += Math.abs(parseFloat(data.list.d[key].money))
             }
-            _data = {list : data.list,
-                    main: {
-                        plan_profit : plan.p,
-                        real_profit : real.p,
-                        plan_drain : plan.d,
-                        real_drain : real.d
-                    }
-                    }
-        }
 
-        function reload (date,callback) {
-            var month = date.getMonth()+1;
-            if (month.toString().length == 1){
-                month = '0'+month.toString()
+            _data = {
+                list : data.list,
+                main: {
+                    plan_profit : plan.p,
+                    real_profit : real.p,
+                    plan_drain : plan.d,
+                    real_drain : real.d
+                }
             }
-            $.post('/my/budget/load/',
-            {
-                start: date.getFullYear()+'-'+month+'-01'
-            },
-            function(data)
-            {
-                load(data);
-                if(typeof callback == "function"){callback(_data.main.real_drain,_data.main.real_profit)}//@todo main ->budget_info
-
-            },
-            'json')
         }
+
+        function reload (date, callback) {
+            var month = date.getMonth() + 1;
+            if (month.toString().length == 1) {
+                month = '0' + month.toString()
+            }
+            
+            $.post(
+                '/my/budget/load/',
+                {
+                    start: date.getFullYear() + '-' + month + '-01'
+                },
+                function(data) {
+                    load(data);
+                    if(typeof callback == "function") {
+                        callback(_data.main.real_drain,_data.main.real_profit)
+                    }
+                },
+                'json'
+            )
+        }
+
         /**
          * @desc возвращает список бюджетов
          * @return {}
@@ -61,66 +69,74 @@ easyFinance.models.budget = function(){
          * @param callback {function}
          * @return void
          */
-        function save (budget,date,callback){
-            var month = date.getMonth()+1;
+        function save (budget, date, callback){
+            var month = date.getMonth() + 1;
             if (month.toString().length == 1){
-                month = '0'+month.toString()
+                month = '0' + month.toString()
             }
+
             $.post('/my/budget/add/',
                 {
                     data: budget,
-                    start: date.getFullYear()+'-'+month+'-01'
+                    start: date.getFullYear() + '-' + month + '-01'
                 },
-                function(data){
-                    if (!data['error'] || data.error == []){
+                function(data) {
+                    if (!data['error'] || data.error == []) {
                         $.jGrowl("Бюджет сохранён", {theme: 'green'});
-                        if(typeof callback == "function"){callback(date);}
-                    }else{
+                        if (typeof callback == "function") {
+                            callback(date);
+                        }
+                    }
+                    else{
                         var err = '<ul>';
-                        for(var key in data.error)
-                        {
+                        for(var key in data.error) {
                             err += '<li>' + data.error[key] + '</li>';
                         }
-                        $.jGrowl(err+'</ul>', {theme: 'red'});
+                        $.jGrowl(err + '</ul>', {theme: 'red'});
                     }
                 },
                 'json'
             )
         }
+
         /**
          * @desc удаляет бюджет
          *
          * @return {String} html for $().append(html)
          */
         function del (date, id, type, callback){
-            var month = date.getMonth()+1;
+            var month = date.getMonth() + 1;
             if (month.toString().length == 1){
-                month = '0'+month.toString()
+                month = '0' + month.toString()
             }
             $.post('/my/budget/del/',
                 {
-                    date_start  : date.getFullYear()+'-'+month+'-01',
-                    category_id : id,
-                    type        : (type == 'p' ? 0 : 1)
+                    date_start: date.getFullYear() + '-' + month + '-01',
+                    category_id: id,
+                    type: (type == 'p' ? 0 : 1)
                 },
-                function(data)
-                {
-                    if (!data['error'] || data.error == []){
+                function(data) {
+                    if (!data['error'] || data.error == []) {
                         $.jGrowl("Бюджет удалён", {theme: 'green'});
-                        if (type =='p'){
+
+                        if (type == 'p'){
                             _data.main.plan_profit = _data.main.plan_profit - _data.list[type][id]['amount']
                             _data.main.real_profit = _data.main.real_profit - _data.list[type][id]['money']
                             delete _data.list[type][id];
-                        }else{
+                        }
+                        else {
                             _data.main.plan_drain = _data.main.plan_drain - _data.list[type][id]['amount']
                             _data.main.real_drain = _data.main.real_drain - _data.list[type][id]['money']
                             delete _data.list[type][id]['amount'];
                         }
-                        if(typeof callback == "function"){callback();}
-                    }else{
+
+                        if (typeof callback == "function"){
+                            callback();
+                        }
+                    }
+                    else {
                         var err = '<ul>';
-                        for(var key in data.error)
-                        {
+                        for(var key in data.error) {
                             err += '<li>' + data.error[key] + '</li>';
                         }
                         $.jGrowl(err+'</ul>', {theme: 'red'});
@@ -129,6 +145,7 @@ easyFinance.models.budget = function(){
                 'json'
             );//del
         }
+
         /**
          * @desc редактирует бюджет
          * @param date {date}
@@ -139,37 +156,42 @@ easyFinance.models.budget = function(){
          * @return {String} html for $().append(html)
          */
         function edit (date, type, id, value, callback){
-            var month = date.getMonth()+1;
+            var month = date.getMonth() + 1;
             if (month.toString().length == 1){
-                month = '0'+month.toString()
+                month = '0' + month.toString()
             }
             value = value.toString().replace(/[^0-9\.]/gi,'');
+
             $.post('/my/budget/edit/',
                 {
-                    type        : (type == 'p' ? 0 : 1),
-                    category_id : id,
-                    value       : value,
-                    start       : date.getFullYear()+'-'+month+'-01'
+                    type : (type == 'p' ? 0 : 1),
+                    category_id: id,
+                    value: value,
+                    start: date.getFullYear() + '-' + month + '-01'
                 },
-                function(data){
-                    if (!data['error'] || data.error == []){
+                function(data) {
+                    if (!data['error'] || data.error == []) {
                         $.jGrowl("Бюджет изменён", {theme: 'green'});
 
-                        if (type =='p'){
+                        if (type =='p') {
                             _data.main.plan_profit = _data.main.plan_profit - _data.list[type][id]['amount'] + parseFloat(value)
                             _data.list[type][id]['amount'] = value;
-                        }else{
+                        }
+                        else{
                             _data.main.plan_drain = _data.main.plan_drain - _data.list[type][id]['amount'] + parseFloat(value)
                             _data.list[type][id]['amount'] = value;
                         }
-                        if(typeof callback == "function"){callback();}
-                    }else{
+
+                        if (typeof callback == "function"){
+                            callback();
+                        }
+                    }
+                    else {
                         var err = '<ul>';
-                        for(var key in data.error)
-                        {
+                        for(var key in data.error) {
                             err += '<li>' + data.error[key] + '</li>';
                         }
-                        $.jGrowl(err+'</ul>', {theme: 'red'});
+                        $.jGrowl(err + '</ul>', {theme: 'red'});
                     }
                 }
                 ,'json'
@@ -180,18 +202,18 @@ easyFinance.models.budget = function(){
          * @return {}
          */
         function returnInfo(){
-            return _data.main;//.budget_info;
+            return _data.main;
         }
 
         /**
          * @desc возвращает объект для редактирования и тп
          * @return {} {}
          */
-        function get_data(p_id,c_id){
+        function get_data(p_id, c_id){
             var tmp = _data.list[p_id]['children'];
-            for (var key in tmp)
-            {
-                if( tmp[key]['id'] == c_id ){
+            
+            for (var key in tmp) {
+                if (tmp[key]['id'] == c_id) {
                     return tmp[key];
                 }
             }
@@ -201,8 +223,6 @@ easyFinance.models.budget = function(){
         return {
             reload : reload,
             load : load,
-//            print_info : print_info,
-//            print_list : print_list,
             save : save,
             del : del,
             edit : edit,

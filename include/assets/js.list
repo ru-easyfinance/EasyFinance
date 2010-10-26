@@ -1,9 +1,12 @@
 jquery/jquery.min.js
 jquery/jquery.common.js
-core.js
+jquery/jquery.cookie.js
+core/utils.js
+core/commands.js
 controls/jquery.phonefield.js
 controls/jquery.prompt.js
 controls/jquery.ajaxupload.js
+controls/jquery.collapsible_table.js
 easyfinance.js
 models/calendar.cache.js
 jquery/ui.core.js
@@ -25,7 +28,6 @@ jquery/jquery.timepicker-table.min.js
 jquery/jquery.validate.js
 jquery/tinysort.js
 jquery/jquery.form.js
-jquery/jquery.cookie.js
 jquery/jquery.download.js
 jquery/jquery.ui.ufd.js
 jquery/jquery.rw-calculator.settings.js

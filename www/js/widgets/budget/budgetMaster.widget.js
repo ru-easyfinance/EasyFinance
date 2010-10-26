@@ -11,6 +11,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
             <td class="w2">\
                 <div class="cont">\
                     <input type="text" value="{%planValue%}"/>\
+                    {%calendarPlanned%}\
                 </div>\
             </td>\
             <td class="w4">\
@@ -39,7 +40,54 @@ easyFinance.widgets.budgetMaster = function(model,widget){
         <div class="waste">Итого расходов: <span><b>{%drain%}</b> {%defaultCurrency%}</span></div>\
         <div class="rest">Остаток: <span><b>{%remainder%}</b> {%defaultCurrency%}</span></div>';
 
+    var tplTableCaptionProfit =
+        '<td>Категория</td>\
+        <td>Сумма, {%defaultCurrency%}</td>\
+        <td>Сред. доход, {%defaultCurrency%}</td>';
+
+    var tplTableCaptionDrain =
+        '<td>Категория</td>\
+        <td>Сумма, {%defaultCurrency%}</td>\
+        <td>Сред. расход, {%defaultCurrency%}</td>';
+
+    var tplCommonColumns =
+        '<colgroup>\
+            <col class="b-budgetwizard-columns__catname"/>\
+            <col class="b-budgetwizard-columns__amount"/>\
+            <col class="b-budgetwizard-columns__mean"/>\
+            <col class="b-budgetwizard-columns__calendar"/>\
+        </colgroup>'
+
     var tplStepHeader = 'Шаг {%stepNum%} из 3. {%stepType%} — Планирование бюджета на {%date%}';
+
+    function _printMasterRow(category, bdgt, isDrain) {
+        if ( (isDrain && category.type > 0) || (!isDrain && category.type < 0) ) {
+            return '';
+        }
+
+        var vals = {
+            catId: category.id,
+            catName: category.name,
+            planValue: '',
+            budgetMean: '',
+            calendarPlanned: ''
+        };
+        
+        bdgt = $.extend({}, bdgt);
+
+        if ("amount" in bdgt) {
+            vals.planValue = formatCurrency( bdgt.amount )
+        }
+        if ("mean" in bdgt) {
+            vals.budgetMean = formatCurrency( bdgt.mean )
+        }
+
+        if ("calendar_plan" in bdgt) {
+            vals.calendarPlanned = '<small>' + formatCurrency( bdgt.calendar_plan ) + '</small>'
+        }
+
+        return templetor(tplCategoryRow, vals);
+    }
 
     /**
      * формирует данные для 2х последних страниц мастера
@@ -60,35 +108,39 @@ easyFinance.widgets.budgetMaster = function(model,widget){
             catName,
             budget,
             plan,
+            bdgt,
 
             cat_rows = [],
             vals = {};
 
-
         var _categories = easyFinance.models.category.getUserCategoriesTreeOrdered();
 
-        for (var key in _categories){
+        for (var key in _categories) {
             categoryType = _categories[key].type;
             if ( (type == 0 && categoryType < 1) || (type == 1 && categoryType > -1) ) {
                 parentId = _categories[key].id
-                parentName=_categories[key].name
+                parentName = _categories[key].name
                 children = _categories[key].children
 
                 for (var k in children) {
-                    categoryType = _categories[key].children[k].type;
-
-                    if ( (type == 0 && categoryType < 1) || (type == 1 && categoryType > -1) ) {
-                        catId = _categories[key].children[k].id;
-
-                        vals = {
-                            catId: catId,
-                            catName: _categories[key].children[k].name,
-                            planValue: formatCurrency( _data[catId] ? _data[catId]['amount'] : 0 ),
-                            budgetMean: formatCurrency( _data[catId] && 'mean' in _data[catId] ? _data[catId]['mean'] : 0 )
-                        }
-
-                        cat_rows.push(templetor(tplCategoryRow, vals));
-                    }
+                    cat_rows.push( _printMasterRow(children[k], _data[children[k].id], type == 0) )
+//                    categoryType = _categories[key].children[k].type;
+//
+//                    if ( (type == 0 && categoryType < 1) || (type == 1 && categoryType > -1) ) {
+//                        catId = _categories[key].children[k].id;
+//
+//                        bdgt = $.extend({amount: 0, mean: 0}, _data[catId]);
+//
+//                        vals = {
+//                            catId: catId,
+//                            catName: _categories[key].children[k].name,
+//                            planValue: formatCurrency( bdgt.amount ),
+//                            budgetMean: formatCurrency( bdgt.mean ),
+//                            calendarPlanned: ("calendar_plan" in bdgt) ? '<small>' + formatCurrency( bdgt.calendar_plan ) + '</small>' : ''
+//                        }
+//
+//                        cat_rows.push(templetor(tplCategoryRow, vals));
+//                    }
                 }
 
                 if (!cat_rows.length) {
@@ -106,7 +158,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                         parentId: parentId,
                         parentName: parentName,
                         amount: formatCurrency(_data[parentId] ? _data[parentId]['amount'] : 0),
-                        children: '<table>' + cat_rows.join('') + '</table>'
+                        children: '<table class="b-budgetwizard-table b-budgetwizard-table__content">' + cat_rows.join('') + '</table>'
                     }
                     ret = templetor(tplParentCategory, vals);
                 }
@@ -216,19 +268,16 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                 $(this).val(calculate($(this).val()));
             }
         })
-        .live('click',function() {
+        .live('click', function() {
             if ($(this).val() == '0.00'){
                 $(this).val('');
             }
         }
     );
 
-    $('#step2 div.master.body div.list.head tr').html('<td class="w1">Категория</td>\
-        <td class="w2">Сумма, ' + easyFinance.models.currency.getDefaultCurrencyText() + '</td>\
-        <td class="w4">Сред. доход, ' + easyFinance.models.currency.getDefaultCurrencyText() + '</td>');
-    $('#step3 div.master.body div.list.head tr').html('<td class="w1">Категория</td>\
-        <td class="w2">Сумма, ' + easyFinance.models.currency.getDefaultCurrencyText() + '</td>\
-        <td class="w4">Сред. расход, ' + easyFinance.models.currency.getDefaultCurrencyText() + '</td>');
+    $('#step2 div.master.body div.list.head tr').html(templetor(tplTableCaptionProfit, {defaultCurrency: easyFinance.models.currency.getDefaultCurrencyText()}));
+    $('#step3 div.master.body div.list.head tr').html(templetor(tplTableCaptionDrain, {defaultCurrency: easyFinance.models.currency.getDefaultCurrencyText()}));
+    
 
     /**
      * Скрытие-раскрытие ветки дерева
@@ -340,9 +389,11 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     $('#master').dialog({
         bgiframe: true,
         autoOpen: false,
-        width: 600,
+        width: 650,
         resizable: false
     });
+
+    utils.initControls( $('#master').dialog('widget') );
 
     function month(num){
         var str = num.toString();
@@ -390,7 +441,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     /**
      * Сумирование подкатегорий
      */
-    $('#master').live('click', function() { fullSum(0) } );
+    $('#master').live('click', function() {fullSum(0)} );
 
     $('#master tr input').live('blur', function() {
         fullSum( $(this).closest('.line').attr('id'), $(this).closest('.step').attr('id') );
