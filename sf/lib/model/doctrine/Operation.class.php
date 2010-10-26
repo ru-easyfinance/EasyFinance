@@ -24,26 +24,6 @@ class Operation extends BaseOperation
      */
     const SOURCE_AMT = 'amt';
 
-    /**
-     * Добавляем связь со счётом-получательем
-     *
-     * @todo сделать через schema.yml
-     * (non-PHPdoc)
-     * @see base/BaseOperation::setUp()
-     */
-    public function setUp()
-    {
-        parent::setUp();
-        $this->hasOne(
-            'Account as TransferAccount',
-            array(
-                'local'    => 'transfer_account_id',
-                'foreign'  => 'id',
-                'onDelete' => 'CASCADE'
-            )
-        );
-    }
-
 
     /**
      * Установить счет и инициализировать user_id

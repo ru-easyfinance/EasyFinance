@@ -1,16 +1,3 @@
-<?php
-$scripts = array(
-    'budget',
-    'models/category.model',
-    'models/budget.model',
-    'widgets/budget/budget.widget',
-    'widgets/budget/budgetMaster.widget'
-);
-
-foreach ($scripts as $script) {
-    use_javascript("/js/{$script}.js");
-}
-?>
 <div class="ramka3">
     <div class="ct">
         <div class="head">

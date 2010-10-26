@@ -187,12 +187,19 @@ Operation:
       foreignType: many
       autoComplete: false         # User ничего не узнает
     Account:
+      class: Account
       local: account_id
       foreign: id
       type: one
       foreignType: many
       foreignAlias: Operations    # Account -> Operations
       onDelete:     CASCADE       # При удалении Счёта удаляются все Операции
+    TransferAccount:
+      class: Account
+      local: transfer_account_id
+      foreign: id
+      type: one
+      onDelete: CASCADE
     Category:
       local: category_id
       foreign: id
@@ -494,7 +501,7 @@ BudgetCategory:
       foreignType:  many
       autoComplete: false
     Currency:
-      local:        category_id
+      local:        currency_id
       foreign:      id
       type:         one
       foreignType:  many

@@ -1,0 +1,17 @@
+# скрипты страницы бюджета
+indexSuccess:
+<?php if (sfConfig::get('sf_environment') == 'prod'): ?>
+  javascripts:
+    - budget.js?r=<?php echo REVISION ?>: { position: last }
+    - models/category.model.js?r=<?php echo REVISION ?>: { position: last }
+    - models/budget.model.js?r=<?php echo REVISION ?>: { position: last }
+    - widgets/budget/budget.widget.js?r=<?php echo REVISION ?>: { position: last }
+    - widgets/budget/budgetMaster.widget.js?r=<?php echo REVISION ?>: { position: last }
+<?php else: ?>
+  javascripts:
+    - budget.js: { position: last }
+    - models/category.model.js: { position: last }
+    - models/budget.model.js: { position: last }
+    - widgets/budget/budget.widget.js: { position: last }
+    - widgets/budget/budgetMaster.widget.js: { position: last }
+<?php endif; ?>

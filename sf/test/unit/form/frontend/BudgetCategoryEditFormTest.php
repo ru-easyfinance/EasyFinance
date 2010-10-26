@@ -93,8 +93,7 @@ class form_frontend_BudgetCategoryEditFormTest extends myFormTestCase
 
 
     /**
-     * Редактируем счет с начальным балансом
-     * Балансовой операции нет
+     * Проверяем что валидные данные проходят валидацию
      */
     public function testValidData()
     {
