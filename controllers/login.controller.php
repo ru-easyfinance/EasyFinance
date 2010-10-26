@@ -146,9 +146,10 @@ class Login_Controller extends _Core_Controller
         );
 
         $data = array_merge($default, (array)$data);
-        $ramblerLogin = "rambler_{$data['id']}";
+        $ramblerLogin = $data['id'] ? "rambler_{$data['id']}" : null;
 
         $user = Core::getInstance()->user;
+        $user->destroy();
 
         // Пытаемся инициализировать пользователя
         $user->initUser($ramblerLogin, sha1($ramblerLogin));
