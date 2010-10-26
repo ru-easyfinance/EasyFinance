@@ -56,7 +56,7 @@
 
 <!-- master -->
 <div id="master" class="budget" style="display: none">
-    <div class="l-dialog-content">
+    <div class="l-dialog-content b-budgetwizard">
     <!-- step1.get date -->
         <div id="step1" class="step">
             <div class="master head">

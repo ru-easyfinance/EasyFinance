@@ -7,7 +7,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
 
     var tplCategoryRow =
         '<tr id="{%catId%}">\
-            <td class="w1"><a>{%catName%}<a></td>\
+            <td class="w1"><a>{%catName%}</a></td>\
             <td class="w2">\
                 <div class="cont">\
                     <input type="text" value="{%planValue%}"/>\
@@ -41,14 +41,14 @@ easyFinance.widgets.budgetMaster = function(model,widget){
         <div class="rest">Остаток: <span><b>{%remainder%}</b> {%defaultCurrency%}</span></div>';
 
     var tplTableCaptionProfit =
-        '<td>Категория</td>\
-        <td>Сумма, {%defaultCurrency%}</td>\
-        <td>Сред. доход, {%defaultCurrency%}</td>';
+        '<td class="w1">Категория</td>\
+        <td class="w2">Сумма, {%defaultCurrency%}</td>\
+        <td class="w4">Сред. доход, {%defaultCurrency%}</td>';
 
     var tplTableCaptionDrain =
-        '<td>Категория</td>\
-        <td>Сумма, {%defaultCurrency%}</td>\
-        <td>Сред. расход, {%defaultCurrency%}</td>';
+        '<td class="w1">Категория</td>\
+        <td class="w2">Сумма, {%defaultCurrency%}</td>\
+        <td class="w4">Сред. расход, {%defaultCurrency%}</td>';
 
     var tplCommonColumns =
         '<colgroup>\
@@ -73,7 +73,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
             calendarPlanned: ''
         };
 
-        bdgt = $.extend({}, bdgt);
+        bdgt = $.extend({}, bdgt); 
 
         if ("amount" in bdgt) {
             vals.planValue = formatCurrency( bdgt.amount )
@@ -82,8 +82,8 @@ easyFinance.widgets.budgetMaster = function(model,widget){
             vals.budgetMean = formatCurrency( bdgt.mean )
         }
 
-        if ("calendar_plan" in bdgt) {
-            vals.calendarPlanned = '<small>' + formatCurrency( bdgt.calendar_plan ) + '</small>'
+        if ("calendar_plan" in bdgt && bdgt.calendar_plan != 0) {
+            vals.calendarPlanned = '<small>В календаре: <strong>' + formatCurrency( bdgt.calendar_plan ) + '</strong></small>'
         }
 
         return templetor(tplCategoryRow, vals);
@@ -106,17 +106,21 @@ easyFinance.widgets.budgetMaster = function(model,widget){
             parentName,
 
             cat_rows = [],
+            cat_types = [],
             row = '',
             vals = {};
 
         var _categories = easyFinance.models.category.getUserCategoriesTreeOrdered();
 
-        for (var key in _categories) {
-            categoryType = _categories[key].type;
+        for (var i = 0, l = _categories.length; i < l; i++) {
+            categoryType = _categories[i].type;
+
             if ( (type == 0 && categoryType < 1) || (type == 1 && categoryType > -1) ) {
-                parentId = _categories[key].id
-                parentName = _categories[key].name
-                children = _categories[key].children
+                parentId = _categories[i].id;
+                parentName = _categories[i].name;
+                children = _categories[i].children;
+
+                cat_rows = [];
 
                 for (var k in children) {
                     row = _printMasterRow(children[k], _data[children[k].id], type == 0)
@@ -125,32 +129,28 @@ easyFinance.widgets.budgetMaster = function(model,widget){
                     }
                 }
 
+                vals = {
+                    parentId: parentId,
+                    parentName: parentName,
+                    amount: formatCurrency(_data[parentId] ? _data[parentId]['amount'] : 0)
+                }
+
                 if (!cat_rows.length) {
-                    vals = {
-                        parentId: parentId,
-                        parentName: parentName,
-                        amount: formatCurrency(_data[parentId] ? _data[parentId]['amount'] : 0),
-                        mean: formatCurrency(_data[parentId] ?_data[parentId]['amount'] : 0)
-                    }
-                    ret = templetor(tplEmptyParentCategory, vals);
+                    vals.mean = formatCurrency(_data[parentId] ? _data[parentId]['amount'] : 0)
+                    cat_types.push( templetor(tplEmptyParentCategory, vals) );
                 }
                 else {
-
-                    vals = {
-                        parentId: parentId,
-                        parentName: parentName,
-                        amount: formatCurrency(_data[parentId] ? _data[parentId]['amount'] : 0),
-                        children: '<table class="b-budgetwizard-table b-budgetwizard-table__content">' + cat_rows.join('') + '</table>'
-                    }
-                    ret = templetor(tplParentCategory, vals);
+                    vals.children = '<table class="b-budgetwizard-table b-budgetwizard-table__content">' + cat_rows.join('') + '</table>'
+                    cat_types.push( templetor(tplParentCategory, vals) );
                 }
             }
         }
+
         if (type) {
-            $('#master #step2 .list.body').html(ret)
+            $('#master #step2 .list.body').html(cat_types.join(''))
         }
         else {
-            $('#master #step3 .list.body').html(ret)
+            $('#master #step3 .list.body').html(cat_types.join(''))
         }
     }
     /**
@@ -371,11 +371,9 @@ easyFinance.widgets.budgetMaster = function(model,widget){
     $('#master').dialog({
         bgiframe: true,
         autoOpen: false,
-        width: 650,
+        width: 600,
         resizable: false
     });
-
-    utils.initControls( $('#master').dialog('widget') );
 
     function month(num){
         var str = num.toString();

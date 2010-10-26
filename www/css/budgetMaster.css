@@ -7,10 +7,15 @@
 }
 
 .budget#master .waste_list .body .list input {
-    width: 100px;
+    width: 120px;
     text-align: right;
 }
-
+.budget#master .waste_list .body .list small {
+    color: #999;
+}
+    .budget#master .waste_list .body .list strong {
+        color: #666;
+    }
 .budget#master .waste_list .list.body {
     overflow-y: auto;
     overflow-x: hidden;
@@ -33,7 +38,7 @@
 }
 
 .budget#master .waste_list .list.head table td.w2 {
-    width: 103px;
+    width: 123px;
 }
 
 .budget#master .waste_list .list.head table td.w4 {
@@ -42,7 +47,7 @@
 
 .budget#master .waste_list table {
     position: relative;
-    width: 100%;
+    width: 502px;
 }
 
 .budget#master .waste_list table td {
@@ -51,6 +56,7 @@
 }
 
 .budget#master .waste_list table td.w1 {
+    width: 199px;
     padding-right: 5px;
     overflow: hidden;
 }
@@ -61,11 +67,13 @@
 }
 
 .budget#master .waste_list table td.w2 {
+    width: 123px;
     padding-top: 4px;
     z-index: 10;
 }
 
 .budget#master .waste_list .list.body table td.w4 {
+    width: 160px;
     text-align: right;
     padding-right: 10px;
 }
@@ -73,7 +81,7 @@
 .budget#master .waste_list .line .amount {
     position: absolute;
     top: 7px;
-    left: 320px;
+    right: 196px;
     font-weight: bold;
 }
 
@@ -90,6 +98,7 @@
 
 .budget#master .waste_list .line {
     position: relative;
+    width: 502px;
     padding: 7px 0 5px 0;
     overflow: hidden;
     background: url('/img/i/point_x.gif') repeat-x bottom left;
