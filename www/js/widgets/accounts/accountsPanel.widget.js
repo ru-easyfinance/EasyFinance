@@ -27,8 +27,8 @@ easyFinance.widgets.accountsPanel = function(){
                 <ul style="z-index: 1006;">\
                     <li title="Добавить операцию" class="operation"><a></a></li>\
                     <li title="Редактировать" class="edit"><a></a></li>\
-                    <li title="Удалить" class="del"><a></a></li>\
                     <li title="В избранные" class="favourite"><a></a></li>\
+                    <li title="Удалить" class="del"><a></a></li>\
                  </ul>\
             </div>\
         </li>';
