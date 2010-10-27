@@ -182,7 +182,7 @@ function getAccountTooltip(accountId) {
     var val = {
         'name': htmlEscape(account.name),
         'account_type': _model.getAccountTypeString(account.id),
-        'comment': account.comment ? templetor(tip_row_template, {head: 'Описание', val: account.comment}) : '',
+        'comment': account.comment ? htmlEscape(templetor(tip_row_template, {head: 'Описание', val: account.comment})) : '',
         'leftover': formatCurrency(account.totalBalance) + ' ' + _model.getAccountCurrencyText(account.id),
         'reserved': account.reserve != 0 ?
             templetor(
