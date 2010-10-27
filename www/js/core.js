@@ -1,7 +1,7 @@
 var utils = (function() {
     // нормализует ноду, переданную как ноду, или как объект jQuery, в ноду
     function normalizeNode(node) {
-        return (node.selector || node.length) ? node[0] : node;
+        return ('jquery' in node) ? node[0] : node;
     }
 
     // нормализует строку к виду телефона: +7 (495) 123-45-67
@@ -203,9 +203,71 @@ var utils = (function() {
             additional_options
         )
     }
+    /**
+     * хелпер ajax'овой отправки файлов, обертка над $.ajaxForm
+     * берет url, тип запроса и данные из аттрибутов формы
+     * @param {Function} onSuccess -- хэндлер успешного (HTPP 2XX) ответа
+     * @param {Function} onError -- хэндлер ошибки (HTPP 4XX, HTPP 5XX)
+     * @param {Object} сtx -- объект, в контексте которого будут выполняться хэндлеры
+     * @param {String} dataType -- тип ожидаемых данных, по умолчанию 'json'
+     * @param {Dict} additional_options -- хэш с любыми параметрами, см. http://api.jquery.com/jQuery.ajax/
+     */
+    function ajaxUpload (frm, onSuccess, onError, ctx, dataType, additional_options) {
+        // конструируем обработчик ошибки (cработает в случае HTTP 5xx)
+        var error = function() {
+            if (onError) {
+                return function (XMLHttpRequest, textStatus, errorThrown) {
+                    if (ctx) {
+                        onError.apply(ctx, [textStatus, errorThrown]);
+                    }
+                    else {
+                        onError(textStatus, errorThrown)
+                    }
+                }
+            }
+            else {
+                return function (XMLHttpRequest, textStatus, errorThrown) {
+                    notifyUser('Произошла непредвиденная ошибка. Попробуйте еще раз через несколько минут.');
+                }
+            }
+        }
+
+        // конструируем обработчик успешного ответа
+        var success = function() {
+            if (onSuccess) {
+                return function (data, textStatus, XMLHttpRequest) {
+                    if (ctx) {
+                        onSuccess.apply(ctx, [data]);
+                    }
+                    else {
+                        onSuccess(data)
+                    }
+                }
+            }
+            else {
+                return defaultOnSuccess;
+            }
+        }
+
+        var options = {
+            url: frm.attr('action'),
+            iframe: true,
+            dataType: dataType || 'json',
+            error: error(),
+            success: success()
+        };
+
+        if (additional_options) {
+            $.extend(options, additional_options)
+        }
+
+        frm.ajaxSubmit(options);
+    }
 
     function initControls(container) {
         container.find('.js-control').each(function (index, elem) { // находим все контролы
+            utils.log($(elem));
+            
             var type = utils.getType.control(elem); // тип контрола -- имя jQuery-плагина
             var params = utils.getParams(elem); // параметры передаются в аттрибуте ondblclick
 
@@ -230,6 +292,7 @@ var utils = (function() {
         // ajax helpers
         defaultOnSuccess: defaultOnSuccess,
         ajax: ajax,
-        ajaxForm: ajaxForm
+        ajaxForm: ajaxForm,
+        ajaxUpload: ajaxUpload
     }
 })();

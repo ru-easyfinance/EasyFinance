@@ -15,6 +15,9 @@
     <li id="i6" block="#reminders">
         <div><a>Уведомления</a></div>
     </li>
+    <li id="i8" block="#import">
+        <div><a>Импорт</a></div>
+    </li>
 </ul>
 
 <?php // форма профиля ?>
@@ -137,6 +140,21 @@
         </div>
     </div>
     <?php include_partial('reminders') ?>
+    <div class="cb">
+        <div> </div>
+    </div>
+</div>
+
+
+<?php // напоминания ?>
+<div id="import" class="ramka3 profile" style="display:none">
+    <div class="ct">
+        <div class="head">
+            <h2>Импорт</h2>
+            <ul class="action"><li class="over3"> </li></ul>
+        </div>
+    </div>
+    <?php include_partial('importcsv') ?>
     <div class="cb">
         <div> </div>
     </div>
