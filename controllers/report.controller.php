@@ -29,13 +29,13 @@ class Report_Controller extends _Core_Controller_UserCommon
 
         // Виды и названия отчетов
         $this->_reports = array(
-            'graph_profit'              => 'Доходы',
-            'graph_loss'                => 'Расходы',
+            'graph_loss'                => 'Расходы - итоги',
+            'txt_loss'                  => 'Расходы - детальные',
+            'txt_loss_difference'       => 'Расходы - сравнение за периоды',
+            'graph_profit'              => 'Доходы &nbsp;&nbsp;- итоги',
+            'txt_profit'                => 'Доходы &nbsp;&nbsp;- детальные',
+            'txt_profit_difference'     => 'Доходы &nbsp;&nbsp;- сравнение за периоды',
             'graph_profit_loss'         => 'Сравнение расходов и доходов',
-            'txt_profit'                => 'Детальные доходы',
-            'txt_loss'                  => 'Детальные расходы',
-            'txt_loss_difference'       => 'Сравнение расходов за периоды',
-            'txt_profit_difference'     => 'Сравнение доходов за периоды',
         );
     }
 
