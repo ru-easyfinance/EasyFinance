@@ -20,8 +20,6 @@ easyFinance.widgets.report = function(){
                     break;
                 case "txt_loss_difference"://"Сравнение расходов за периоды":
                 case "txt_profit_difference"://"Сравнение доходов за периоды":
-                case "txt_profit_avg_difference": //"Сравнение доходов со средним за периоды":
-                case "txt_loss_avg_difference"://"Сравнение расходов со средним за периоды":
                     $('.js-compare-fields').removeClass('hidden');
                     $('#itogo').addClass('hidden')
                     break;
@@ -50,8 +48,7 @@ easyFinance.widgets.report = function(){
             acclist: accountsList.toString()
         }
 
-        if (reportType == "txt_loss_difference" || reportType == "txt_profit_difference"
-            || reportType == "txt_loss_avg_difference" || reportType == "txt_profit_avg_difference") {
+        if (reportType == "txt_loss_difference" || reportType == "txt_profit_difference") {
                 requestData.dateFrom2 = $('#dateFrom2').val();
                 requestData.dateTo2 = $('#dateTo2').val();
         }
@@ -76,13 +73,6 @@ easyFinance.widgets.report = function(){
                     break;
                 case "txt_profit_difference":
                     ShowCompareWaste(data, currencyId);
-                    break;
-
-                case "txt_profit_avg_difference":
-                    ShowAverageIncome(data, currencyId);
-                    break;
-                case "txt_loss_avg_difference":
-                    ShowAverageIncome(data, currencyId);
                     break;
             }
         });
@@ -368,67 +358,6 @@ easyFinance.widgets.report = function(){
                     ssum2 = parseFloat(ssum2) + parseFloat(sum2);
                     sdelta += Math.round(delta);
                 }
-            }
-        }
-        tr += '<tr><th>Итого:</th>' +
-        '<td class="' +
-        (ssum1 >= 0 ? 'sumGreen' : 'sumRed') +
-        '"><span>' +
-        formatCurrency(ssum1) +
-        '</span></td>' +
-        '<td class="' +
-        (ssum2 >= 0 ? 'sumGreen' : 'sumRed') +
-        '"><span>' +
-        formatCurrency(ssum2) +
-        '</span></td>' +
-        '<td class="' +
-        (sdelta >= 0 ? 'sumGreen' : 'sumRed') +
-        '"><span>' +
-        formatCurrency(sdelta) +
-        '</span></td>' +
-        '</tr>';
-
-        $('table.js-reports-body tbody.js-comparereport').html(tr);
-        $('table.js-reports-body tbody.js-detailreport').html('');
-
-        showReports('tables');
-        showReportTables('compare');
-    }
-
-    function ShowAverageIncome(data, currencyId){ /* кажется, не используется */
-        var tr = '';
-
-        var sum1 = 0;
-        var sum2 = 0;
-        var delta = 0;
-        var ssum1 = 0;
-        var ssum2 = 0;
-        var sdelta = 0;
-        for (c in data[2]) {
-            if (data[2][c].su != null) {
-                if (data[2][c].per == 1) {
-                    sum1 = data[2][c].su;
-                    sum2 = 0;
-                    for (v in data[2]) {
-                        if (data[2][v].cat_name == data[2][c].cat_name)
-                            if (data[2][v].per == 2) {
-                                sum2 = data[2][v].su * data[0] / data[1];
-                                data[2][v].su = null;
-                            }
-                    }
-                } else {
-                    sum2 = data[2][c].su * data[0] / data[1];
-                    sum1 = 0;
-                    for (v in data[2]) {
-                        if (data[2][v].cat_name == data[2][c].cat_name)
-                            if (data[2][v].per == 1) {
-                                sum1 = data[2][v].su * data[0] / data[1];
-                                data[2][v].su = null;
-                            }
-                    }
-                }
-
-                delta = sum2 - sum1;
             }
         }
         tr += '<tr><th>Итого:</th>' +
