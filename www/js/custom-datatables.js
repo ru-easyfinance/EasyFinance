@@ -80,7 +80,7 @@ _ActivateDataGrid = {
                 zTop:    8,
                 zBottom: 7,
                 zLeft:   6,
-                zRight:  5,
+                zRight:  5
             }
         );
         $('.fixedHeader').addClass('custom-grid-style');
