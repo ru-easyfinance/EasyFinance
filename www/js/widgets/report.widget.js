@@ -25,12 +25,30 @@ easyFinance.widgets.report = function(){
                     break;
             }
 
-        });
-        $('#btnShow').click(function(){
-            load($('#report').val());
+            loadChosenReport();
         });
 
+        $('#account').change(function(){
+            loadChosenReport();
+        });
+
+        $('#currency').change(function(){
+                loadChosenReport();
+        });
+
+        $('#btnShow').click(function(){
+            loadChosenReport();
+        });
+
+        //загрузим сразу выбранный отчет - пользователю удобнее и приятнее
+        loadChosenReport();
     }
+
+    function loadChosenReport()
+    {
+        load($('#report').val());
+    }
+
     function load(reportType){
         var accountsList = [];
         for (var key in res.accounts) {
