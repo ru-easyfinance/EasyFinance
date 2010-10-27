@@ -270,6 +270,10 @@ thead.budget-header {
 .budget .list table .indicator .green {
     z-index: 2;
 }
+.budget .list table .indicator .yellow {
+    z-index: 2;
+    background-position: 0 -149px;
+}
 
 .budget .list table .indicator .strip {
     top: 0;
@@ -277,4 +281,14 @@ thead.budget-header {
     z-index: 3;
     border-right: 1px solid #a5a5a5;
     background: none;
+}
+
+.danger {
+    color: #EB3C34;
+}
+.warning {
+    color: #cbc12d;
+}
+.ok {
+    color: #309500;
 }

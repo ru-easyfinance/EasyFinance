@@ -73,7 +73,7 @@ easyFinance.widgets.budgetMaster = function(model,widget){
             calendarPlanned: ''
         };
 
-        bdgt = $.extend({}, bdgt); 
+        bdgt = $.extend({}, bdgt);
 
         if ("amount" in bdgt) {
             vals.planValue = formatCurrency( bdgt.amount )

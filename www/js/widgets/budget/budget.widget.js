@@ -87,7 +87,7 @@ var tplbudgetHeader =
     }
 
     /**
-     * Возвращает используюмую дату в сторонние виджеты
+     * Возвращает используемую дату в сторонние виджеты
      */
     function getDate() {
         return new Date(_currentDate);
@@ -291,29 +291,137 @@ var tplbudgetHeader =
             strPlan = (params.cls != 'parent open') ? '<FONT COLOR="#FF0000"> запланировать </FONT>' : '0';
         }
 
+        var tooltipParams = getTooltip(params); log(tooltipParams)
+
         var vals = {
             id: params.id,
             className: params.cls,
             type: params.type,
             parent: params.parent != undefined ? 'parent="' + params.parent + '"' : '',
             catName: shorter(params.cat, 20),
-            indicator: _buildIndicatorString(color, params.drain),
+            indicator: _buildIndicatorString(tooltipParams.color, params.drain),
             strPlan: strPlan,
             planValue: formatCurrency(params.plan, true, false),
             factValue: formatCurrency(params.fact, true, false),
             diffClass: diffClass,
             diffValue: formatCurrency(diff, true, false),
             diffMenu: (params.cls == 'nochild' || params.cls == 'child') ? '<div class="menuwrapper"><div class="menu"><a title="Редактировать" class="edit">&nbsp;</a><a title="Удалить" class="remove">&nbsp;</a></div></div>' : '',
-            title: title
+            title: tooltipParams.title
         }
+
         return templetor(tplBudgetRow, vals);
+    }
+
+    function getTooltip(params) {
+        // calendarPlan -- все то, что в календаре, подтв. и неподтв.
+        // notCalendarPlan -- все, что подверждено не в календаре
+        // fact -- все подтвежденное вообще
+
+        var budgetTotal = params.plan;
+        var adhoc = params.notCalendarPlan;
+        var calendarAccepted = params.fact - params.notCalendarPlan;
+        var calendarPlanned = params.calendarPlan - calendarAccepted;
+        var daysInMonth = _getMonthDays(_currentDate);
+        var currentDay = _currentDate.getDate();
+
+        var msg = {
+            drain: {
+                BudgetOverhead: "<span class='danger'>Внимание! Бюджет уже превышен на {%budgetLeft%}.</span>",
+                PositiveMargin: "<span class='ok'>Поздравляем! Вы сэкономите {%marginTotal%} к концу месяца, если сохраните текущие темпы трат.</span>",
+                ZeroMargin: "<span class='warning'>Будьте аккуратны: бюджет расходуется точно по плану.</span>",
+                ChangeGeneral: "<span class='danger'>Внимание! Вам нужно снизить траты, чтобы уложиться в план.</span> Возможные действия:<ul><li>&bull; снизить в сумме на {%marginTotal%} внеплановые траты и траты, запланированные в календаре</li>",
+                ChangeAdhoc: "<li>&bull; снизить внеплановые траты на {%changeAdhoc%} в день<li>",
+                ChangeCalendar: "<li>&bull; снизить запланированные в календаре траты на {%changeCalendar%}</li>",
+                ChangeBoth: "",
+                ChangeClosing: "</ul>"
+            },
+            profit: {
+                BudgetOverhead: "<span class='ok'>Поздравляем! Вы уже перевыполнили бюджет на {%budgetLeft%}.</span>",
+                PositiveMargin: "<span class='danger'>Внимание! Вы недополучите {%marginTotal%} за этот месяц при текущих темпах доходов.</span>",
+                ZeroMargin: "<span class='warning'>Бюджет наполняется точно по плану.</span>",
+                ChangeGeneral: "<span class='ok'>Так держать! Вы перевыполните бюджет на {%marginTotal%} при текущих темпах доходов</span>",
+                ChangeAdhoc: "",
+                ChangeCalendar: "",
+                ChangeBoth: "",
+                ChangeClosing: ""
+            }
+        }
+        var message = [],
+            color,
+            resultMessage;
+
+        //оставшийся бюджет
+        var budgetLeft = budgetTotal - adhoc - calendarAccepted
+
+        //сколько останется, если будем тратить с неизменной скоростью и календарем
+        var marginTotal = budgetLeft - calendarPlanned - (daysInMonth - currentDay) / currentDay * adhoc
+
+        //насколько урезать спонтанные траты, чтобы выйти в 0
+        var changeAdhoc = Math.abs(marginTotal / (daysInMonth - currentDay))
+        var canChangeAdhoc = changeAdhoc < adhoc / currentDay;
+
+        //насколько урезать календарь, чтобы выйти в 0
+        var changeCalendar = Math.abs(marginTotal);
+        var canChangeCalendar = changeCalendar < calendarPlanned;
+
+        var canChangeBoth = canChangeAdhoc == canChangeCalendar;
+
+        var budgetOverheaded = budgetLeft < 0;
+        var marginZero = marginTotal == 0;
+        var marginPositive = marginTotal > 0;
+
+        var messageSrc = (params.type == 'd' ? msg.drain : msg.profit);
+
+        if (budgetOverheaded) {
+            message = messageSrc.BudgetOverhead;
+        }
+        else if (marginZero) {
+            message = messageSrc.ZeroMargin
+        }
+        else if (marginPositive) {
+            message = messageSrc.PositiveMargin
+        }
+        else {
+            message = messageSrc.ChangeGeneral;
+            if (canChangeAdhoc) {
+                message += messageSrc.ChangeAdhoc
+            }
+            if (canChangeCalendar) {
+                message += messageSrc.ChangeCalendar
+            }
+            message += messageSrc.ChangeClosing
+        }
+
+        if (params.type == 'd') {
+            color = (budgetLeft < 0 && marginTotal < 0) ? 'red' : marginTotal == 0 ? 'yellow' : 'green';
+        }
+        else {
+            color = (budgetLeft < 0 && marginTotal < 0) ? 'green' : marginTotal == 0 ? 'yellow' : 'red';
+        }
+
+        resultMessage = templetor(message, {
+            budgetLeft: formatCurrency(Math.abs(budgetLeft)),
+            marginTotal: formatCurrency(Math.abs(marginTotal)),
+            changeAdhoc: formatCurrency(changeAdhoc),
+            changeCalendar: formatCurrency(changeCalendar)
+        })
+
+        return {color: color, title: resultMessage};
     }
 
     function _buildIndicatorString(color, drainPercent) {
         drainPercent = drainPercent > 100 ? 100 : drainPercent;
+        var width;
+
+        if (drainPercent == 0) {
+            width = "1px";
+        }
+        else {
+            width = drainPercent + "%"
+        }
 
         return '<div class="indicator">'
-                    + '<div class="' + color + '" style="width: ' + drainPercent + '%;"></div>' +
+                    + '<div class="' + color + '" style="width: ' + width + ';"></div>' +
                 '</div>';
     }
 

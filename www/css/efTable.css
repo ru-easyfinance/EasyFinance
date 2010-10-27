@@ -194,9 +194,6 @@ div.efTableWrapper{
     cursor: pointer;
 }
 
-.sumGreen {color: green;}
-.sumRed {color: red;}
-
 #efLiveTooltip {
     z-index: 3000;
     position: absolute;
@@ -207,4 +204,8 @@ div.efTableWrapper{
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     padding: 2px;
+}
+
+#efLiveTooltip ul li {
+    text-indent: .5em;
 }
