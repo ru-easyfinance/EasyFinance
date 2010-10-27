@@ -334,30 +334,27 @@ easyFinance.widgets.accountsPanel = function(){
         var grouptype = '';
         var acc;
 
-        // поскольку избранные отображаются дважды -- один раз в избранных и один раз в своей группе
-        // то обходим исходные данные дважды:
-        //      один раз выбираем някотку,
-        //      второй раз просто группируем, невзирая на "любимость"
-
-        groups['favourite'] = [];
-        for (var key in accounts) {
-            acc = accounts[key];
-            if (acc.state == '1') {
-                groups['favourite'].push(acc);
-            }
-        }
-
         for (key in accounts) {
             acc = accounts[key];
             grouptype = _model.getTypeNameForced(acc.id);
-            if (!(grouptype in groups)) {
-                groups[grouptype] = []
-            }
-            groups[grouptype].push( acc );
 
+            //запихнем счет в основную группу по типу счета
+            addAccountToGroup(groups, acc, grouptype);
+
+            //дополнительно добавим счет в избранные, если он избранный
+            if (acc.state == '1')
+                addAccountToGroup(groups, acc, 'favourite');
         }
 
         return groups;
+    }
+	
+    function addAccountToGroup(groups, acc, grouptype)
+    {
+        if (!(grouptype in groups)) {
+            groups[grouptype] = []
+        }
+        groups[grouptype].push( acc );
     }
 
     function redraw() {
