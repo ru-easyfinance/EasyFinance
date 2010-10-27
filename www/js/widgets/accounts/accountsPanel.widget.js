@@ -334,17 +334,17 @@ easyFinance.widgets.accountsPanel = function(){
         var grouptype = '';
         var acc;
 
-        for (key in accounts) {
-            acc = accounts[key];
-            grouptype = _model.getTypeNameForced(acc.id);
+    for (key in accounts) {
+        acc = accounts[key];
+        grouptype = _model.getTypeNameForced(acc.id);
 
-            //запихнем счет в основную группу по типу счета
-            addAccountToGroup(groups, acc, grouptype);
+        //запихнем счет в основную группу по типу счета
+        addAccountToGroup(groups, acc, grouptype);
 
-            //дополнительно добавим счет в избранные, если он избранный
-            if (acc.state == '1')
-                addAccountToGroup(groups, acc, 'favourite');
-        }
+        //дополнительно добавим счет в избранные, если он избранный
+        if (acc.state == '1')
+            addAccountToGroup(groups, acc, 'favourite');
+    }
 
         return groups;
     }
