@@ -6,26 +6,7 @@ easyFinance.widgets.report = function(){
 
         //Показ и скрытие дополнительных полей при выборе типа отчёта
         $('#report').change(function(){
-            switch ($('#report :selected').val()) {
-                case "graph_profit": //Доходы":
-                case "graph_loss": //"Расходы":
-                    $('.js-compare-fields').addClass('hidden');
-                    $('#itogo').removeClass('hidden');
-                    break;
-                case "graph_profit_loss": //"Сравнение расходов и доходов":
-                case "txt_profit"://"Детальные доходы":
-                case "txt_loss"://"Детальные расходы":
-                    $('.js-compare-fields').addClass('hidden');
-                    $('#itogo').addClass('hidden');
-                    break;
-                case "txt_loss_difference"://"Сравнение расходов за периоды":
-                case "txt_profit_difference"://"Сравнение доходов за периоды":
-                    $('.js-compare-fields').removeClass('hidden');
-                    $('#itogo').addClass('hidden')
-                    break;
-            }
-
-            loadChosenReport();
+        	applyChosenReport();
         });
 
         $('#account').change(function(){
@@ -41,6 +22,26 @@ easyFinance.widgets.report = function(){
         });
 
         //загрузим сразу выбранный отчет - пользователю удобнее и приятнее
+        applyChosenReport();
+    }
+    
+    function applyChosenReport()
+    {
+    	var displayFieldsSettings = {
+    			'#itogo': ["graph_profit", "graph_loss"],
+    			'.js-compare-fields': ["txt_loss_difference", "txt_profit_difference"],
+    			'#profitCategory': ["graph_profit", "txt_profit", "txt_profit_difference"],
+    			'#drainCategory': ["graph_loss", "txt_loss", "txt_loss_difference"]
+    	};
+    	
+        var chosenReport = $('#report :selected').val();
+    	
+    	for (field in displayFieldsSettings)
+    	{
+    		var displayField = $.inArray(chosenReport, displayFieldsSettings[field]) >= 0;
+    		$(field).toggleClass('hidden', !displayField);
+    	}
+
         loadChosenReport();
     }
 

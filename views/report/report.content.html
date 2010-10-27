@@ -47,7 +47,6 @@
                 <col width="20%"/>
                 <col width="26%"/>
                 <col width="19%"/>
-                <col width="10%"/>
                 <tr>
                     <td>
                         <div class="b-custom-input-inline">
@@ -77,12 +76,40 @@
                             <b class="clear"></b>
                         </div>
                     </td>
+                </tr>
+            </table>
+            <table>
+                <col width="60%"/>
+                <col width="25%"/>
+                <col width="15%"/>
+                <tr>
+                    <td>
+                    	<div id = "drainCategory">
+	                        {capture name='selectbox'}
+	                            <option value="">Все категории</option>
+	                            {foreach from=$drainCategories item=category}
+	                                <option value="{$category.cat_id}">{$category.cat_name}</option>
+	                            {/foreach}
+	                        {/capture}
+	                        {include file="ui/textfield.tpl" value="Все категории" selectbox=$smarty.capture.selectbox selectid="drainCategorySelect"}
+                        </div>
+                        <div id = "profitCategory">
+	                        {capture name='selectbox'}
+	                            <option value="">Все категории</option>
+	                            {foreach from=$profitCategories item=category}
+	                                <option value="{$category.cat_id}">{$category.cat_name}</option>
+	                            {/foreach}
+	                        {/capture}
+	                        {include file="ui/textfield.tpl" value="Все категории" selectbox=$smarty.capture.selectbox selectid="profitCategorySelect"}
+                        </div>
+                    </td>
+                    <td>
+                    </td>
                     <td style="text-align: right;">
                         <input class="b-button-simple" type="submit" value="Показать" id="btnShow" />
                     </td>
                 </tr>
             </table>
-
             </div>
 
         <div class="w-report-wrapper js-reports-graphs">
