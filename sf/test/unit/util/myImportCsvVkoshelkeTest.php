@@ -4,7 +4,7 @@ require_once dirname(__FILE__).'/../../bootstrap/all.php';
 /**
  * CsvImport
  */
-class util_myCsvImportVkoshelkeTest extends myUnitTestCase
+class util_myImportCsvVkoshelkeTest extends myUnitTestCase
 {
     /**
      * Тестовые данные
@@ -28,6 +28,11 @@ class util_myCsvImportVkoshelkeTest extends myUnitTestCase
     protected $helper;
 
     /**
+     * Файл для фикстуры
+     */
+    private $_ymlFileName;
+
+    /**
      * (non-PHPdoc)
      * @see sfPHPUnitTestCase::setUp()
      */
@@ -35,6 +40,19 @@ class util_myCsvImportVkoshelkeTest extends myUnitTestCase
     {
         parent::setUp();
         $this->_user = $this->helper->makeUser();
+
+        $this->_ymlFileName = sys_get_temp_dir() . '/php_' . __CLASS__ . '.yml';
+        touch($this->_ymlFileName);
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see sfPHPUnitTestCase::tearDown()
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+        unlink($this->_ymlFileName);
     }
 
     /**
@@ -42,11 +60,11 @@ class util_myCsvImportVkoshelkeTest extends myUnitTestCase
      */
     public function testExecuteProducesYaml()
     {
-        $csvImport  = new myCsvImportVkoshelke($this->_csvData);
-        $yamlFile   = $csvImport->execute($this->_user);
-        $this->assertNotEquals(false, $yamlFile);
+        $csvImport = new myImportCsvVkoshelke($this->_csvData);
+        $success   = $csvImport->execute($this->_user);
+        $this->assertTrue($success, 'Импорт должен завершиться успешно');
 
-        $yaml       = file_get_contents($yamlFile);
+        $yaml       = $csvImport->getYmlData();
         $yamlParser = new sfYamlParser();
         $data       = $yamlParser->parse($yaml);
 
@@ -84,15 +102,13 @@ class util_myCsvImportVkoshelkeTest extends myUnitTestCase
      */
     public function testLoadData()
     {
-        $csvImport  = new myCsvImportVkoshelke($this->_csvData);
-        $yamlFile   = $csvImport->execute($this->_user);
-        $this->assertNotEquals(false, $yamlFile);
+        $csvImport  = new myImportCsvVkoshelke($this->_csvData);
+        $success    = $csvImport->execute($this->_user);
+        $this->assertTrue($success, 'Импорт должен завершиться успешно');
 
-        $yaml       = file_get_contents($yamlFile);
-        $yamlParser = new sfYamlParser();
-        $data       = $yamlParser->parse($yaml);
+        file_put_contents($this->_ymlFileName, $csvImport->getYmlData());
 
-        Doctrine_Core::loadData($yamlFile, true);
+        Doctrine_Core::loadData($this->_ymlFileName, true);
         $transfer = Doctrine::getTable('Operation')
             ->findOneByTransferAmount('300000.00', Doctrine::HYDRATE_ARRAY);
 
@@ -117,13 +133,9 @@ class util_myCsvImportVkoshelkeTest extends myUnitTestCase
     {
         // Маленькая подлость от MS Excel - BOM вначале файла
         $csv        = pack('H*', "EFBBBF") . $this->_csvData;
-        $csvImport  = new myCsvImportVkoshelke($csv);
-        $yamlFile   = $csvImport->execute($this->_user);
-        $this->assertNotEquals(
-            false,
-            $yamlFile,
-            'Импорт должен работать не смотря на BOM'
-        );
+        $csvImport  = new myImportCsvVkoshelke($csv);
+        $success    = $csvImport->execute($this->_user);
+        $this->assertTrue($success, 'Импорт должен работать не смотря на BOM');
     }
 
     /**
@@ -133,12 +145,8 @@ class util_myCsvImportVkoshelkeTest extends myUnitTestCase
     {
         $csv        = "FirstName,LastName\n";
         $csv       .= "Крошка,Енот";
-        $csvImport  = new myCsvImportVkoshelke($csv);
-        $yamlFile   = $csvImport->execute($this->_user);
-        $this->assertEquals(
-            false,
-            $yamlFile,
-            'Формат CSV не тот - надо возвращать false'
-        );
+        $csvImport  = new myImportCsvVkoshelke($csv);
+        $success    = $csvImport->execute($this->_user);
+        $this->assertFalse($success, 'Импорт не должен удаться');
     }
 }

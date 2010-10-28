@@ -1,6 +1,6 @@
 <?php
 /**
- * Форма: анкета сити банка
+ * Помощники для JSON ответов
  *
  * @package    EasyFinance
  * @author     Anton Minin <anton.a.minin@gmail.com>

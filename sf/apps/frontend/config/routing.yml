@@ -38,6 +38,14 @@ load_user_data:
   class: sfRoute
   param: { module: profile, action: loadUserData }
 
+# Импорт из csv
+import_csv:
+  url: /profile/import_csv
+  class: sfRoute
+  param: { module: profile, action: importCsv }
+  requirements:
+    sf_method: [get, post]
+
 
 # Счета
 # ------------------------------------------------------------------------------

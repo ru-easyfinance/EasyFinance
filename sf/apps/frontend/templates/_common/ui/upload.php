@@ -55,7 +55,7 @@
 <div class="b-custom-input<?php echo $render['wrapperClass']; ?>">
     <div class="b-custom-input-border">
         <?php echo $render['placeholder']; ?>
-        <input type="file" class="b-custom-input-upload" <?php $render['name'] . $render['disabled'] . $render['id'] ?>  />
+        <input type="file" class="b-custom-input-upload" <?php echo $render['name'] . $render['disabled'] . $render['id'] ?>  />
 
     </div>
 </div>

@@ -5,7 +5,7 @@
             <div class="b-row">
                 <div class="b-col">
                     <div class="b-col-indent">
-                        <?php include_partial('global/common/ui/upload', array('label' => "Выбрать файл")); ?>
+                        <?php include_partial('global/common/ui/upload', array('label' => "Выбрать файл", 'name' => 'data')); ?>
                     </div>
                 </div>
             </div>

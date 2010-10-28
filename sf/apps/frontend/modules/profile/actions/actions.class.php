@@ -4,7 +4,7 @@ require_once(dirname(__FILE__) . '/../../../lib/helper/myDateTimezoneHelper.php'
 /**
  * Профиль пользователя
  */
-class profileActions extends sfActions
+class profileActions extends myBaseFrontendJsonActions
 {
     /**
      * Форма редактирования
@@ -190,4 +190,41 @@ class profileActions extends sfActions
         return $this->renderText(json_encode($result));
     }
 
+
+    /**
+     * Загрузить данные пользователя, AJAX
+     */
+    public function executeImportCsv(sfRequest $request)
+    {
+        putenv('LANG=ru_RU.utf8');
+        setlocale(LC_ALL, 'ru_RU.utf8');
+
+        $csvFile = $request->getFiles('data');
+        $import  = new myImportCsvVkoshelke($csvFile['tmp_name']);
+
+        if (!$import->execute($this->getUser()->getUserRecord())) {
+            $this->renderJsonError(
+                'Не удалось разобрать CSV'
+            );
+        }
+
+        $ymlFileName = sprintf(
+            "%s/php_%s_%s.yml",
+            sys_get_temp_dir(),
+            __CLASS__,
+            rand(1e6, 1e7)
+        );
+
+        try {
+            file_put_contents($ymlFileName, $import->getYmlData());
+            Doctrine::loadData($ymlFileName, true);
+            unlink($ymlFileName);
+        } catch (Exception $e) {
+            return $this->renderJsonError(
+                'Импорт не удалось загрузить данные в БД'
+            );
+        }
+
+        return $this->renderJsonSuccess('Импорт данных успешно завершён');
+    }
 }

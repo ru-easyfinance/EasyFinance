@@ -4,7 +4,7 @@ require_once "File/CSV/DataSource.php";
 /**
  * Импорт из CSV в кошельке
  */
-class myCsvImportVkoshelke
+class myImportCsvVkoshelke
 {
     /**
      * Поскольку на нижнем уровне мы имеем дело с fgetcsv, нам нужно имя файла
@@ -13,11 +13,10 @@ class myCsvImportVkoshelke
     private $_csvFileName;
 
     /**
-     * Имя файла с расширением .yml, поскольку доктрина принимает фикстуры
-     * только с расширением yml
+     * Данные в формате yml
      * @var string
      */
-    private $_ymlFileName;
+    private $_ymlData;
 
     /**
      * @var File_CSV_DataSource
@@ -37,26 +36,28 @@ class myCsvImportVkoshelke
      */
     public function __construct($csv)
     {
-        if (!file_exists($csv)) {
-            $csvFileName = tempnam(sys_get_temp_dir(), 'php_' . __CLASS__);
-            file_put_contents($csvFileName, $csv);
-        } else {
-            $csvFileName = $csv;
+        if (file_exists($csv) && is_readable($csv)) {
+            $csv = file_get_contents($csv);
         }
 
-        $this->_csvFileName = $csvFileName;
+        $this->_csvFileName = tempnam(sys_get_temp_dir(), 'php_' . __CLASS__);
+        file_put_contents($this->_csvFileName, $csv);
         $this->_replaceBom($this->_csvFileName);
+    }
 
-        $ymlFileName = tempnam(sys_get_temp_dir(), 'php_' . __CLASS__) . '.yml';
-        touch($ymlFileName);
-        $this->_ymlFileName = $ymlFileName;
+    /**
+     * Убиваем временный файл
+     */
+    public function __destruct()
+    {
+        unlink($this->_csvFileName);
     }
 
 
     /**
      * Делаем основную работу
      * @param User $user
-     * @return string Имя файла с фикстурой или false
+     * @return bool false в случае ошибки
      */
     public function execute(User $user)
     {
@@ -162,17 +163,25 @@ class myCsvImportVkoshelke
             }
         }
 
-        $this->_writeYaml();
+        $this->_setYmlData();
 
-        return $this->_ymlFileName;
+        return true;
     }
 
 
     /**
-     * Записываем данные из кучи в Yaml файл
-     * @return bool
+     * @return string фикстура в формате yaml
      */
-    private function _writeYaml()
+    public function getYmlData()
+    {
+        return $this->_ymlData;
+    }
+
+    /**
+     * Преобразуем данные из кучи в Yaml
+     * @return void
+     */
+    private function _setYmlData()
     {
         foreach ($this->_heap as $key => $value) {
             if (preg_match("/_keys$/", $key)) {
@@ -183,9 +192,7 @@ class myCsvImportVkoshelke
         }
 
         $yamlDumper = new sfYamlDumper();
-        $yaml = $yamlDumper->dump($this->_heap, 3);
-
-        return (bool) file_put_contents($this->_ymlFileName, $yaml);
+        $this->_ymlData = $yamlDumper->dump($this->_heap, 3);
     }
 
     /**
@@ -285,8 +292,17 @@ class myCsvImportVkoshelke
      */
     private function _getCurrencyId($code)
     {
-        $currency = Doctrine::getTable('Currency')
-            ->findOneByCode($code, Doctrine::HYDRATE_ARRAY);
-        return isset($currency['id']) ? $currency['id'] : 1;
+        static $currencies = array();
+
+        if (empty($currencies)) {
+            $currencyList = Doctrine::getTable('Currency')
+                ->findAll(Doctrine::HYDRATE_ARRAY);
+
+            foreach ($currencyList as $currency) {
+                $currencies[$currency['code']] = $currency['id'];
+            }
+        }
+
+        return (isset($currencies[$code]) ? $currencies[$code] : 1);
     }
 }
