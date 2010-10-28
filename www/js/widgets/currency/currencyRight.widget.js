@@ -7,8 +7,8 @@ easyFinance.widgets.currencyRight = function(){
             <span class="b-rates-row-rateprogress b-rates-row-rateprogress__{%progress%}">{%cost%}</span>\
         </div>';
 
-    function load(modelCurrency){
-        _model = modelCurrency;
+    function load() {
+        _model = easyFinance.models.currency;
         redraw();
     }
 
