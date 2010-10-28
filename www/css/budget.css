@@ -181,7 +181,7 @@ thead.budget-header {
 .budget#budget .list #drain a {
     padding-left: 14px;
     font-weight: bold;
-    font-size: 13px
+    font-size: 12px
 }
 
 .budget#budget .list #profit a {
@@ -206,13 +206,14 @@ thead.budget-header {
 }
 
 .budget#budget .list a {
-    cursor: pointer
+    font-size: 12px;
+    cursor: pointer;
 }
 
 .budget#budget .list .child a {
     color: #313131;
     padding-left: 25px;
-    font-size: 12px;
+
 }
 
 .budget#budget .list .parent a {
