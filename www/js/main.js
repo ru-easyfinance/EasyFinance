@@ -495,8 +495,6 @@ $(document).ready(function(){
             id: "gaugeMain"
         };
         swfobject.embedSWF("/swf/efGauge.swf", "divGaugeMain", "107", "107", "9.0.0", false, flashvars, params, attributes);
-        //курсы валют в правой панели
-        easyFinance.widgets.currencyRight.load(easyFinance.models.currency);
 
         //mainmenu
         $('div#mainwrap #' + page_mid).addClass('cur act').children('a').addClass('cur');

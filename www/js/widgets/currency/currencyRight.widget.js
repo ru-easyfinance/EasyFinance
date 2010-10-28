@@ -27,6 +27,8 @@ easyFinance.widgets.currencyRight = function(){
         $('dl.b-rates dd').html( currencyList.join('') );
     }
 
+    $(load);
+
     return{
         load : load,
         redraw : redraw
