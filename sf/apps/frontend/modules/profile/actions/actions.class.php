@@ -33,16 +33,22 @@ class profileActions extends sfActions
         $postParameters = $request->getPostParameters();
         $formParameters = array();
 
+        // default fields
         $fields = array(
-            'login'             => 'user_login',
-            'mailIntegration'   => 'user_service_mail',
-            'nickname'          => 'name',
-            'mail'              => 'user_mail',
-            'pass'              => 'password',
-            'newpass'           => 'password_new',
-            'getNotify'         => 'notify',
+            'mailIntegration' => 'user_service_mail',
+            'nickname'        => 'name',
         );
 
+        // грязный хак для (от) Рамблёра
+        if (strpos($_SERVER['HTTP_HOST'], 'rambler') === false) {
+            $fields = array_merge(array(
+                'login'     => 'user_login',
+                'mail'      => 'user_mail',
+                'pass'      => 'password',
+                'newpass'   => 'password_new',
+                'getNotify' => 'notify',
+            ), $fields);
+        }
 
         foreach ($fields as $parameter => $field) {
             if (array_key_exists($parameter, $postParameters)) {

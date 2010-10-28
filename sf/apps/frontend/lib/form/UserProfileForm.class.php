@@ -79,6 +79,14 @@ class UserProfileForm extends BaseFormDoctrine
             'callback' => array($this, 'checkPasswordNotEmpty'),
         )));
 
+        // грязный хак для Рамблёра, но быстро
+        if (strpos($_SERVER['HTTP_HOST'], 'rambler') !== false) {
+            foreach ($this->validatorSchema as $name => $validator) {
+                if (!in_array($name, array('id', 'name','user_service_mail',))) {
+                    unset($this[$name]);
+                }
+            }
+        }
     }
 
 

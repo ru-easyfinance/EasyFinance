@@ -37,12 +37,15 @@ easyFinance.widgets.profile = function(model){
             newPassword : $('#newpass').val(),
             confirmpass : $('#newpass2').val(),
             mail : $('#mail').val(),
-            name : $('#name').val(),
+            nickname : $('#name').val(),
             mailIntegration: $('#mailIntegration').val()
         }
         _model.setUserInfo(data, function(data){
             if (data.result && data.result.text) {
                 $.jGrowl(data.result.text, {theme: 'green'});
+                // добавил перезагрузку профиля после сохранения, а то подглючивает
+                // хорошо бы все данные в форму при обновлении перекладывать - не знаю - оно реализовано?
+                _model.reload(setupProfile);
             } else if (data.error && data.error.text) {
                 $.jGrowl(data.error.text, {theme: 'red'});
             }

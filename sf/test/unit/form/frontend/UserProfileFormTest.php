@@ -18,6 +18,15 @@ class form_frontend_UserProfileFormTest extends myFormTestCase
 
 
     /**
+     * SetUp
+     */
+    public function _start()
+    {
+        $_SERVER['HTTP_HOST'] = 'https://ef.test';
+    }
+
+
+    /**
      * Создать форму
      */
     protected function makeForm(User $user = null)
@@ -178,6 +187,33 @@ class form_frontend_UserProfileFormTest extends myFormTestCase
 
         $user = $form->save();
         $this->assertEquals(1, $this->queryFind('User', $expected)->count(), 'Expected found 1 object (User)');
+    }
+
+
+    /**
+     * Сохранить: эмулируем Рамблер
+     */
+    public function testSaveRambler()
+    {
+        $_SERVER['HTTP_HOST'] = 'https://rambler.ef.test';
+
+        $input = array(
+            'name'              => 'Дядя Федор',
+            'user_service_mail' => 'unique.mail',
+        );
+
+        $user = $this->helper->makeUser($input);
+        $form = new UserProfileForm($user);
+
+        $expected = $input;
+        unset($expected['user_service_mail']);
+        $expected['id'] = $user->getId();
+
+        $form->bind($input);
+        $this->assertFormIsValid($form);
+
+        $user = $form->save();
+        $this->assertEquals(1, $this->queryFind('User', $expected)->count(), 'Expected found 1 object (rambler-User)');
     }
 
 }
