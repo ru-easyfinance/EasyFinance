@@ -26,19 +26,6 @@ class Operation extends BaseOperation
 
 
     /**
-     * Установить счет и инициализировать user_id
-     *
-     * @param  Account $account
-     * @return void
-     */
-    public function setAccount(Account $account)
-    {
-        $this->_set('Account', $account);
-        $this->_set('user_id', $account->getUserId());
-    }
-
-
-    /**
      * Конвертирует сумму перевода в нужную валюту автоматом
      */
     protected function convertAmounts($data)

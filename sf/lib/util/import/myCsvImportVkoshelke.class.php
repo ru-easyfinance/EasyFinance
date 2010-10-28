@@ -45,6 +45,7 @@ class myCsvImportVkoshelke
         }
 
         $this->_csvFileName = $csvFileName;
+        $this->_replaceBom($this->_csvFileName);
 
         $ymlFileName = tempnam(sys_get_temp_dir(), 'php_' . __CLASS__) . '.yml';
         touch($ymlFileName);
@@ -54,9 +55,10 @@ class myCsvImportVkoshelke
 
     /**
      * Делаем основную работу
+     * @param User $user
      * @return string Имя файла с фикстурой или false
      */
-    public function execute()
+    public function execute(User $user)
     {
         $this->_csvDataSource = new File_CSV_DataSource($this->_csvFileName);
 
@@ -64,24 +66,30 @@ class myCsvImportVkoshelke
             return false;
 
         foreach ($this->_hydrateArrayHash() as $k => $csvOperation) {
-            $currency = array(
-                'code' => $csvOperation['Currency']
+            $csvOperation['ReceiptDate'] = preg_replace(
+                "/^[\s\S]*?(\d{2})\.(\d{2})\.(\d{4})[\s\S]*?$/",
+                "$3-$2-$1",
+                $csvOperation['ReceiptDate']
             );
 
+            $csvOperation['Value'] =
+                str_replace(',', '.', $csvOperation['Value']);
+
             $account = array(
+                'user_id'  => $user->getId(),
                 'name'     => sprintf(
                     "%s (%s)",
                     $csvOperation['Account'],
                     $csvOperation['Currency']
                 ),
-                'currency' => $this->_replace(
-                    'Currency',
-                    $currency['code'],
-                    $currency
-                )
+                'currency_id' => $this->_getCurrencyId(
+                    $csvOperation['Currency']
+                ),
+                'type_id' => 1
             );
 
             $category = !$csvOperation['Category'] ? null : array(
+                'user_id' => $user->getId(),
                 'name' => $csvOperation['Category'],
                 'type' =>
                     ($csvOperation['TransactionType'] == 'Доход' ? 1 : -1)
@@ -90,26 +98,47 @@ class myCsvImportVkoshelke
             switch ($csvOperation['TransactionType']) {
                 case 'Доход':
                 case 'Расход':
-                case 'Перевод списание':
                     $operation = array(
+                        'user_id'  => $user->getId(),
                         'date'     => $csvOperation['ReceiptDate'],
                         'amount'   => $csvOperation['Value'],
                         'comment'  => $csvOperation['Comment'],
-                        'Account'  => $this->_replace(
+                        'type'     => (
+                            $csvOperation['TransactionType'] == 'Доход' ?
+                            Operation::TYPE_PROFIT :
+                            Operation::TYPE_EXPENSE),
+                        'Account'  => $this->_getRecordPointer(
                             'Account',
                             $account['name'],
                             $account
                          ),
-                        'Category' => $this->_replace(
+                        'Category' => $this->_getRecordPointer(
                             'Category',
                             $category['name'],
                             $category
                         ),
                     );
                 break;
+                case 'Перевод списание':
+                    $operation = array_merge(
+                        $operation,
+                        array(
+                            'user_id'  => $user->getId(),
+                            'date'     => $csvOperation['ReceiptDate'],
+                            'amount'   => $csvOperation['Value'],
+                            'comment'  => $csvOperation['Comment'],
+                            'type'     => Operation::TYPE_TRANSFER,
+                            'Account'  => $this->_getRecordPointer(
+                                'Account',
+                                $account['name'],
+                                $account
+                             ),
+                        )
+                    );
+                break;
                 case 'Перевод зачисление':
                     $operation['transfer_amount'] = $csvOperation['Value'];
-                    $operation['TransferAccount'] = $this->_replace(
+                    $operation['TransferAccount'] = $this->_getRecordPointer(
                         'Account',
                         $account['name'],
                         $account
@@ -117,12 +146,19 @@ class myCsvImportVkoshelke
                 break;
             }
 
-            switch ($csvOperation['TransactionType']) {
-                case 'Доход':
-                case 'Расход':
-                case 'Перевод зачисление':
-                    $this->_replace('Operation', $k, $operation);
-                break;
+            if (
+                (
+                    isset($operation['TransferAccount']) &&
+                    isset($operation['Account'])
+                )
+                ||
+                (
+                    isset($operation['type']) &&
+                    $operation['type'] != 2
+                )
+            ) {
+                $this->_getRecordPointer('Operation', $k, $operation);
+                $operation = array();
             }
         }
 
@@ -141,11 +177,13 @@ class myCsvImportVkoshelke
         foreach ($this->_heap as $key => $value) {
             if (preg_match("/_keys$/", $key)) {
                 unset($this->_heap[$key]);
+            } else {
+
             }
         }
 
         $yamlDumper = new sfYamlDumper();
-        $yaml = $yamlDumper->dump($this->_heap);
+        $yaml = $yamlDumper->dump($this->_heap, 3);
 
         return (bool) file_put_contents($this->_ymlFileName, $yaml);
     }
@@ -168,13 +206,15 @@ class myCsvImportVkoshelke
 
 
     /**
-     * Складываем в кучу объекты
-     * @param  array $modelName
-     * @param  array $keyCandidate
-     * @param  array $data
+     * Складывает в кучу объекты, возвращая уникальный идентификатор объекта
+     * в куче
+     *
+     * @param array $modelName
+     * @param array $keyCandidate фактически ид, но не всегда в удобном формате
+     * @param array $data
      * @return string ссылка на объект
      */
-    private function _replace($modelName, $keyCandidate, $data)
+    private function _getRecordPointer($modelName, $keyCandidate, $data)
     {
         if (!isset($this->_heap[$modelName])) {
             $this->_heap[$modelName] = array();
@@ -224,5 +264,29 @@ class myCsvImportVkoshelke
         }
 
         return true;
+    }
+
+    /**
+     * Убираем BOM из файла
+     * @param string $csvFileName
+     * @return void
+     */
+    private function _replaceBom($csvFileName)
+    {
+        $csvData = file_get_contents($csvFileName);
+        $csvData = str_replace(pack('H*', 'EFBBBF'), '', $csvData);
+        file_put_contents($csvFileName, $csvData);
+    }
+
+    /**
+     * Получаем ид валюты по коду
+     * @param string $code
+     * @return int идентификатор валюты
+     */
+    private function _getCurrencyId($code)
+    {
+        $currency = Doctrine::getTable('Currency')
+            ->findOneByCode($code, Doctrine::HYDRATE_ARRAY);
+        return isset($currency['id']) ? $currency['id'] : 1;
     }
 }
