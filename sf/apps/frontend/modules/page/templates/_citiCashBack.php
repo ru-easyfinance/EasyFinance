@@ -77,21 +77,48 @@ $email = array(
 ?>
 
 <div id="cititabs" class="b-citipage js-widget js-widget-citipage">
+    <h2>Кредитная карта Cash Back для тех, кто рационально относится к своим расходам</h2>
+
+    <p>Для тех, кто считает деньги и планирует свой бюджет, создана кредитная карта Ситибанка CASH BACK.</p>
     <div class="w-citipage-wrapper js-control js-control-tabs">
         <ul>
             <li><a href="#cititabs-1">Преимущества</a></li>
             <li><a href="#cititabs-2">Тарифы</a></li>
             <li><a href="#cititabs-3">Анкета</a></li>
         </ul>
-        <div id="cititabs-1">
+        <div id="cititabs-1" class="b-citipage-tabs b-citipage-advantages">
             <!-- зюда фставлять ис одминге кусок про преимущества -->
+            <p>Кредитная карта CASH BACK создана для тех, кто умеет считать деньги и планировать свой бюджет. Вы просто
+            оплачиваете свои ежедневные покупки кредитной картой CASH BACK и получаете 1% от потраченной суммы
+            обратно на Ваш счет. Погашая задолженность в срок, установленный в ежемесячной выписке, Вы не платите
+            проценты – 0% на срок до 50 дней.</p>
+
+            <p>Оформив кредитную карту Ситибанка CASH BACK Вы сможете автоматически вести учет операций по
+            банковской карте с помощью системы EasyFinance.ru. Теперь у Вас не будет необходимости вручную вносить
+            информацию по проведенным операциям, и Вы сможете более рационально планировать свой бюджет,
+            используя средства банка.</p>
+
+            <p>А благодаря напоминаниям от EasyFinance.ru Вы своевременно сможете погашать задолженность по
+            кредитной карте и не платить проценты за пользование кредитными средствами банка.</p>
             <!-- каменты жжгут, патом удалить -->
         </div>
-        <div id="cititabs-2">
+        <div id="cititabs-2" class="b-citipage-tabs b-citipage-tariffs">
             <!-- зюда фставлять ис одминге кусок про ториффы -->
+            <table class="b-citipage-tariffs-table">
+                <tbody>
+                    <tr>
+                        <td>Максимальный кредитный лимит</td>
+                        <td>300 000 рублей</td>
+                    </tr>
+                    <tr>
+                        <td>Выдача Кредитной карты</td>
+                        <td>бесплатно</td>
+                    </tr>
+                </tbody>
+            </table>
             <!-- каменты жжгут, патом удалить -->
         </div>
-        <div id="cititabs-3" style="width: 400px">
+        <div id="cititabs-3" class="b-citipage-tabs b-citipage-form">
             <form method="post" action="<?php echo $api_url ?>" class="b-form-skeleton">
                 <div class="b-row">
                     <div class="b-col">
