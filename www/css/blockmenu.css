@@ -1,0 +1,56 @@
+ul.action {
+    height: 22px;
+}
+.block3 ul.action {
+    position: absolute;
+    top: 7px;
+    right: 3px;
+}
+.block2 ul.action {
+    position: absolute;
+    top: 7px;
+    right: 13px;
+}
+
+ul.action li {
+    float: left;
+    margin-right: 4px;
+    width: 23px;
+    height: 22px;
+}
+    ul.action li a {
+        display: block;
+        width: 23px;
+        height: 22px;
+        text-indent: -999px;
+        overflow: hidden;
+        background: url('/img/i/icons_control2.png') no-repeat 0 0;
+    }
+
+    ul.action li.over1 a {
+        background-position: -46px 0;
+    }
+        ul.action li.over1 a:hover {
+            background-position: -46px -22px;
+        }
+
+    ul.action li.over2 a {
+        background-position: -28px 0;
+    }
+        ul.action li.over2 a:hover {
+            background-position: -28px -22px;
+        }
+
+    ul.action li.over3 a {
+        background-position: 0px 0;
+    }
+        ul.action li.over3 a:hover {
+            background-position: 0px -22px;
+        }
+
+    ul.action li.uparrow a {
+        background-position: -22px 0;
+    }
+        ul.action li.uparrow a:hover {
+            background-position: -22px -22px;
+        }

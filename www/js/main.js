@@ -509,13 +509,10 @@ $(document).ready(function(){
          */
         $(this).closest('div.ramka3').find('div.inside').toggle();
         $(this).toggleClass('uparrow').toggleClass('over3');
-        var title = $(this).find('a').attr('title') == 'свернуть' ? 'развернуть' : 'свернуть';
+        var title = $(this).find('a').attr('title') == 'Свернуть' ? 'Развернуть' : 'Свернуть';
         $(this).find('a').attr('title', title);
         //$(this).closest('div.ramka3').className("over2");
     }).find('a').removeAttr('href');
-    // Кнопка закрыть
-    $('li.over2').remove();
-    $('li.over1').remove();
 
     $(document).keypress(function(e) {
         if(e.keyCode == 27) {
