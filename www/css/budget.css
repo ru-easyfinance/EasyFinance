@@ -177,44 +177,46 @@ thead.budget-header {
     text-decoration: none
 }
 
-.budget#budget .list #profit a {
-    padding-left: 12px;
-    color: #309500;
-    font-weight: bold;
-    font-size: 13px
-}
-
+.budget#budget .list #profit a,
 .budget#budget .list #drain a {
-    padding-left: 12px;
-    color: #eb3c34;
+    padding-left: 14px;
     font-weight: bold;
     font-size: 13px
 }
 
-.budget#budget .list #profit.open a, .budget#budget .list #drain.open a {
+.budget#budget .list #profit a {
+    color: #309500;
+}
+.budget#budget .list #drain a {
+    color: #eb3c34;
+}
+
+.budget#budget .list #profit.open a,
+.budget#budget .list #drain.open a {
     margin-left: 0;
     background: url('/img/i/minus.gif') no-repeat 6px 4px;
     background-position: left
 }
 
-.budget#budget .list #profit.close a, .budget#budget .list #drain.close a {
+.budget#budget .list #profit.close a,
+.budget#budget .list #drain.close a {
     margin-left: 0;
     background: url('/img/i/plus.gif') no-repeat 6px 4px;
     background-position: left
 }
 
 .budget#budget .list a {
-    text-decoration: underline;
     cursor: pointer
 }
 
 .budget#budget .list .child a {
     color: #313131;
-    padding-left: 25px
+    padding-left: 25px;
+    font-size: 12px;
 }
 
 .budget#budget .list .parent a {
-    padding-left: 23px;
+    padding-left: 21px;
     font-weight: bold;
     color: #313131;
 }
