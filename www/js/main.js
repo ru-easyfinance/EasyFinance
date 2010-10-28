@@ -510,7 +510,7 @@ $(document).ready(function(){
         var title = $(this).find('a').attr('title') == 'Свернуть' ? 'Развернуть' : 'Свернуть';
         $(this).find('a').attr('title', title);
         //$(this).closest('div.ramka3').className("over2");
-    }).find('a').removeAttr('href');
+    });
 
     $(document).keypress(function(e) {
         if(e.keyCode == 27) {
