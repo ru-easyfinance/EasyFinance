@@ -2,9 +2,7 @@
     <div class="ct">
         <div class="head">
             <h2>Бюджет</h2>
-            <ul class="action">
-                <li class="over3"><a href="#" title="свернуть">свернуть</a></li>
-            </ul>
+            <?php include_partial('global/common/blockmenu', array('clipno' => 5))?>
         </div>
     </div>
 <center>

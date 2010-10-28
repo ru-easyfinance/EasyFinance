@@ -20,27 +20,18 @@
                             <div class="ct">
                                 <div class="head">
                                     <h2 style="color: red;">Просроченные операции</h2>
+                                    {include file="ui/blockmenu.tpl" clipno=6}
                                 </div>
                             </div>
                             <!-- таблица просроченных событий -->
                             <div id="calendarOverdue" class="efTableWrapper" style="height:160px;">
                                 <table class="efTable head">
                                     <tr>
-                                      <th class="col1 date">
-                                          Дата
-                                      </th>
-                                      <th class="col2 money">
-                                          <span>Сумма</span>
-                                      </th>
-                                      <th class="col3">
-                                          Счёт
-                                      </th>
-                                      <th class="col4">
-                                        Категория
-                                      </th>
-                                      <th class="scroll">
-                                          <div>&nbsp;</div>
-                                      </th>
+                                      <th class="col1 date">Дата</th>
+                                      <th class="col2 money"><span>Сумма</span></th>
+                                      <th class="col3">Счёт</th>
+                                      <th class="col4">Категория</th>
+                                      <th class="scroll"><div>&nbsp;</div></th>
                                     </tr>
                                 </table>
                                 <div class="efTable content" style="height:139px;">
@@ -59,6 +50,7 @@
                             <div class="ct">
                                 <div class="head">
                                     <h2>Календарь</h2>
+                                    {include file="ui/blockmenu.tpl" clipno=6}
                                     <div id="calendarSwitchView">
                                         <div id="calendarModeCalendar" title="календарь"></div>
                                         <div id="calendarModeTable" title="список"></div>
