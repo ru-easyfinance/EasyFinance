@@ -14,14 +14,14 @@
     )
 ?>
 <div class="b-feedback js-widget js-widget-feedback hidden">
-    <div class="js-feedback-dialogue" ondblclick="return {width: 750, height: 630, title: '«Хочу предложить вам…»'}">
+    <div class="js-feedback-dialogue" ondblclick="return {width: 770, height: 640, title: '«Идеи и отзывы»'}">
         <div style="margin-top: 1em;">
             <div id="feedbacktabs" class="b-feedback-tabs js-control js-control-tabs">
                 <div id="feedbacktabs-1">
                     <script type="text/javascript"><!--
                     reformal_wdg_w    = "713";
                     reformal_wdg_h    = "460";
-                    reformal_wdg_domain    = "easyfinance";
+                    reformal_wdg_domain    = "easyfinanceru";
                     reformal_wdg_mode    = 5;
                     reformal_wdg_title   = "Сделайте EasyFinance удобнее";
                     reformal_wdg_ltitle  = "Есть идеи? Выскажите их!…";
@@ -43,7 +43,7 @@
                         <script type="text/javascript" language="JavaScript" src="http://widget.reformal.ru/tabn3v4.js"></script>
                         <div class="drsdtf">на платформе <a href="http://reformal.ru" target="_blank" title="Reformal.ru">Reformal.ru</a></div>
                     </div>
-                    <p class="b-feedback-switchtext">Есть срочная проблема? <span class="pseudo-active js-switchtabs" title="Поддержка — решение Ваших проблем">Обратитесь в службу поддержки</span> — поможем оперативно и вежливо.</p>
+                    <p class="b-feedback-switchtext"><strong>Есть срочная проблема?</strong> <span class="pseudo-active js-switchtabs" title="Поддержка — решение Ваших проблем">Обратитесь в службу поддержки</span> — поможем оперативно и вежливо.</p>
                 </div>
                 <div id="feedbacktabs-2">
                     <form class="b-form-skeleton" action="/feedback/add_message/?responseMode=json" method="post">
@@ -76,7 +76,7 @@
                         <input type="hidden" name="colors"/>
                         <input type="hidden" name="plugins"/>
                     </form>
-                    <p class="b-feedback-switchtext">Есть идея или отзыв? <span class="pseudo-active js-switchtabs" title="Идеи и отзывы">Выскажитесь</span> &mdash; мы учтем их в работе.</p>
+                    <p class="b-feedback-switchtext"><strong>Есть идея или отзыв?</strong> <span class="pseudo-active js-switchtabs" title="Идеи и отзывы">Выскажитесь</span> &mdash; мы учтем их в работе.</p>
                 </div>
                 <ul class="b-feedback-tabs-switchers hidden">
                     <li><a href="#feedbacktabs-1">«Хочу предложить вам…»</a></li>

@@ -155,3 +155,7 @@ form.op_addoperation {
 form.op_addoperation .b-custom-select-wrap {
     top: 0px;
 }
+
+.b-feedback-tabs .b-row {
+    width: 95% !important;
+}
