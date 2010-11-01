@@ -138,6 +138,10 @@ easyFinance.models.user = function(data){
         return _data.reminders ? _data.reminders.enabled || false : false;
     }
 
+    function isRemindersAvailable() {
+        return isMailRemindersAvailable() || isSmsRemindersAvailable()
+    }
+
     return {
         reload: reload,
         getUserInfo: getUserInfo,
@@ -148,7 +152,8 @@ easyFinance.models.user = function(data){
         getTimeZone: getTimeZone,
         getRemindersSettings: getRemindersSettings,
         isMailRemindersAvailable: isMailRemindersAvailable,
-        isSmsRemindersAvailable: isSmsRemindersAvailable
+        isSmsRemindersAvailable: isSmsRemindersAvailable,
+        isRemindersAvailable: isRemindersAvailable
     }
 }();
 

@@ -96,3 +96,13 @@ div.calendar_tooltip.transfer div {
 div.calendar_tooltip.target div {
     background-position: -300px 3px;
 }
+
+.b-advertsms {
+    margin: 0.5em auto;
+    background-color: #e3ffdf;
+    text-align: center;
+}
+    .b-advertsms p {
+        padding: .5em;
+        font-size: 110%;
+    }

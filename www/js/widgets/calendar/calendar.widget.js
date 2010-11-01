@@ -1,22 +1,31 @@
 easyFinance.widgets.calendar = function(){
-    var _data, _editor;
-    var _d = new Date();
+    var _data,
+        _d = new Date(),
+        operationId,
+        elem,
+        chainId,
+        _editor,
+        _element;
+
     function _positioningToolbar(left, top){
         $('#calendar #popupMenuWithEventsForCalendar').css({
             left: left,
             top: top
         }).addClass('act');
     }
-    var chainId;
-    var operationId;
-    var elem;
-    var _element;
-    function init(){
 
+    function renderSmsAdvert() {
+        if (!easyFinance.models.user.isRemindersAvailable()) {
+            $('.js-advertsms').removeClass('hidden');
+        }
+    }
+
+    function init() {
         $.fullCalendar.monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
         $.fullCalendar.monthNamesShort = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
         $.fullCalendar.dayNames = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
         $.fullCalendar.dayNamesShort = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+
         $('#calendar').fullCalendar({
             year: _d.getFullYear(),
             month: _d.getMonth(),
@@ -28,20 +37,15 @@ easyFinance.widgets.calendar = function(){
             header: false,
             showTime: 'guess',
             timeFormat: {
-                // for agendaWeek and agendaDay
-                agenda: 'h:mm{ - h:mm}', // 5:00 - 6:30
-                // for all other views
-                '': 'h:mm' // 7p
+                agenda: 'h:mm{ - h:mm}', // for agendaWeek and agendaDay: 5:00 - 6:30
+                '': 'h:mm' // for all other views 7p
             },
             editable: true,
             disableResizing: true,
             firstDay: 1,
             DragOpacity: {
-                // for agendaWeek and agendaDay
-                agenda: 0.5,
-
-                // for all other views
-                '': 0.5
+                agenda: 0.5, // for agendaWeek and agendaDay
+                '': 0.5 // for all other views
             },
             events: function(start, end, calback){
                 var month = start.getMonth();
@@ -81,28 +85,28 @@ easyFinance.widgets.calendar = function(){
                 }
 
                 calback(calendarArray);
-                //cont
+
                 $('#calendar .fc-content #popupMenuWithEventsForCalendar').remove();
-                $('#calendar .fc-content').append('<div class="cont" id="popupMenuWithEventsForCalendar"><ul style="display:block">' +
-                '<li title="Подтвердить" class="accept"><a></a></li>' +
-                '<li title="Редактировать" class="edit"><a></a></li>' +
-                '<li title="Удалить" class="del"><a></a></li></ul></div>');
-                $('#calendar .fc-content #popupMenuWithEventsForCalendar li.edit').click(function(){
-                    //                        alert('edit' + $('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key'));
+                
+                $('#calendar .fc-content').append(
+                '<div class="cont" id="popupMenuWithEventsForCalendar"><ul style="display:block">' +
+                    '<li title="Подтвердить" class="accept"><a></a></li>' +
+                    '<li title="Редактировать" class="edit"><a></a></li>' +
+                    '<li title="Удалить" class="del"><a></a></li></ul></div>');
+
+                $('#calendar .fc-content #popupMenuWithEventsForCalendar li.edit').click(function() {
                     elem = _data[$('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key')];
                     calendarEditSingleOrChain(elem);
                 });
                 
-                $('#calendar .fc-content #popupMenuWithEventsForCalendar li.del').click(function(){
-                    //                        alert('del' + $('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key'));
+                $('#calendar .fc-content #popupMenuWithEventsForCalendar li.del').click(function() {
                     elem = _data[$('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key')];
                     calendarDeleteSingleOrChain(elem);
                 });
 
-                $('#calendar .fc-content #popupMenuWithEventsForCalendar:not(.accepted) li.accept').click(function(){
-                    //                        alert('acc' + $('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key'));
+                $('#calendar .fc-content #popupMenuWithEventsForCalendar:not(.accepted) li.accept').click(function() {
                     var operationId = _data[$('#calendar .fc-content #popupMenuWithEventsForCalendar').attr('key')].id;
-                    easyFinance.models.accounts.acceptOperationsByIds([operationId], function(data){
+                    easyFinance.models.accounts.acceptOperationsByIds([operationId], function(data) {
                         if (data.result) {
                             if (data.result.text)
                                 $.jGrowl(data.result.text, {theme: 'green'});
@@ -112,22 +116,25 @@ easyFinance.widgets.calendar = function(){
                         }
                     });
                 });
-                //cont
             },
+
             eventClick: function(event, element, view){
                 elem = _data[event.key];
                 calendarEditSingleOrChain(elem);
             },
-            dayClick: function(date, allDay, jsEvent, view){
+
+            dayClick: function(date, allDay, jsEvent, view) {
                 // открываем окно планирования
                 easyFinance.widgets.operationEdit.showFormCalendar();
                 // подставляем выбранный день
                 $('#op_date').datepicker('setDate', date);
             },
-            eventDragStart: function(calEvent, jsEvent, ui){
+
+            eventDragStart: function(calEvent, jsEvent, ui) {
 
             },
-            eventMouseover: function(event, jsEvent, view){
+
+            eventMouseover: function(event, jsEvent, view) {
                 _positioningToolbar(jsEvent.currentTarget.style.left, jsEvent.currentTarget.style.top);
                 $('#calendar #popupMenuWithEventsForCalendar').attr('key', event.key);
                 if (_data[event.key].accepted == '1') {
@@ -139,10 +146,15 @@ easyFinance.widgets.calendar = function(){
                     $('#calendar #popupMenuWithEventsForCalendar li.accept').show();
                 }
             },
+
             eventDrop: function(calEvent, jsEvent, ui){
-                easyFinance.models.accounts.editOperationDateById(calEvent.id, $.datepicker.formatDate('dd.mm.yy', calEvent.start));
+                easyFinance.models.accounts.editOperationDateById(
+                    calEvent.id,
+                    $.datepicker.formatDate('dd.mm.yy', calEvent.start)
+                );
                 $('.qtip').remove();
             },
+
             eventRender: function(calEvent, element){
                 var event = _data[calEvent.key];
                 var template = '';
@@ -162,7 +174,7 @@ easyFinance.widgets.calendar = function(){
 
                 if (event.repeat != null) {
                     template = 'Повторяется';
-                    //                        var lastChar = event.repeat.toString().substr(event.repeat.toString().length-1, 1);
+
                     switch (event.every) {
                         case '0':
                             template = 'Без повторения';
@@ -207,8 +219,8 @@ easyFinance.widgets.calendar = function(){
                             else {
                                 template += ' до' + $.datepicker.formatDate('dd.mm.yy', Date(event.repeat));
                             }
-
                             break;
+
                         case '30':
                             template += ' ежемесячно';
                             if (event.repeat < 500) {
@@ -218,6 +230,7 @@ easyFinance.widgets.calendar = function(){
                                 template += ' до' + $.datepicker.formatDate('dd.mm.yy', Date(event.repeat));
                             }
                             break;
+
                         case '365':
                             template += ' ежегодно';
                             if (event.repeat < 500) {
@@ -259,6 +272,8 @@ easyFinance.widgets.calendar = function(){
 
             }
         });
+
+        renderSmsAdvert();
     }
     function getCurrentDate() {
         return $('#calendar').fullCalendar('getDate');
