@@ -219,7 +219,9 @@ class myOperationQueryTest extends myUnitTestCase
 
         $result = Doctrine::getTable('Operation')
             ->createQuery()
-            ->getRepayLoanQuery($user, 0)
+            // никто и никогда не будет получать переводы за сегодня
+            // поэтому т.к. операции править более лениво - будем выбирать за месяц
+            ->getRepayLoanQuery($user, 1)
             ->execute();
 
         $this->assertEquals(3, $result->count());
