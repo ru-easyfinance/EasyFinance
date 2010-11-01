@@ -43,7 +43,20 @@ $date = array(
     'name'          => 'birthday',
     'hint'          => 'В формате ДД.ММ.ГГГГ',
     'inputClass'    => 'js-control js-control-datepicker',
-    'jsparams'      => '{dateFormat: "dd.mm.yy", changeMonth: true, changeYear: true, maxDate: "", minDate: ""}'
+    'jsparams'      => sprintf(
+        '{
+            dateFormat: "dd.mm.yy",
+            changeMonth: true,
+            changeYear: true,
+            maxDate: new Date("%s"),
+            minDate: new Date("%s"),
+            yearRange: "%s:%s"
+        }',
+        date('r', strtotime('22 years ago')),
+        date('r', strtotime('60 years ago')),
+        date('Y', strtotime('60 years ago')),
+        date('Y', strtotime('20 years ago'))
+    )
 );
 
 $name = array(
@@ -71,7 +84,7 @@ $phone = array(
 $email = array(
     'label' => 'Email',
     'name'  => 'email',
-    'type'  => 'email'
+    'type'  => 'text'
 );
 
 ?>

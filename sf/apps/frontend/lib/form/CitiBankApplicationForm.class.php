@@ -82,65 +82,92 @@ class CitiBankApplicationForm extends BaseForm
             )
         );
 
+        $messages = array(
+            'invalid'    => 'Поле заполнено неверно',
+            'required'   => 'Поле обязательно для заполнения'
+        );
+
         $this->setValidators(
             array(
                 'city'       => new sfValidatorChoice(
                     array(
                         'choices'  => $cities,
                         'required' => true,
-                    )
+                    ),
+                    $messages
                 ),
                 'employment' => new sfValidatorChoice(
                     array(
                         'choices'  => $employments,
                         'required' => true,
-                    )
+                    ),
+                    $messages
                 ),
                 'birthday'   => new sfValidatorDate(
                     array(
                         'date_format' =>
                             '~(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})~',
-                        'max'       => date('Y-m-d', strtotime('22 years ago')),
-                        'min'       => date('Y-m-d', strtotime('60 years ago')),
-                    )
+                        'date_format_range_error' => 'Y-m-d',
+                        'max' => date('Y-m-d', strtotime('22 years ago')),
+                        'min' => date('Y-m-d', strtotime('60 years ago')),
+                    ),
+                    $messages
                 ),
                 'name' => new sfValidatorRegex(
                     array(
                         'pattern'  => '~[А-Я][а-я]+~',
                         'trim'     => true,
                         'required' => true,
-                    )
+                    ),
+                    $messages
                 ),
                 'patronymic' => new sfValidatorRegex(
                     array(
                         'pattern'  => '~[А-Я][а-я]+~',
                         'trim'     => true,
                         'required' => false,
-                    )
+                    ),
+                    $messages
                 ),
                 'surname'    => new sfValidatorRegex(
                     array(
                         'pattern'  => '~[А-Я][а-я]+~',
                         'trim'     => true,
                         'required' => true,
-                    )
+                    ),
+                    $messages
                 ),
                 'mobile_code' => new sfValidatorRegex(
                     array(
                         'pattern'  => '~\d{3}~',
                         'trim'     => true,
                         'required' => true,
-                    )
+                    ),
+                    $messages
                 ),
                 'mobile_phone' => new sfValidatorRegex(
                     array(
                         'pattern'  => '~\d{7}~',
                         'trim'     => true,
                         'required' => true,
-                    )
+                    ),
+                    $messages
                 ),
-                'email' => new sfValidatorEmail(),
+                'email' => new sfValidatorEmail(array(), $messages),
             )
+        );
+
+        $this->validatorSchema->setMessage(
+            'extra_fields',
+            'Передано лишнее поле ""%field%".'
+        );
+
+        $this->getValidator('birthday')->setMessage(
+            'max', 'Дата должна быть не позднее %max%.'
+        );
+
+        $this->getValidator('birthday')->setMessage(
+            'min', 'Дата должна быть не ранее %min%.'
         );
 
         $this->widgetSchema->setNameFormat('%s');

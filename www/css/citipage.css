@@ -1,4 +1,10 @@
 .b-citipage {
-    margin-left: 2em;
-    width: 400px;
+    width: 650px;
+    margin: auto;
 }
+    .b-citipage .b-citipage-tabs {
+        padding: 0;
+    }
+    .b-citipage p {
+        text-align: justify;
+    }
