@@ -279,8 +279,8 @@ var tplbudgetHeader =
         // fact -- все подтвежденное вообще
 
         var budgetTotal = params.plan;
-        var adhoc = params.notCalendarPlan;
-        var calendarAccepted = params.fact - params.notCalendarPlan;
+        var adhoc = parseFloat(params.notCalendarPlan || 0);
+        var calendarAccepted = params.fact - adhoc;
         var calendarPlanned = params.calendarPlan - calendarAccepted;
         var daysInMonth = _getMonthDays(_currentDate);
         var currentDay = _currentDate.getDate();
@@ -354,10 +354,10 @@ var tplbudgetHeader =
         }
 
         if (params.type == 'd') {
-            color = (budgetLeft < 0 && marginTotal < 0) ? 'red' : marginTotal == 0 ? 'yellow' : 'green';
+            color = (budgetOverheaded || marginTotal < 0) ? 'red' : marginTotal == 0 ? 'yellow' : 'green';
         }
         else {
-            color = (budgetLeft < 0 && marginTotal < 0) ? 'green' : marginTotal == 0 ? 'yellow' : 'red';
+            color = (budgetOverheaded || marginTotal < 0) ? 'green' : marginTotal == 0 ? 'yellow' : 'red';
         }
 
         resultMessage = templetor(message, {
@@ -447,7 +447,7 @@ var tplbudgetHeader =
             drainprc = Math.abs(Math.round(temp.totalMoney * 100 / temp.totalAmount));
         }
         else {
-            drainprc = 0;
+            drainprc = 100;
         }
 
         str = templetor(tplbudgetHeader, {currencyName: easyFinance.models.currency.getDefaultCurrencyText()})
@@ -471,7 +471,7 @@ var tplbudgetHeader =
             drainprc = Math.abs(Math.round(temp.totalMoney * 100 / temp.totalAmount));
         }
         else {
-            drainprc = 0;
+            drainprc = 100;
         }
 
         params = {

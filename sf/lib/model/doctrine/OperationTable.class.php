@@ -125,11 +125,10 @@ class OperationTable extends Doctrine_Table
         $query = $this->querySumByCategory($user, $rate, $alias)
             ->andWhere("{$alias}.chain_id IS NOT NULL")
             ->andWhere("{$alias}.chain_id <> 0")
-            ->andWhere("{$alias}.date >= ?", $date)
+            ->andWhere("{$alias}.date >= '$date'")
             ->andWhere("{$alias}.date <= LAST_DAY('$date')");
 
         $data = $query->execute(array(), 'FetchPair');
-
         return $data;
     }
 
@@ -171,7 +170,6 @@ class OperationTable extends Doctrine_Table
         $query = $this->createQuery("{$alias}")
             ->select("category_id, sum(amount*cu.rate/$rate) AS fact")
             ->innerJoin("{$alias}.Category c")
-            ->innerJoin("{$alias}.Account a")
             ->innerJoin("{$alias}.Account.Currency cu")
             ->where("{$alias}.user_id = ?", $user->getId())
             ->groupBy("{$alias}.category_id");
