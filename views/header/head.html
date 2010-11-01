@@ -36,7 +36,7 @@
         <meta name="google-site-verification" content="4dOi6ZB5xsxat-pXPscMRqOO6ayZce_gbhMvoreo7Sc" />
         <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <link href="/favicon.ico" rel="icon" type="image/x-icon" />
-        <!-- Подключениее стилей и скриптов -->
+        <!-- Подключение стилей и скриптов -->
         {foreach from=$css item=i}
             <link rel="stylesheet" type="text/css" href="/css/{$i}?r={$smarty.const.REVISION}"/>
         {/foreach}
@@ -69,59 +69,16 @@
             {if strpos($smarty.server.HTTP_HOST, 'rambler') === false}
                 {if $smarty.server.REQUEST_URI === '/'}
                     <div id="menumain"  value="{$head_val}">
-                        <ul class="menu1">
-                            <!-- Jet. ticket #273 -->
-                            <li class="first"><a href="https://{$smarty.const.URL_ROOT_MAIN}review/" id="review" class="efTooltip" title="Описание основных элементов и сервисов">Обзор</a></li>
-                            <li><a href="https://{$smarty.const.URL_ROOT_WIKI}tiki-view_blog.php?blogId=2" id="feed" class="efTooltip" title="Мнения пользователей о работе сайта и их пожелания">Отзывы</a></li>
-                            <li><a href="https://{$smarty.const.URL_ROOT_WIKI}tiki-view_blog.php?blogId=4" id="feed" class="efTooltip" title="Публикации СМИ о нашем сервисе">Сми о нас</a></li>
-                            <li><a href="https://{$smarty.const.URL_ROOT_WIKI}tiki-view_blog.php?blogId=1" id="blog" class="efTooltip" title="Корпоративный блог">Блог</a></li>
-                            <li><a href="https://{$smarty.const.URL_ROOT_WIKI}tiki-view_articles.php" id="articles" title="Статьи о финансах">Статьи</a></li>
-                            <li><a href="https://{$smarty.const.URL_ROOT_PDA}" id="pda" title="Версия для использования с мобильного телефона">Мобильная версия</a></li>
-                            <li><a href="https://{$smarty.const.URL_ROOT_WIKI}tiki-read_article.php?articleId=14" id="help" style="font-weight:bold; color: white;" title="Помощь по использованию сервиса">Помощь</a></li>
-                            <li style="background: none; margin-left: -1em;"><a href="https://{$smarty.const.URL_ROOT_MAIN}integration" style="font-weight:bold; color: yellow;" title="Интеграция с банками">EasyBank</a></li>
-                        </ul>
+                        {include_php file="../sf/apps/frontend/templates/_common/uppermenu.php"}
+
                         {if $user_info.user_id > 0}
                             <ul class="menu2">
-                                <!--- <li><a href="/info/">Личный кабинет</a></li> --->
-                                <!--- <li><a href="/profile/">Настройки профиля</a></li> --->
                                 <li><a href="/my/profile/">{$user_info.user_name}&nbsp;</a><a id="show_logout" href="/logout/" title="Выход">ВЫХОД</a></li>
                             </ul>
                         {else}
-                            <!-- Jet. ticket #273 -->
-                            {if $smarty.const.IS_DEMO == false}
-                                <form method="post" action="https://{$smarty.const.URL_ROOT}login/">
-                                    <div class="b-login-form">
-                                        <div class="b-login-form-row l-buttons-inline">
-                                            {include file="ui/textfield.tpl" name="login" placeholder="логин/почта"}
-                                            {include file="ui/textfield.tpl" name="pass" type="password" placeholder="пароль"}
-                                            <input class="b-button-login" type="submit" value="" />
-                                        </div>
-                                        <div class="b-login-form-row second">
-                                            <label><input type="checkbox" name="autoLogin" value="1" checked="checked" /> <span>Запомнить</span></label>
-                                            <a href="https://{$smarty.const.URL_ROOT}restore/">Забыли пароль?</a>
-                                        </div>
-                                        <div class="b-login-form-bg">
-                                            <i class="l"></i>
-                                            <i class="r"></i>
-                                        </div>
-                                    </div>
-                                </form>
-                            {else}
-                                <form method="post" action="https://{$smarty.const.URL_ROOT}login/">
-                                    <div class="b-login-form">
-                                        <div class="b-login-form-row l-buttons-inline">
-                                            {include file="ui/textfield.tpl" name="login" placeholder="логин/почта"}
-                                            {include file="ui/textfield.tpl" name="pass" type="password" placeholder="пароль"}
-                                            <input class="b-button-simple" type="submit" value="ok" />
-                                        </div>
-                                        <div class="b-login-form-row second">
-                                            <label><input type="checkbox" name="autoLogin" value="1" checked="checked" /> <span>Запомнить</span></label>
-                                            <a href="https://{$smarty.const.URL_ROOT}restore/">Забыли пароль?</a>
-                                        </div>
-                                    </div>
-                                </form>
-                            {/if}
+                            {include file="header/loginform.html"}
                         {/if}
+
                     </div>
                 {/if}
 <!-- верхнее меню -->

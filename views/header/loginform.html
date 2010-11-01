@@ -1,0 +1,17 @@
+<form method="post" action="https://{$smarty.const.URL_ROOT}login/">
+    <div class="b-login-form">
+        <div class="b-login-form-row l-buttons-inline">
+            {include file="ui/textfield.tpl" name="login" placeholder="логин/почта"}
+            {include file="ui/textfield.tpl" name="pass" type="password" placeholder="пароль"}
+            <input class="b-button-login" type="submit" value="" title="Войти"/>
+        </div>
+        <div class="b-login-form-row second">
+            <label><input type="checkbox" name="autoLogin" value="1" checked="checked" /> <span>Запомнить</span></label>
+            <a href="https://{$smarty.const.URL_ROOT}restore/">Забыли пароль?</a>
+        </div>
+        <div class="b-login-form-bg">
+            <i class="l"></i>
+            <i class="r"></i>
+        </div>
+    </div>
+</form>
