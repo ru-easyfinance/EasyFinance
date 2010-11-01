@@ -32,4 +32,8 @@
         .b-feedback-tabs .b-feedback-switchtext {
             padding-top: .5em;
             color: #EB6B44;
+            font-size: 110%;
         }
+            .b-feedback-tabs .b-feedback-switchtext .pseudo-active {
+                font-weight: bold;
+            }

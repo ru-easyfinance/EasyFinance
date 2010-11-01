@@ -4,6 +4,7 @@
         <?php include_http_metas() ?>
         <?php include_metas() ?>
         <?php include_title() ?>
+        <meta name="verify-reformal" content="0df0cf61e83e18bd7bfe09a5" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <?php include_stylesheets() ?>
         <!--[if IE 7]>

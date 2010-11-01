@@ -14,7 +14,7 @@
     )
 ?>
 <div class="b-feedback js-widget js-widget-feedback hidden">
-    <div class="js-feedback-dialogue" ondblclick="return {width: 770, height: 640, title: '«Идеи и отзывы»'}">
+    <div class="js-feedback-dialogue" ondblclick="return {width: 770, height: 640, title: 'Идеи и отзывы'}">
         <div style="margin-top: 1em;">
             <div id="feedbacktabs" class="b-feedback-tabs js-control js-control-tabs">
                 <div id="feedbacktabs-1">
