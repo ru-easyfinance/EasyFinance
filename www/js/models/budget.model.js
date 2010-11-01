@@ -63,6 +63,26 @@ easyFinance.models.budget = function(){
         }
 
         /**
+         * @desc возвращает список бюджетов, в котором значения приведены к float'ам
+         * Это нужно только лишь потому, что PHP-шный генератор JSON -- коряв и богопротивен.
+         */
+        function getNormalizedList() {
+            var fields = 'amount calendar_plan mean money not_calendar_plan'.split(' ');
+
+            var result = $.extend({}, _data.list, {}); // копируем список, а то вдруг он кому-то понадобится
+
+            for (var type in result) { // 'p' or 'd'
+                for (var catId in result[type]) {
+                    for (var i = 0, l = fields.length; i < l; i++) {
+                        result[type][catId][fields[i]] = Math.abs( parseFloat(result[type][catId][fields[i]]) )
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /**
          * @desc добавляет бюджет
          * @param budget {str} JSON
          * @param date {date}
@@ -228,6 +248,7 @@ easyFinance.models.budget = function(){
             edit : edit,
             get_data : get_data,
             returnList : returnList,
+            getNormalizedList : getNormalizedList,
             returnInfo : returnInfo
         }
 }();
