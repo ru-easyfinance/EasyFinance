@@ -12,35 +12,30 @@ class myAuthActions extends sfActions
         $this->setLayout("layout");
 
         $user = $this->getUser();
-        if ($user->isAuthenticated()) {
-                if (!$this->checkSubscription()) {
-                    $user->signOut();
-                    return $this->raiseError('Payment required', 402);
+
+        if (!$user->isAuthenticated()) {
+            if ($request->isMethod('post')) {
+                $form = new myAuthForm();
+                $form->bind($request->getPostParameters());
+
+                if ($form->isValid()) {
+                    $userRecord = $form->getUser();
+                } else {
+                    return $this->raiseError($form->getErrorSchema());
                 }
-
-            return sfView::SUCCESS;
-        }
-
-        // Запрос на авторизацию
-        if ($request->isMethod('post')) {
-            $form = new myAuthForm();
-            $form->bind($request->getPostParameters());
-            if ($form->isValid()) {
-                $user->signIn($form->getUser());
-                if (!$this->checkSubscription()) {
-                    $user->signOut();
-                    return $this->raiseError('Payment required', 402);
-                }
-
-                return sfView::SUCCESS;
+            } else {
+                return $this->raiseError('Authentification required');
             }
 
-            return $this->raiseError($form->getErrorSchema());
-
-        // Форвард из других контроллеров
-        } else {
-            return $this->raiseError('Authentification required');
+            $user->signIn($userRecord);
         }
+
+        if (!$this->checkSubscription()) {
+            $user->signOut();
+            return $this->raiseError('Payment required', 402);
+        }
+
+        return sfView::SUCCESS;
     }
 
 
