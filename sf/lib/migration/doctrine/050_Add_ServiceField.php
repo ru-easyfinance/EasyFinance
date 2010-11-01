@@ -23,7 +23,24 @@ class Migration050_Add_ServiceField extends myBaseMigration
             32,
             $options
         );
+    }
 
+    /**
+     * Заполняет поле keyword
+     */
+    public function postUp()
+    {
+        // Харкодовые id первых услуг
+        $sms    = 1;
+        $iphone = 2;
+
+        $this->rawQuery("UPDATE billing_services SET keyword = id;");
+        $this->rawQuery(
+            "UPDATE billing_services SET keyword = 'sms'    WHERE id = $sms;
+             UPDATE billing_services SET keyword = 'iphone' WHERE id = $iphone;"
+        );
+
+        // Индекс
         $definition = array(
             'fields' => array(
                 'keyword' => array()
@@ -32,25 +49,10 @@ class Migration050_Add_ServiceField extends myBaseMigration
         );
 
         $this->index(
-            $upDown,
+            'up',
             'billing_services',
             'service_keyword',
             $definition
         );
-    }
-
-    /**
-     * Расставить правильные зоны
-     */
-    public function postUp()
-    {
-        // Харкодовые id первых услуг
-        $sms    = 1;
-        $iphone = 2;
-
-        $this->rawQuery("
-            UPDATE billing_services SET keyword = 'sms'    WHERE id = $sms;
-            UPDATE billing_services SET keyword = 'iphone' WHERE id = $iphone;
-        ");
     }
 }
