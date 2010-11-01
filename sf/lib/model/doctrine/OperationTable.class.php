@@ -78,8 +78,8 @@ class OperationTable extends Doctrine_Table
 
         $query = $this->querySumByCategory($user, $alias)
             ->select("category_id, sum(amount*cu.rate/{$rate})/{$monthCount} AS mean")
-            ->andWhere("{$alias}.date >= ADDDATE('{$date}', INTERVAL -{$monthCount} MONTH)")
-            ->andWhere("{$alias}.date <= '{$date}'");
+            ->andWhere("{$alias}.date > ADDDATE('{$date}', INTERVAL -{$monthCount} MONTH)")
+            ->andWhere("{$alias}.date < '{$date}'");
 
         $data = $query->execute(array(), 'FetchPair');
 

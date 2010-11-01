@@ -439,7 +439,11 @@ class model_OperationTableTest extends myUnitTestCase
         $expected = $expected / $monthCount;
 
         $result = Doctrine::getTable("Operation")
-            ->getMeanByCategory($user, date('Y-m-d'), $monthCount);
+            ->getMeanByCategory(
+                $user,
+                date('Y-m-d', strtotime('+1 month')),
+                $monthCount
+        );
 
         $this->assertEquals(
             $expected,

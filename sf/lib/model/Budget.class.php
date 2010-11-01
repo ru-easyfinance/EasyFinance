@@ -61,13 +61,13 @@ class Budget
     public function getFact($categoryId)
     {
         return isset($this->_fact[$categoryId]) ?
-            $this->_fact[$categoryId] : 0;
+            abs($this->_fact[$categoryId]) : 0;
     }
 
     public function getThreeMonthMean($categoryId)
     {
         return isset($this->_threeMonthMean[$categoryId]) ?
-            $this->_threeMonthMean[$categoryId] : 0;
+            abs($this->_threeMonthMean[$categoryId]) : 0;
     }
 }
 ?>

@@ -26,6 +26,7 @@ ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . SYS_DIR_LIBS 
 //Настройки языка
 putenv('LANG=ru_RU.utf8');
 setlocale(LC_ALL, 'ru_RU.utf8');
+setlocale(LC_NUMERIC, 'en_US.utf8');
 
 // Other
 define('IS_DEMO',          ${project.demo});
