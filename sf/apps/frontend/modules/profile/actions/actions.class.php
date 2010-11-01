@@ -196,16 +196,19 @@ class profileActions extends myBaseFrontendJsonActions
      */
     public function executeImportCsv(sfRequest $request)
     {
-        putenv('LANG=ru_RU.utf8');
-        setlocale(LC_ALL, 'ru_RU.utf8');
-
         $csvFile = $request->getFiles('data');
         $import  = new myImportCsvVkoshelke($csvFile['tmp_name']);
 
         if (!$import->execute($this->getUser()->getUserRecord())) {
-            $this->renderJsonError(
-                'Не удалось разобрать CSV'
+            $errorMessage = 'Не удалось разобрать CSV';
+            $this->myLogMessage(
+                __METHOD__,
+                'fail',
+                $errorMessage,
+                $errorMessage,
+                file_get_contents($csvFile['tmp_name'])
             );
+            return $this->renderJsonError($errorMessage);
         }
 
         $ymlFileName = sprintf(
@@ -220,11 +223,40 @@ class profileActions extends myBaseFrontendJsonActions
             Doctrine::loadData($ymlFileName, true);
             unlink($ymlFileName);
         } catch (Exception $e) {
-            return $this->renderJsonError(
-                'Импорт не удалось загрузить данные в БД'
+            $errorMessage = 'Импорт не удалось загрузить данные в БД';
+            $this->myLogMessage(
+                __METHOD__,
+                'fail',
+                $errorMessage,
+                $errorMessage,
+                file_get_contents($csvFile['tmp_name'])
             );
+            return $this->renderJsonError($errorMessage);
         }
 
         return $this->renderJsonSuccess('Импорт данных успешно завершён');
+    }
+
+
+    /**
+     * Сообщить о событии слушателям
+     *
+     * @see     myDoctrineLoggerPlugin
+     * @param   string  $action
+     * @param   string  $level          Уровень ошибки
+     * @param   string  $name           Название события
+     * @param   string  $description    Описание (расшифровка) события
+     * @param   string  $environment
+     */
+    protected function myLogMessage($action, $level, $name, $description, $environment = '')
+    {
+        $this->dispatcher->notify(new sfEvent("Action \"prfile::$action\"", 'app.activity', array(
+            'state'       => ($level ? $level : 'fail'),
+            'name'        => $name,
+            'description' => $description,
+            'component'   => 'Профиль пользователя',
+            'env'         => (string) $environment,
+            'user'        => $this->getUser()->getUserRecord()
+        )));
     }
 }
