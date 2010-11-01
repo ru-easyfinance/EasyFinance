@@ -194,6 +194,13 @@ function formatCurrency(num, hideCents, centsSpacers) {
     return strSign + whole.toString().replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ') + strCents;
 }
 
+/**
+ * То же, что formatCurrency, но выводит еще название дефолтной валюты
+ */
+function formatCurrencyDefault(num, hideCents, centsSpacers) {
+    return formatCurrency(num, hideCents, centsSpacers) + ' ' + easyFinance.models.currency.getDefaultCurrencyText()
+}
+
 /* Выводим сумму в ноду с заданным селектором,
  * выставляет соответствующий класс суммы
  * и добавляет в конце текст валюты по молчанию

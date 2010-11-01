@@ -68,7 +68,7 @@
 $(document).ready(function() {
     // для всплывающих подсказок в таблицах
     // используется в журнале операций и журнале счетов
-    $(".efTableWithTooltips tr").efLiveTooltip();
+    $(".efTableWithTooltips tr, .efTdWithTooltips").efLiveTooltip();
 
     // для всплывающих подсказок в списках
     // используется в списке счетов в левой панеи

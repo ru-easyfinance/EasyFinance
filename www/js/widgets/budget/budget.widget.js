@@ -33,9 +33,9 @@ easyFinance.widgets.budget = function(data) {
     </table>'
 
 var tplBudgetRow =
-    '<tr id="{%id%}" class="{%className%} js-tooltipped" type="{%type%}" {%parent%} title="{%title%}">\
+    '<tr id="{%id%}" class="{%className%}" type="{%type%}" {%parent%}>\
         <td class="w1"><a>{%catName%}</a></td>\
-        <td class="w2">{%indicator%}</td>\
+        <td class="w2 efTdWithTooltips" title="{%title%}">{%indicator%}</td>\
         <td class="w3">\
             <div class="cont">\
                 <span>{%strPlan%}</span>\
@@ -138,7 +138,7 @@ var tplbudgetHeader =
     function _printList(type, categories, parentId) { // 0 == drain
         var prefix = (type == 1) ? 'p' : 'd'; // profit / drain
 
-        var budgets = _model.returnList()[prefix],
+        var budgets = _model.getNormalizedList()[prefix],
             budget;
 
         var temp = {},
@@ -164,47 +164,50 @@ var tplbudgetHeader =
                 catId = categories[key].id;
                 catName = categories[key].name;
 
-                budget = budgets[catId];
+                budget = {
+                    money: 0,
+                    amount: 0,
+                    calendar_plan: 0,
+                    not_calendar_plan: 0
+                }
+
+                budget = $.extend(budget, budgets[catId]);
 
                 if (categories[key].children.length) {
                     temp = _printList(type, categories[key].children, catId);
                 }
                 else {
-                    temp = {};
+                    temp = {
+                        xhtml: '',
+                        totalAmount: 0,
+                        totalMoney: 0,
+                        totalCalendarPlan: 0,
+                        totalNotCalendarPlan: 0
+                    };
                 }
 
-                totalAmount += parseFloat(isNaN(temp.totalAmount) ? 0 : temp.totalAmount)
-                    + parseFloat(budget ? Math.abs(budget.amount) : 0);
+                totalAmount += temp.totalAmount + budget.amount;
 
-                totalMoney += parseFloat(isNaN(temp.totalMoney) ? 0 : temp.totalMoney)
-                    + parseFloat(budget ? Math.abs(budget.money) : 0);
+                totalMoney += temp.totalMoney + budget.money;
 
-                totalCalendarPlan += parseFloat(isNaN(temp.totalCalendarPlan) ? 0 : temp.totalCalendarPlan)
-                	+ parseFloat(budget ? Math.abs(budget.calendar_plan) : 0);
+                totalCalendarPlan += temp.totalCalendarPlan + budget.calendar_plan;
 
-                totalNotCalendarPlan += parseFloat(isNaN(temp.totalNotCalendarPlan) ? 0 : temp.totalNotCalendarPlan)
-                	+ parseFloat(budget ? Math.abs(budget.not_calendar_plan) : 0);
+                totalNotCalendarPlan += temp.totalNotCalendarPlan + budget.not_calendar_plan;
 
-                amount = parseFloat(isNaN(temp.totalAmount) ? 0 : temp.totalAmount)
-                    + parseFloat(budget ? Math.abs(budget.amount) : 0);
+                amount = temp.totalAmount + budget.amount;
 
-                money = parseFloat(isNaN(temp.totalMoney) ? 0 : temp.totalMoney)
-                    + parseFloat(budget ? Math.abs(budget.money):0);
+                money = temp.totalMoney + budget.money;
 
-                calendarPlan = parseFloat(isNaN(temp.totalCalendarPlan) ? 0 : temp.totalCalendarPlan)
-                	+ parseFloat(budget ? Math.abs(budget.calendar_plan) : 0);
+                calendarPlan = temp.totalCalendarPlan + budget.calendar_plan;
 
-                notCalendarPlan = parseFloat(isNaN(temp.notCalendarPlan) ? 0 : temp.notCalendarPlan)
-                	+ parseFloat(budget ? Math.abs(budget.not_calendar_plan) : 0);
+                notCalendarPlan = temp.notCalendarPlan + budget.not_calendar_plan;
 
                 if (amount > 0 || money !== 0) {
                     var drainprc = Math.abs(Math.round(money*100/amount));
 
-                    var cls = !parentId ? 'parent open':'child';
-                    if (cls == 'parent open'){
-                        if (!temp.xhtml){
-                            cls = 'nochild';
-                        }
+                    var cls = parentId ? 'child' : 'parent open';
+                    if (cls == 'parent open' && !temp.xhtml) {
+                        cls = 'nochild';
                     }
 
                     var params = {
@@ -227,12 +230,7 @@ var tplbudgetHeader =
                 }
             }
         }
-        if (isNaN(totalAmount)) {
-            totalAmount = 0
-        }
-        if (isNaN(totalMoney)){
-            totalMoney = 0
-        }
+
         return {
             xhtml: dhtml,
             totalAmount: totalAmount,
@@ -243,46 +241,9 @@ var tplbudgetHeader =
     }
 
     function _buildTableRow(params) {
-        var color,
-            diff = 0,
+        var diff = 0,
             diffClass = '',
             strPlan = '';
-
-        var title;
-
-        params.plan = parseFloat(params.plan);
-        params.fact = parseFloat(params.fact);
-        params.calendarPlan = parseFloat(params.calendarPlan);
-        params.notCalendarPlan = parseFloat(params.notCalendarPlan);
-        
-
-        // определяем цвет ползунков
-        if (params.type == "p") { // для доходов
-            diff = params.fact - params.plan;
-
-            if (0 >= _calculateIsOverrun(params.plan, params.calendarPlan, params.notCalendarPlan)) {
-                color = 'green';
-                diffClass = 'sumGreen';
-                title = 'Сохраняя текущий уровень доходов, вы не выйдете за рамки бюджета.'
-            }
-            else {
-                color = 'red';
-                title = 'Сохраняя текущий уровень доходов, вы не уложитесь в бюджет.'
-            }
-        }
-        else { // для расходов
-            diff = params.plan - params.fact;
-
-            if (0 <= _calculateIsOverrun(params.plan, params.calendarPlan, params.notCalendarPlan)) {
-                color = 'green';
-                title = 'Сохраняя текущий уровень расходов, вы не выйдете за рамки бюджета.'
-            }
-            else {
-                color = 'red';
-                diffClass = 'sumRed';
-                title = 'Сохраняя текущий уровень расходов, вы не уложитесь в бюджет.'
-            }
-        }
 
         if (params.plan > 0) {
             strPlan = formatCurrency(params.plan, true, false);
@@ -291,7 +252,7 @@ var tplbudgetHeader =
             strPlan = (params.cls != 'parent open') ? '<FONT COLOR="#FF0000"> запланировать </FONT>' : '0';
         }
 
-        var tooltipParams = getTooltip(params); log(tooltipParams)
+        var tooltipParams = getTooltip(params);
 
         var vals = {
             id: params.id,
@@ -326,20 +287,20 @@ var tplbudgetHeader =
 
         var msg = {
             drain: {
-                BudgetOverhead: "<span class='danger'>Внимание! Бюджет уже превышен на {%budgetLeft%}.</span>",
-                PositiveMargin: "<span class='ok'>Поздравляем! Вы сэкономите {%marginTotal%} к концу месяца, если сохраните текущие темпы трат.</span>",
-                ZeroMargin: "<span class='warning'>Будьте аккуратны: бюджет расходуется точно по плану.</span>",
-                ChangeGeneral: "<span class='danger'>Внимание! Вам нужно снизить траты, чтобы уложиться в план.</span> Возможные действия:<ul><li>&bull; снизить в сумме на {%marginTotal%} внеплановые траты и траты, запланированные в календаре</li>",
-                ChangeAdhoc: "<li>&bull; снизить внеплановые траты на {%changeAdhoc%} в день<li>",
-                ChangeCalendar: "<li>&bull; снизить запланированные в календаре траты на {%changeCalendar%}</li>",
+                BudgetOverhead: "<span class='danger'>Внимание! Бюджет уже превышен на <strong>{%budgetLeft%}</strong></span>",
+                PositiveMargin: "<span class='ok'>Поздравляем! Вы сэкономите <strong>{%marginTotal%}</strong> к концу месяца, если сохраните текущие темпы трат</span>",
+                ZeroMargin: "<span class='warning'>Будьте аккуратны: бюджет расходуется точно по плану</span>",
+                ChangeGeneral: "<span class='danger'>Внимание! Вам нужно снизить траты, чтобы уложиться в план.</span> Возможные действия:<ul><li>&bull; снизить в сумме на <strong>{%marginTotal%}</strong> внеплановые траты и траты, запланированные в календаре</li>",
+                ChangeAdhoc: "<li>&bull; снизить внеплановые траты на <strong>{%changeAdhoc%}</strong> в день<li>",
+                ChangeCalendar: "<li>&bull; снизить запланированные в календаре траты на <strong>{%changeCalendar%}</strong></li>",
                 ChangeBoth: "",
                 ChangeClosing: "</ul>"
             },
             profit: {
-                BudgetOverhead: "<span class='ok'>Поздравляем! Вы уже перевыполнили бюджет на {%budgetLeft%}.</span>",
-                PositiveMargin: "<span class='danger'>Внимание! Вы недополучите {%marginTotal%} за этот месяц при текущих темпах доходов.</span>",
-                ZeroMargin: "<span class='warning'>Бюджет наполняется точно по плану.</span>",
-                ChangeGeneral: "<span class='ok'>Так держать! Вы перевыполните бюджет на {%marginTotal%} при текущих темпах доходов</span>",
+                BudgetOverhead: "<span class='ok'>Поздравляем! Вы уже перевыполнили бюджет на <strong>{%budgetLeft%}</strong></span>",
+                PositiveMargin: "<span class='danger'>Внимание! Вы недополучите <strong>{%marginTotal%}</strong> за этот месяц при текущих темпах доходов</span>",
+                ZeroMargin: "<span class='warning'>Бюджет наполняется точно по плану</span>",
+                ChangeGeneral: "<span class='ok'>Так держать! Вы перевыполните бюджет на <strong>{%marginTotal%}</strong> при текущих темпах доходов</span>",
                 ChangeAdhoc: "",
                 ChangeCalendar: "",
                 ChangeBoth: "",
@@ -400,10 +361,10 @@ var tplbudgetHeader =
         }
 
         resultMessage = templetor(message, {
-            budgetLeft: formatCurrency(Math.abs(budgetLeft)),
-            marginTotal: formatCurrency(Math.abs(marginTotal)),
-            changeAdhoc: formatCurrency(changeAdhoc),
-            changeCalendar: formatCurrency(changeCalendar)
+            budgetLeft: formatCurrencyDefault(Math.abs(budgetLeft)),
+            marginTotal: formatCurrencyDefault(Math.abs(marginTotal)),
+            changeAdhoc: formatCurrencyDefault(changeAdhoc),
+            changeCalendar: formatCurrencyDefault(changeCalendar)
         })
 
         return {color: color, title: resultMessage};
