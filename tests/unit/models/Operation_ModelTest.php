@@ -18,7 +18,7 @@ class Operation_ModelTest extends UnitTestCase
 
     function _start()
     {
-        $this->userLogin = 'someLogin++' . mktime();
+        $this->userLogin = 'someLogin++' . time();
         $this->userPass  = 'somePass';
 
         $options = array(

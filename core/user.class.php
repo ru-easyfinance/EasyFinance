@@ -270,7 +270,6 @@ class oldUser
         $this->initUserTags();
         $this->initUserTargets();
         $this->initUserEvents();
-        $this->initUserBudget();
     }
 
     /**
@@ -523,16 +522,6 @@ class oldUser
         $calendar = new Calendar($this);
         $calendar->loadReminder($this);
         $this->user_reminder = $calendar->getArray();
-    }
-
-    /**
-     * Возвращает бюджет пользователя на текущий месяц
-     */
-    public function initUserBudget()
-    {
-        $this->user_budget = array();
-        $this->user_budget = Budget_Model::loadBudget(null, null, $this->getId(),
-            $this->getUserCategory(), $this->getUserProps('user_currency_default'));
     }
 
     /**

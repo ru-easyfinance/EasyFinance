@@ -64,23 +64,6 @@ class Operation extends BaseOperation
                     $this->setAmount($amount);
                 }
             break;
-            case self::TYPE_TRANSFER:
-                if (in_array($this->getTransferAccount()->getTypeId(), array(
-                            Account::TYPE_CREDIT,
-                            Account::TYPE_CREDIT_CARD,
-                            Account::TYPE_LOAN_GET,
-                    )) && in_array($this->getAccount()->getTypeId(), array(
-                            Account::TYPE_CASH,
-                            Account::TYPE_DEBIT_CARD,
-                            Account::TYPE_DEPOSIT,
-                            Account::TYPE_LOAN_GIVE,
-                            Account::TYPE_ELECT_PURSE,
-                            Account::TYPE_BANK_ACC,
-                    ))
-                ) {
-                    $this->setCategoryId($this->getUser()->getDebtCategoryId());
-                }
-            break;
         }
 
         if (!$this->getAccountId()) {
@@ -191,22 +174,26 @@ class Operation extends BaseOperation
      */
     public function getCategory()
     {
-        if (in_array($this->getTransferAccount()->getTypeId(), array(
-                    Account::TYPE_CREDIT,
-                    Account::TYPE_CREDIT_CARD,
-                    Account::TYPE_LOAN_GET,
-            )) && in_array($this->getAccount()->getTypeId(), array(
-                    Account::TYPE_CASH,
-                    Account::TYPE_DEBIT_CARD,
-                    Account::TYPE_DEPOSIT,
-                    Account::TYPE_LOAN_GIVE,
-                    Account::TYPE_ELECT_PURSE,
-                    Account::TYPE_BANK_ACC,
-            ))
+        if (
+            $this->getTransferAccount()->isDebt()
+            &&
+            !$this->getAccount()->isDebt()
         ) {
             return Category::getDebtCategoryInstance();
         } else {
             return parent::getCategory();
         }
+    }
+
+
+    public function isFromCalendar()
+    {
+        return (bool) $this->getChainId();
+    }
+
+
+    public function isAccepted()
+    {
+        return (bool) $this->getAccepted();
     }
 }

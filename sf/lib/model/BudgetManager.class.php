@@ -70,11 +70,11 @@ class BudgetManager
 
             //иначе учитываем операцию в текущем бюджете:
             //операцию не из календаря учтем как ad hoc
-            else if(!$operation->IsFromCalendar())
+            else if (!$operation->isFromCalendar())
                 $currentBudgetArticle->adhoc += $operationContributionAmount;
 
             //подтвержденные и неподтвержденные учтем отдельно
-            else if ($operation->IsAccepted())
+            else if ($operation->isAccepted())
                 $currentBudgetArticle->calendarAccepted += $operationContributionAmount;
 
             else

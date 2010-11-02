@@ -136,4 +136,16 @@ class Account extends BaseAccount
         return $this->getName();
     }
 
+
+    public function isDebt()
+    {
+        return in_array(
+            $this->getTypeId(),
+            array(
+                Account::TYPE_CREDIT,
+                Account::TYPE_CREDIT_CARD,
+                Account::TYPE_LOAN_GET,
+            )
+        );
+    }
 }

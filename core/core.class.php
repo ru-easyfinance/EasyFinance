@@ -30,7 +30,7 @@ class Core
      * Ссылка на экземпляр класса User
      * @var oldUser
      */
-    public static $user = null;
+    public $user = null;
 
     /**
      * Ссылка на экземпляр класса с валютами
@@ -47,7 +47,7 @@ class Core
      *  )),
      * </code>
      */
-    public static $currency = null;
+    public $currency = null;
 
     /**
      * Массив с ошибками, которые будут сообщаться пользователю в виде всплывающего облачка

@@ -25,22 +25,21 @@ class BudgetCategoryTable extends Doctrine_Table
      * Список запланированных расходов на месяц
      *
      * @param User $user
-     * @param string $start
-     * @param float $rate курс валюты пользователя по-умолчанию
+     * @param DateTime $start
+     * @return array
      */
-    public function getBudget(User $user, $start, $rate = 1)
+    public function getBudget(User $user, DateTime $start)
     {
         $alias  = 'b';
         $userId = $user->getId();
         $q = $this->createQuery($alias)
-            ->select("*")
             ->innerJoin("{$alias}.Category c")
                 ->andWhere("c.id = {$alias}.category_id")
-            ->where("{$alias}.date_start = '$start'")
+            ->where("{$alias}.date_start = '?'", $start->format('Y-m-d'))
                 ->andWhere("c.deleted_at IS NULL")
-                ->andWhere("{$alias}.user_id = '$userId'")
+                ->andWhere("{$alias}.user_id = '?'", $userId)
                 ->orderBy("c.parent_id ASC");
 
-        return $q->execute()->getData();
+        return $q->execute()->detData();
     }
 }

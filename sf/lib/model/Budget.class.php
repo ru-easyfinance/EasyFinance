@@ -22,6 +22,12 @@ class Budget {
     public function fill(DateTime $startDate)
     {
         $this->_startDate = $startDate;
+        $budgetArticles = Doctrine::getTable('BudgetCategory')
+            ->getBudget($user, $startDate);
+
+        foreach ($budgetArticles as $budgetArticle)
+            $this->_budgetArticles[$budgetArticle->getCategoryId()] =
+                $budgetArticle;
     }
 
 
@@ -33,7 +39,20 @@ class Budget {
 
     public function getBudgetArticleByCategory(Category $category)
     {
-        Doctrine::getTable('BudgetCategory')
--            ->getBudget($user, $startDate);
+        if (isset($this->_budgetArticles[$category->getId()]))
+            return $this->_budgetArticles[$category->getId()];
+
+        $budgetArticle = new BudgetCategory();
+
+        $budgetArticle->setCategory($category);
+        $budgetArticle->setType(
+            $category->getType() == Category::TYPE_PROFIT ?
+            BudgetCategory::TYPE_PROFIT :
+            BudgetCategory::TYPE_EXPENCE
+        );
+        $budgetArticle->setUser($category->getUser());
+        $budgetArticle->setDateStart($this->_startDate->format('Y-m-d'));
+
+        return $budgetArticle;
     }
 }

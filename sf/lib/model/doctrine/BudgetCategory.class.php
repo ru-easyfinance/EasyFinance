@@ -5,6 +5,8 @@
  */
 class BudgetCategory extends BaseBudgetCategory
 {
+    const TYPE_EXPENCE = 1;
+    const TYPE_PROFIT  = 0;
     //среднее значение за месяцы, предшествующие выбранному
     public $mean = 0;
 

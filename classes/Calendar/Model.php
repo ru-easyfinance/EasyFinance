@@ -162,7 +162,7 @@ class Calendar_Model extends _Core_Abstract_Model
      * @param array $row
      * @return array
      */
-    private function _addNotificationInfo(oldUser $user, array &$rows)
+    private static function _addNotificationInfo(oldUser $user, array &$rows)
     {
         // Предполагаем, что в ключах массивов лежат ID записей
         // см. self::_find()
