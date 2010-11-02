@@ -1,3 +1,4 @@
+<?php include_partial('global/common/accountEdit'); ?>
 <?php use_stylesheet('screens/integration.screen.css?r='.REVISION); ?>
 <?php use_javascript('screens/integration.screen.js?r='.REVISION); ?>
 <?php use_javascript('widgets/profile/userIntegrations.widget.js?r='.REVISION); ?>
