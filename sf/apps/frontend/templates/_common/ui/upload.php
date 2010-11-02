@@ -52,7 +52,7 @@
 
 ?>
 <?php echo $render['label']; ?>
-<div class="b-custom-input<?php echo $render['wrapperClass']; ?>">
+<div class="b-custom-input b-custom-input__borderless<?php echo $render['wrapperClass']; ?>">
     <div class="b-custom-input-border">
         <?php echo $render['placeholder']; ?>
         <input type="file" class="b-custom-input-upload" <?php echo $render['name'] . $render['disabled'] . $render['id'] ?>  />

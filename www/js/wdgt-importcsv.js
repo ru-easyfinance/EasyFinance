@@ -22,6 +22,10 @@ importcsv.prototype = {
     },
     onSubmit: function(evt) {
         evt.preventDefault();
+        if (this.frm.find('input[type="file"]').val() == '') {
+            utils.notifyUser('Не выбран файл');
+            return false;
+        }
         this.submit.attr('disabled', 'disabled');
 
         function onResponse(data) {
@@ -30,6 +34,8 @@ importcsv.prototype = {
         }
 
         utils.ajaxUpload(this.frm, onResponse, onResponse, this);
+
+        return false;
     }
 };
 

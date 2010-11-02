@@ -76,6 +76,9 @@
 .b-custom-textarea {
     background:#aaa;
 }
+.b-custom-input__borderless {
+    background: none !important;
+}
 .b-custom-input .b-custom-input-border,
 .b-custom-textarea .b-custom-textarea-border {
     /*background:#66686f url(../img/ui/custom-input.png) repeat-x;*/
