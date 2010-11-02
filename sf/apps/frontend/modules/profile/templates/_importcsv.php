@@ -1,6 +1,9 @@
 <div class="inside form">
     <div class="js-widget js-widget-importcsv b-importcsv">
-        <p>Импорт данных из других сервисов в формате CSV</p>
+        <p>
+            Импорт данных в формате CSV<br/>
+            <a href="https://<?php echo URL_ROOT_WIKI; ?>tiki-index.php?page=Import">Описание формата и процедуры импорта</a>
+            </p>
         <form class="b-form-skeleton b-importcsv-form" action="/my/profile/import_csv" method="POST">
             <div class="b-row">
                 <div class="b-col">
