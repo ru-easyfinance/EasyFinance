@@ -2,11 +2,8 @@ jquery/jquery.min.js
 jquery/jquery.common.js
 core.js
 controls/jquery.phonefield.js
-<<<<<<< HEAD
 controls/jquery.prompt.js
-=======
 controls/jquery.ajaxupload.js
->>>>>>> t2195 Импорт из CSV
 easyfinance.js
 models/calendar.cache.js
 jquery/ui.core.js
