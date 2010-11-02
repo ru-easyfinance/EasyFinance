@@ -266,8 +266,6 @@ var utils = (function() {
 
     function initControls(container) {
         container.find('.js-control').each(function (index, elem) { // находим все контролы
-            utils.log($(elem));
-            
             var type = utils.getType.control(elem); // тип контрола -- имя jQuery-плагина
             var params = utils.getParams(elem); // параметры передаются в аттрибуте ondblclick
 

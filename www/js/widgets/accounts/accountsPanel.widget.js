@@ -275,7 +275,7 @@ easyFinance.widgets.accountsPanel = function(){
         })
     }
 
-    function renderGroup(group, id) { log(id, group.length)
+    function renderGroup(group, id) {
         var currentPanel = _$node.find('.js-type-' + id).next();
 
         var groupBalance = getSumGroup(group);
