@@ -2,9 +2,90 @@
     width: 650px;
     margin: auto;
 }
+
+.b-citipage .ui-tabs-nav {
+    margin-bottom: 1em;
+}
+    .b-citipage .ui-tabs-nav li {
+        font-size: 145%;
+        font-weight: bold;
+    }
+    .b-citipage .ui-tabs-selected {
+        background-color: #6CBD45;
+    }
+        .b-citipage .ui-tabs-selected a {
+            color: white !important;
+        }
+
+
     .b-citipage .b-citipage-tabs {
         padding: 0;
+    }
+
+    .b-citipage h3 {
+        color: #3366ff;
+        font-weight: bold;
+        font-size: 150%;
+        margin-top: 1em;
+        margin-bottom: 3px;
     }
     .b-citipage p {
         text-align: justify;
     }
+
+    .b-citipage .b-footnote {
+        font-size: smaller;
+        text-decoration: none;
+        vertical-align: top;
+    }
+
+    .b-citipage .b-citipage-list {
+        list-style: circle inside;
+    }
+
+    .b-citipage .b-citipage-footnotes {
+        margin-top: 1.5em;
+        text-align: justify;
+        color: #646464;
+        font-size: smaller;
+    }
+
+
+.b-citipage-banner {
+    position: relative;
+    background: url('/img/i/citi/circle.png') left center no-repeat;
+    height: 97px;
+    margin: 1em 0;
+}
+    .b-citipage-banner .b-banner-circletxt {
+        position: absolute;
+        top: 38px;
+        left: 0;
+        width: 97px;
+        color: white;
+
+        font-weight: bold;
+        font-size: 10px;
+        text-align: center;
+        line-height: 90%;
+    }
+        .b-citipage-banner .b-banner-circletxt big {
+            font-size: 200%;
+        }
+    
+    .b-citipage-banner .b-banner-plaintxt {
+        position: absolute;
+        top: 0px;
+        left: 98px;
+        padding-left: .5em;
+    }
+        .b-banner-plaintxt .b-banner-header {
+            font-size: 150%;
+            color: red;
+            margin-bottom: .5em;
+        }
+        .b-banner-plaintxt .b-banner-text {
+            font-size: 150%;
+            font-weight: bold;
+        }
+
