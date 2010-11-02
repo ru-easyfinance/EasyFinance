@@ -1,43 +1,42 @@
-easyFinance.widgets.report = function(){
-    function init(){
+easyFinance.widgets.report = function() {
+    var tplDetailedRow =
+        '<tr class="{%trClass%}">\
+            <th>{%categoryName%}</th>\
+            <td>{%date%}</td>\
+            <td>{%accountName%}</td>\
+            <td class="{%color%}">{%money%}</td>\
+        </tr>';
+
+
+    function init() {
         var reportType = '';
 
         $('#dateFrom,#dateTo,#dateFrom2,#dateTo2').datepicker({dateFormat: 'dd.mm.yy'});
 
         //Показ и скрытие дополнительных полей при выборе типа отчёта
-        $('#report').change(function(){
-        	applyChosenReport();
-        });
+        $('#report').bind('change', applyChosenReport);
 
-        $('#account').change(function(){
-            loadChosenReport();
-        });
+        $('#account').bind('change', loadChosenReport);
 
-        $('#currency').change(function(){
-                loadChosenReport();
-        });
+        $('#currency').bind('change', loadChosenReport);
 
-        $('#btnShow').click(function(){
-            loadChosenReport();
-        });
+        $('#btnShow').bind('click', loadChosenReport);
 
         //загрузим сразу выбранный отчет - пользователю удобнее и приятнее
         applyChosenReport();
     }
     
-    function applyChosenReport()
-    {
+    function applyChosenReport() {
     	var displayFieldsSettings = {
-    			'#itogo': ["graph_profit", "graph_loss"],
-    			'.js-compare-fields': ["txt_loss_difference", "txt_profit_difference"],
-    			'#profitCategory': ["graph_profit", "txt_profit", "txt_profit_difference"],
-    			'#drainCategory': ["graph_loss", "txt_loss", "txt_loss_difference"]
+            '#itogo': ["graph_profit", "graph_loss"],
+            '.js-compare-fields': ["txt_loss_difference", "txt_profit_difference"],
+            '#profitCategory': ["graph_profit", "txt_profit", "txt_profit_difference"],
+            '#drainCategory': ["graph_loss", "txt_loss", "txt_loss_difference"]
     	};
     	
         var chosenReport = $('#report :selected').val();
-    	
-    	for (field in displayFieldsSettings)
-    	{
+
+        for (var field in displayFieldsSettings) {
     		var displayField = $.inArray(chosenReport, displayFieldsSettings[field]) >= 0;
     		$(field).toggleClass('hidden', !displayField);
     	}
@@ -45,8 +44,7 @@ easyFinance.widgets.report = function(){
         loadChosenReport();
     }
 
-    function loadChosenReport()
-    {
+    function loadChosenReport() {
         load($('#report').val());
     }
 
@@ -72,7 +70,7 @@ easyFinance.widgets.report = function(){
                 requestData.dateTo2 = $('#dateTo2').val();
         }
 
-        easyFinance.models.report.load(requestData, function(data){
+        easyFinance.models.report.load(requestData, function(data) {
             switch (reportType) {
                 case "graph_profit":
                 case "graph_loss":
@@ -119,7 +117,7 @@ easyFinance.widgets.report = function(){
         $(reportTables[type]).removeClass('hidden');
     }
 
-    function ShowGraph(data, currencyId){
+    function ShowGraph(data, currencyId) {
         $('#chart').empty();
 
         var key, money;
@@ -163,7 +161,7 @@ easyFinance.widgets.report = function(){
         }
     }
 
-    function ShowCompareGraph(data, currencyId){
+    function ShowCompareGraph(data, currencyId) {
         $('#chart').empty();
 
         var key, tempValue;
@@ -205,25 +203,20 @@ easyFinance.widgets.report = function(){
         showReports('graphs');
     }
 
-    function CreateDetailedRow(categoryName, date, accountName, type, money)
-    {
-    	var row = 
-        	'<tr><th>' +
-        	categoryName +
-            '</th><td>' + 
-            date + 
-            '</td><td>' +
-            accountName + 
-            '</td><td class="' +
-            (type == 'profit' ? 'sumGreen' : 'sumRed') +
-            '">' +
-            formatCurrency(money) + 
-            '</td></tr>';
-    	
-    	return row;
+    function CreateDetailedRow(categoryName, date, accountName, type, money, trClass) {
+        var values = {
+            categoryName: categoryName,
+            date: date,
+            accountName: accountName,
+            color: type == 'profit' ? 'sumGreen' : 'sumRed',
+            money: formatCurrency(money),
+            trClass: trClass || ''
+        }
+
+        return utils.templator(tplDetailedRow, values);
     }
     
-    function ShowDetailed(data, type){
+    function ShowDetailed(data, type) {
 
         var tableContent = '';
         var totalSum = 0;
@@ -246,26 +239,27 @@ easyFinance.widgets.report = function(){
         
         var tableData = data[0];
         
-        if (tableData.length > 0)
-        {
+        if (tableData.length > 0) {
         	for (var key in data[0]) {
+
+                var currentData = tableData[key];
         	
-	        	var currentCategoryId = tableData[key].category_id;
-	        	var currentParentCategoryId = tableData[key].parent_category_id;
-	        	var currentCategoryName = tableData[key].cat_name;
-	        	var currentParentCategoryName = tableData[key].parent_cat_name;
-	        	var currentDate = tableData[key].date;
-	        	var currentAccountName = tableData[key].account_name;
-	        	var currentMoney = tableData[key].money;       	
-	        	
-	
+                var currentCategoryId = currentData.category_id;
+                var currentParentCategoryId = currentData.parent_category_id;
+                var currentCategoryName = currentData.cat_name;
+                var currentParentCategoryName = currentData.parent_cat_name;
+                var currentDate = currentData.date;
+                var currentAccountName = currentData.account_name;
+                var currentMoney = currentData.money;
+
+
 	        	//Если сменилась дочерняя категория, занесем ее в родительскую
 	        	if (currentCategoryId != categoryId) {
 	        		
 	        		//проверяем, что какая-то предыдущая категория есть, т.е. мы не в начале массива
-	        		if(categoryId != null) {
+                    if (categoryId != null) {
 	        			parentCategoryContent += CreateDetailedRow(categoryName, '', '', type, categorySum) +
-		                    categoryContent;
+                            categoryContent;
 	        		}
 	        		categoryName = currentCategoryName;
 	        		categoryId = currentCategoryId;
@@ -278,7 +272,7 @@ easyFinance.widgets.report = function(){
 	        	if (currentParentCategoryId != parentCategoryId) {
 	        		
 	        		//проверяем, что есть предыдущая родительская категория, и тогда выводим все данные по ней
-	        		if(parentCategoryId != null) {
+                    if (parentCategoryId != null) {
 	        			tableContent += CreateDetailedRow(parentCategoryName, '', '', type, parentCategorySum) +
 	        			parentCategoryContent;
 	        		}
@@ -296,19 +290,19 @@ easyFinance.widgets.report = function(){
         		parentCategorySum += currentMoney;
         		totalSum += currentMoney;
 	           
-	        	categoryContent += CreateDetailedRow('', currentDate, currentAccountName, type, currentMoney);
+                categoryContent += CreateDetailedRow('', currentDate, currentAccountName, type, currentMoney, 'b-reportstable-row-operation');
 	        }
 
 			//сформируем строку итоговой суммы для повторного использования
-			var totalRow = CreateDetailedRow('Всего', '', '', '', type, totalSum);
+			var totalRow = CreateDetailedRow('Всего', '', '', type, totalSum, 'b-reportstable-row-overall');
         	
 			//выведем итоговую сумму и хвостовые категории, которые не вывели в самом теле for 
 			tableContent = 
 				totalRow +
 				tableContent +
-				CreateDetailedRow(parentCategoryName, '', '', type, parentCategorySum) +
+				CreateDetailedRow(parentCategoryName, '', '', type, parentCategorySum, 'b-reportstable-row-category') +
 				parentCategoryContent +
-				CreateDetailedRow(categoryName, '', '', type, categorySum) +
+				CreateDetailedRow(categoryName, '', '', type, categorySum, 'b-reportstable-row-subcategory') +
                 categoryContent +				
 				totalRow;			
 		}
@@ -320,7 +314,7 @@ easyFinance.widgets.report = function(){
         showReportTables('detail');
     }
 
-    function ShowCompareWaste(data, currencyId){
+    function ShowCompareWaste(data, currencyId) {
         var tr = '';
 
         var sum1 = 0;

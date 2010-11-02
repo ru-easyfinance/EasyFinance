@@ -96,13 +96,24 @@ div.report {
     .b-reportstable-body tr {
         height: 20px;
     }
-        .b-reportstable-body tr td,
-        .b-reportstable-body tr th {
+        .b-reportstable-body td,
+        .b-reportstable-body th {
             vertical-align: middle;
             text-align: left;
             padding: 5px;
             border-bottom: 1px dotted #dfdede;
         }
+
+    .b-reportstable-body .b-reportstable-row-overall {
+        font-weight: normal;
+        background-color: #efefef;
+    }
+    .b-reportstable-row-category th {
+        padding-left: 1em;
+    }
+    .b-reportstable-row-subcategory th {
+        padding-left: 2em;
+    }
 
 .b-reportstable-head__detail,
 .b-reportstable-head__compare {
