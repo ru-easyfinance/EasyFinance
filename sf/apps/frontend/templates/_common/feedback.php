@@ -24,7 +24,7 @@
                     reformal_wdg_domain    = "easyfinanceru";
                     reformal_wdg_mode    = 5;
                     reformal_wdg_title   = "Сделайте EasyFinance удобнее";
-                    reformal_wdg_ltitle  = "Есть идеи? Выскажите их!…";
+                    reformal_wdg_ltitle  = "Есть идеи? Выскажите их!";
                     reformal_wdg_lfont   = "Verdana, Geneva, sans-serif";
                     reformal_wdg_lsize   = "12px";
                     reformal_wdg_color   = "#0033ff";
