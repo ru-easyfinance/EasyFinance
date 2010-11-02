@@ -2,101 +2,77 @@
 /**
  * Бюджет за период
  */
-class Budget
+class BudgetManager
 {
-    /**
-     * Фактический расход по категориям
-     * @var array
-     */
-    private $_fact = array();
-    /**
-     * Средний расход по категориям
-     * @var array
-     */
-    private $_threeMonthMean = array();
-    /**
-     * Запланированный расход по категориям
-     * @var array
-     */
-    private $_calendarPlan = array();
-    /**
-     * Незапланированный расход по категориям
-     * @var array
-     */
-    private $_notCalendarPlan = array();
-
     /**
      * Загружает список статей бюджета
      * @param User $user
-     * @param string $startDate
+     * @param string $startDate - дата начала текущего месяца
      * @param float $rate курс пользовательской валюты
      */
-    public function load($user, $startDate, $rate = 1)
+    public function load($user, $startDate)
     {
-        $plan = Doctrine::getTable('BudgetCategory')
-            ->getBudget($user, $startDate);
+        //получим операции за этот месяц - для подсчета текущего бюджета,
+        //и за предыдущие - для подсчета среднего показателя
+        
+        //средний показатель рассчитываем по трем предыдущим месяцам
+        $meanRateMonthsAmount = 3;
+        
+        $beginDate = date_sub($startDate, new DateInterval("P" . $meanRateMonthsAmount . "M"));
+        
+        //дата конца - последнее число заданного месяца, т.е. "начало месяца + 1 месяц - 1 день"
+        $endDate = date_sub(date_add($startDate, new DateInterval("P1M")), new DateInterval("P1D")); 
 
-        $this->_threeMonthMean = Doctrine::getTable('Operation')
-            ->getMeanByCategory($user, $startDate, $rate);
+        //получим выборку операций за рассчитанный период
+        $operations = new OperationCollection();
+        $operations->FillForPeriod($beginDate, $endDate);
+        
+        //получим бюджет на месяц (коллекцию статей бюджета на заданный месяц)
+        $budget = new Budget();
+        
+        $budget->Fill($startDate);
+        
+        //валюта нужна для подсчета сумм операций
+        $mainCurrency = $user->getMainCurrency();        
+        
+        //TODO: всю логику подсчета можно вынести в отдельный калькулятор бюджета и тестить его уже модульно,
+        //без привлечения базы, передавая готовые операции и статьи бюджета
+        
+        //по каждой операции определим ее вклад в соотв. статью бюджета или средний показатель
+        foreach ($operations->getOperations() as $operation) {
+            
+            //получаем модуль вклада операции в бюджет:
+            //получаем в основной валюте и без знака
+            $signed = false;
+            $operationContributionAmount = $operation->GetAmountForBudget($mainCurrency, $signed);
+            
+            //определяем, к какой категории относится операция, и по ней определяем статью бюджета
+            //категорию берем не напрямую из связи операции, а вычисляем для корректного учета переводов
+            //если категория не запланирована, создается и возвращается пустая
+            $currentBudgetArticle = $budget->GetBudgetArticleByCategory(
+                $operation->DefineCategory());
+                
+            //в зависимости от свойств операции учтем ее сумму в среднем показателе или статье бюджета:
+            
+            //операция - из предыдущих месяцев => только в средний показатель
+            if($operation->getDate() < $budget->StartDate) 
+                $currentBudgetArticle->Mean += $operationContributionAmount;
 
-        $this->_fact = Doctrine::getTable('Operation')
-            ->getFactByCategory($user, $startDate, $rate);
-
-        $this->_calendarPlan = Doctrine::getTable('Operation')
-            ->getCalendarPlanByCategory($user, $startDate, $rate);
-
-        $this->_notCalendarPlan = Doctrine::getTable('Operation')
-            ->getNotCalendarPlanByCategory($user, $startDate, $rate);
-
-        $budgetCategories = array();
-
-        foreach ($plan as &$budgetCategory) {
-            $budgetCategory->setBudget($this);
-            $budgetCategories[$budgetCategory->getCategoryId()]
-                = $budgetCategory;
+            //иначе учитываем операцию в текущем бюджете:
+            //операцию не из календаря учтем как ad hoc              
+            else if(!$operation->IsFromCalendar())
+                $currentBudgetArticle->Adhoc += $operationContributionAmount;
+                
+            //подтвержденные и неподтвержденные учтем отдельно
+            else if ($operation->IsAccepted())
+                $currentBudgetArticle->CalendarAccepted += $operationContributionAmount;
+            
+            else
+                $currentBudgetArticle->CalendarFuture += $operationContributionAmount;
         }
-
-        foreach ($this->_fact as $categoryId => $factValue) {
-            if (!isset($budgetCategories[$categoryId])) {
-                $budgetCategory = new BudgetCategory();
-                $budgetCategory->setArray(
-                    array(
-                        'category_id' => $categoryId,
-                        'amount'      => 0,
-                        'user_id'     => $user->getId(),
-                        'type'        => $factValue < 0 ? '1' : '0'
-                    )
-                );
-                $budgetCategory->setBudget($this);
-                $budgetCategories[$categoryId] = $budgetCategory;
-            }
-        }
-
-        return $budgetCategories;
-    }
-
-    public function getFact($categoryId)
-    {
-        return isset($this->_fact[$categoryId]) ?
-            abs($this->_fact[$categoryId]) : 0;
-    }
-
-    public function getCalendarPlan($categoryId)
-    {
-        return isset($this->_calendarPlan[$categoryId]) ?
-            $this->_calendarPlan[$categoryId] : 0;
-    }
-
-    public function getNotCalendarPlan($categoryId)
-    {
-        return isset($this->_notCalendarPlan[$categoryId]) ?
-            $this->_notCalendarPlan[$categoryId] : 0;
-    }
-
-    public function getThreeMonthMean($categoryId)
-    {
-        return isset($this->_threeMonthMean[$categoryId]) ?
-            abs($this->_threeMonthMean[$categoryId]) : 0;
+        
+        //возвращаем уже заполненные категории        
+        return $monthBudget;
     }
 }
 ?>

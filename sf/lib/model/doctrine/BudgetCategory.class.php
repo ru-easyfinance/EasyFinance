@@ -3,57 +3,29 @@
 /**
  * BudgetCategory
  */
-class BudgetCategory extends BaseBudgetCategory
+class BudgetArticle extends BaseBudgetArticle
 {
-    /**
-     * Бюджет
-     * @var Budget
-     */
-    private $_budget = null;
+    //среднее значение за месяцы, предшествующие выбранному
+    public $Mean = 0;
+    
+    //траты вне календаря за выбранный месяц
+    public $Adhoc = 0;
+    
+    //подтвержденные траты в календаре за выбранный месяц
+    public $CalendarAccepted = 0;
 
-    public function getPlan()
-    {
-        return $this->getAmount();
-    }
-
-    public function getCalendarPlan()
-    {
-        return isset($this->_budget) ?
-            $this->_budget->getCalendarPlan($this->getCategoryId()) : 0;
-    }
-
-    public function getNotCalendarPlan()
-    {
-        return isset($this->_budget) ?
-            $this->_budget->getNotCalendarPlan($this->getCategoryId()) : 0;
-    }
-
-    public function getFact()
-    {
-        return isset($this->_budget) ?
-            $this->_budget->getFact($this->getCategoryId()) : 0;
-    }
-
-    public function getThreeMonthMean()
-    {
-        return isset($this->_budget) ?
-            $this->_budget->getThreeMonthMean($this->getCategoryId()) : 0;
-    }
-
+    //будущие (неподтвержденные) траты в календаре за выбранный месяц
+    public $CalendarFuture = 0;
+    
     public function getData()
     {
+        throw new Exception("форматировать данные должен вызывающий код контроллера! вынесите это туда.");
         $data = parent::getData();
-        $data['plan'] = $this->getPlan();
-        $data['fact'] = $this->getFact();
-        $data['calendar_plan'] = $this->getCalendarPlan();
-        $data['not_calendar_plan'] = $this->getNotCalendarPlan();
-        $data['three_month_mean'] = $this->getThreeMonthMean();
+        $data['plan'] = $this->getAmount();
+        $data['adhoc'] = $this->AdHoc;
+        $data['calendar_accepted'] = $this->CalendarAccepted;
+        $data['calendar_future'] = $this->CalendarFuture;
+        $data['mean'] = $this->Mean;
         return $data;
-    }
-
-    public function setBudget(Budget $budget)
-    {
-        if (!$this->_budget)
-            $this->_budget = $budget;
     }
 }
