@@ -81,6 +81,11 @@ User:
     symfony:
       form:   false
       filter: false
+  relations:
+    Currency:
+      local: currency_id
+      foreign: id
+      type: one
 
 
 # Тип счёта (100% - ОК)

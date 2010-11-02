@@ -147,4 +147,66 @@ class Operation extends BaseOperation
             self::TYPE_BALANCE,
         );
     }
+
+
+    /**
+     * Возвращает сумму в указанной валюте
+     * @param Currency $currency валюта в которой вернуть сумму
+     * @param bool $signed
+     * @return float
+     */
+    public function getAmountForBudget(Currency $currency, $signed)
+    {
+        if ($this->getType() == self::TYPE_BALANCE) {
+            throw new InvalidOperationTypeException(
+                'В бюджете не должно быть балансовых операций'
+            );
+        }
+
+        if (
+            $this->getTransferAccount()
+            && $this->getTransferAccount()->getCurrency() == $currency
+        ) {
+            $amount = $this->getTransferAmount();
+        } else {
+            $amount = $currency->convert(
+                $this->getAmount(),
+                $this->getAccount()->getCurrency()
+            );
+        }
+
+        // Операции без категорий в бюджете не нужны
+        // Это обычные внутренние переводы
+        $sign = $this->getCategory() ?
+            (Category::TYPE_PROFIT == $this->getCategory()->getType() ? 1 : -1)
+            : 0 ;
+
+        return $signed ? $sign * abs($amount) : abs($amount);
+    }
+
+
+    /**
+     * Возвращает категорию
+     * Применяется в бюджете
+     */
+    public function getCategory()
+    {
+        if (in_array($this->getTransferAccount()->getTypeId(), array(
+                    Account::TYPE_CREDIT,
+                    Account::TYPE_CREDIT_CARD,
+                    Account::TYPE_LOAN_GET,
+            )) && in_array($this->getAccount()->getTypeId(), array(
+                    Account::TYPE_CASH,
+                    Account::TYPE_DEBIT_CARD,
+                    Account::TYPE_DEPOSIT,
+                    Account::TYPE_LOAN_GIVE,
+                    Account::TYPE_ELECT_PURSE,
+                    Account::TYPE_BANK_ACC,
+            ))
+        ) {
+            return Category::getDebtCategoryInstance();
+        } else {
+            return parent::getCategory();
+        }
+    }
 }
