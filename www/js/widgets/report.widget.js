@@ -258,8 +258,8 @@ easyFinance.widgets.report = function() {
 	        		
 	        		//проверяем, что какая-то предыдущая категория есть, т.е. мы не в начале массива
                     if (categoryId != null) {
-	        			parentCategoryContent += CreateDetailedRow(categoryName, '', '', type, categorySum, 'b-reportstable-row-subcategory') +
-                            categoryContent;
+	                    parentCategoryContent += CreateDetailedRow(categoryName, '', '', type, categorySum, 'b-reportstable-row-subcategory') +
+                        categoryContent;
 	        		}
 	        		categoryName = currentCategoryName;
 	        		categoryId = currentCategoryId;
@@ -273,8 +273,8 @@ easyFinance.widgets.report = function() {
 	        		
 	        		//проверяем, что есть предыдущая родительская категория, и тогда выводим все данные по ней
                     if (parentCategoryId != null) {
-	        			tableContent += CreateDetailedRow(parentCategoryName, '', '', type, parentCategorySum, 'b-reportstable-row-category') +
-	        			parentCategoryContent;
+                        tableContent += CreateDetailedRow(parentCategoryName, '', '', type, parentCategorySum, 'b-reportstable-row-category') +
+                        parentCategoryContent;
 	        		}
 	        		parentCategoryId = currentParentCategoryId;
 	        		parentCategoryName = currentParentCategoryName;
