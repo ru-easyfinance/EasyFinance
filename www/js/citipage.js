@@ -9,7 +9,7 @@ var citipage = (function(selector) {
     }
 
     function onFrmSubmit(evt) {
-        frm.find('input[type="submit"]').attr('disabled', 'disabled'); utils.log(frm.find('input[type="submit"]'))
+        frm.find('input[type="submit"]').attr('disabled', 'disabled');
         evt.preventDefault();
 
         // запоминаем событие в Google Analytics

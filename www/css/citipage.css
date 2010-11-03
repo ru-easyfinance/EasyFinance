@@ -6,15 +6,15 @@
 .b-citipage .ui-tabs-nav {
     margin-bottom: 1em;
 }
-    .b-citipage .ui-tabs-nav li {
-        font-size: 145%;
-        font-weight: bold;
+    .b-citipage .ui-tabs-nav li a {
+        text-decoration: underline;
     }
     .b-citipage .ui-tabs-selected {
-        background-color: #6CBD45;
+        
     }
         .b-citipage .ui-tabs-selected a {
-            color: white !important;
+            font-weight: bold;
+            text-decoration: none !important;
         }
 
 
