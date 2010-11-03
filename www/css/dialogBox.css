@@ -149,8 +149,7 @@ body .ui-dialog .ui-dialog-titlebar a.ui-dialog-titlebar-close .ui-icon.ui-icon-
     border-radius:5px;
 }
 
-.b-print-dialog,
-.b-category-del-dialog {
+.b-print-dialog {
     min-height:0 !important;
     font-size:15px;
     text-align:center;

@@ -66,26 +66,22 @@ $(document).ready(function() {
 
     });
     $('.categories li.del').live('click', function() {
-        $('<div>').addClass('b-category-del-dialog hidden').attr('title', 'Удаление категории').html('Удалить категорию?').appendTo('body');
-        var el = $(this),
-            dialog = $('.b-category-del-dialog'),
-            del = function(el) {
-                el.dialog('close');
-                dialog.remove();
-            };
-        dialog.dialog({
-            resizable: false,
+        var el = $(this);
+        $("#categoryDeletionConfirm").dialog({
+            autoOpen: false,
+            title: "Удалить или скрыть?",
             modal: true,
             buttons: {
-                Ok: function() {
-                    delCategory(el.closest('tr,.line').attr('id').split("_", 2)[1]);
-                    del($(this));
+                "Удалить": function() {
+                    delCategory(el.closest('tr, .line').attr('id').split("_", 2)[1]);
+                    $(this).dialog('close');
                 },
-                Cancel: function() {
-                    del($(this));
+                "Отмена": function() {
+                    $(this).dialog('close');
                 }
             }
         });
+        $("#categoryDeletionConfirm").dialog("open");
     });
     $('.categories li.add').live('click',function(){
         clearForm();
