@@ -199,7 +199,7 @@ function wsInitValidator() {
     dValidator.validatableElems['registration_address'] = new Array();
 
     dValidator.validatableElems['registration_address']['wz_reg_country'] = {
-        'validationType' : 'rualpha',
+        'validationType' : 'blank',
         'errMsg' : '',
         'params' : {}
     };
