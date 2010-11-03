@@ -51,10 +51,11 @@ var feedback = (function(selector) {
     function onSubmit(e) {
         e.preventDefault();
 
-        var emptyFields = frm.find('input[type="text"], textarea');
-        emptyFields.filter(function(index) {
-            return emptyFields.eq(index).val() == '';
-        });
+        var emptyFields = frm
+            .find('input[type="text"], textarea')
+            .filter(function(index) {
+                return $(this).val() == '';
+            });
         if (emptyFields.length) {
             utils.notifyUser('Все поля обязательны для заполнения')
             return false;
@@ -96,8 +97,7 @@ var feedback = (function(selector) {
         frm.bind('submit', onSubmit)
 
         $('#btnFeedback, #footerAddMessage, #linkMainMenuFeedback').bind('click', function() {
-            document.write = function(){};
-            dialog.dialog(utils.getParams(dialog));
+            dialog.prompt(utils.getParams(dialog));
             dialog.dialog('open');
         });
 

@@ -1,39 +1,22 @@
 .b-feedback {
 
 }
-    .b-feedback-tabs .gertuik { /* скрываем заголовок реформала */
-        display: none;
+
+    .b-feedback-container .b-feedback-notice {
+        background-color: #E3FFDF;
+        padding: 3px .5em 0;
+        margin-bottom: 1em;
     }
+        .b-feedback-notice .b-feedback-notice-header {
+            font-size: 125%;
+            color: #ef6300;
+        }
+        .b-feedback-notice .b-feedback-notice-reformal {
+            font-style: italic;
+            font-weight: bold;
+            text-decoration: none;
+        }
 
-    .b-feedback-tabs .poxupih_center {
-        min-height: 460px;
+    .b-feedback-container .b-feedback-message {
+        height: 240px;
     }
-    
-    .b-feedback-tabs {
-
-    }
-        .b-feedback-tabs .b-feedback-tabs-switchers .ui-state-focus,
-        .b-feedback-tabs .b-feedback-tabs-switchers .ui-state-focus a {
-            outline: none;
-            border: none;
-        }
-        .b-feedback-tabs .b-feedback-tabs-switchers .ui-state-active {
-            display: none;
-        }
-            .b-feedback-tabs .b-feedback-tabs-switchers .ui-state-default a {
-                border-bottom: 1px dashed;
-                font-size: 120%;
-            }
-
-        .b-feedback-tabs .b-feedback-message {
-            height: 340px;
-        }
-
-        .b-feedback-tabs .b-feedback-switchtext {
-            padding-top: .5em;
-            color: #EB6B44;
-            font-size: 110%;
-        }
-            .b-feedback-tabs .b-feedback-switchtext .pseudo-active {
-                font-weight: bold;
-            }
