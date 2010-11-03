@@ -91,8 +91,6 @@ $email = array(
 
 <div id="cititabs" class="b-citipage js-widget js-widget-citipage">
     <h2>Кредитная карта Cash Back для тех, кто рационально относится к своим расходам</h2>
-
-    <p>Для тех, кто считает деньги и планирует свой бюджет, создана кредитная карта Ситибанка CASH BACK.</p>
     <div class="w-citipage-wrapper js-control js-control-tabs">
         <ul>
             <li><a href="#cititabs-1">Преимущества</a></li>
@@ -146,6 +144,9 @@ $email = array(
                 <li>Дополнительные карты для Ваших близких</li>
                 <li>Безопасная оплата покупок и услуг в сети Интернет</li>
             </ul>
+            <br/>
+            <p><span class="pseudo js-toform">Заполните онлайн-заявку на оформление кредитной карты</span></p>
+
             <div class="b-citipage-footnotes">
                 <ol class="b-citipage-noteslist">
                     <li><a name="fn1"></a>Кредитная карта Ситибанка CASH BACK выпускается только гражданам РФ.
@@ -196,7 +197,8 @@ $email = array(
                 <li>Ваш подтвержденный  ежемесячный доход после уплаты всех налогов составляет не менее 15 000 рублей,</li>
                 <li>Вы живете и работаете в Москве или ближайшем Подмосковье, Санкт-Петербурге или Ленинградской области, Екатеринбурге, Самаре, Ростове-на-Дону, Уфе, Волгограде, Новосибирске, Казани, Нижнем Новгороде.</li>
             </ul>
-
+            <br/>
+            <p><strong style="color: #3366ff;">Необходимо заполнить все поля</strong></p>
             <form method="post" action="<?php echo $api_url ?>" class="b-form-skeleton">
                 <div class="b-row">
                     <div class="b-col">
@@ -265,6 +267,14 @@ $email = array(
                             <?php include_partial('global/common/ui/simplebutton', array()); ?>
                         </div>
                     </div>
+                </div>
+                <div class="b-citipage-notice js-form-notice hidden">
+                    <p>
+                        <big><span class="js-username"></span> <span class="js-userpatronymic"></span></big>,<br/>
+                        спасибо за интерес, проявленный к Ситибанку. Специалист Ситибанка перезвонит вам
+                        в течение одного рабочего дня по указанному телефону:
+                        +7 (<span class="js-usermobile_code"></span>) <span class="js-usermobile_phone"></span>.
+                    </p>
                 </div>
             </form>
         </div>

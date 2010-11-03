@@ -31,8 +31,7 @@ class CitiBankApplicationForm extends BaseForm
             'Военнослужащий',
             'Владелец предприятия',
             'Агент на комиссионном договоре',
-            'Индивидуальный предприниматель',
-            'Не работаю'
+            'Индивидуальный предприниматель'
         );
 
         $this->disableLocalCSRFProtection();

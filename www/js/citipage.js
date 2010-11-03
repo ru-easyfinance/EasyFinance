@@ -2,14 +2,26 @@ var citipage = (function(selector) {
     var container,
         tabs,
         frm,
-        phone_field;
+        phone_field,
+        notice_container;
 
     function initFormControls() {
 
     }
 
+    function renderNotice() {
+        var fieldsToCopy = 'name patronymic mobile_code mobile_phone'.split(' ');
+        for (var i = 0, l = fieldsToCopy.length; i < l; i++) {
+            notice_container.find('.js-user' + fieldsToCopy[i]).text( frm[0][fieldsToCopy[i]].value );
+        }
+
+        notice_container.removeClass('hidden');
+    }
+
     function onFrmSubmit(evt) {
         frm.find('input[type="submit"]').attr('disabled', 'disabled');
+        notice_container.addClass('hidden');
+
         evt.preventDefault();
 
         // запоминаем событие в Google Analytics
@@ -48,6 +60,8 @@ var citipage = (function(selector) {
             utils.defaultOnSuccess(data);
             frm.find('input[type="submit"]').removeAttr('disabled');
             phone_field.attr('name', 'mobile_number');
+
+            renderNotice();
         }
         function onError(data) {
             notifyUser('Произошла непредвиденная ошибка. Попробуйте еще раз через несколько минут.')
@@ -67,6 +81,12 @@ var citipage = (function(selector) {
 
         frm = container.find('form').eq(0);
         frm.bind('submit', onFrmSubmit);
+
+        container.find('.js-toform').bind('click', function() {
+            container.find('.js-control-tabs').tabs('select', 1);
+        });
+
+        notice_container = container.find('.js-form-notice');
     }
 
     $(init);
