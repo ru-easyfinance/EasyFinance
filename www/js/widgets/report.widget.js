@@ -258,7 +258,7 @@ easyFinance.widgets.report = function() {
 	        		
 	        		//проверяем, что какая-то предыдущая категория есть, т.е. мы не в начале массива
                     if (categoryId != null) {
-	        			parentCategoryContent += CreateDetailedRow(categoryName, '', '', type, categorySum) +
+	        			parentCategoryContent += CreateDetailedRow(categoryName, '', '', type, categorySum, 'b-reportstable-row-subcategory') +
                             categoryContent;
 	        		}
 	        		categoryName = currentCategoryName;
@@ -273,7 +273,7 @@ easyFinance.widgets.report = function() {
 	        		
 	        		//проверяем, что есть предыдущая родительская категория, и тогда выводим все данные по ней
                     if (parentCategoryId != null) {
-	        			tableContent += CreateDetailedRow(parentCategoryName, '', '', type, parentCategorySum) +
+	        			tableContent += CreateDetailedRow(parentCategoryName, '', '', type, parentCategorySum, 'b-reportstable-row-category') +
 	        			parentCategoryContent;
 	        		}
 	        		parentCategoryId = currentParentCategoryId;
@@ -297,13 +297,13 @@ easyFinance.widgets.report = function() {
 			var totalRow = CreateDetailedRow('Всего', '', '', type, totalSum, 'b-reportstable-row-overall');
         	
 			//выведем итоговую сумму и хвостовые категории, которые не вывели в самом теле for 
-			tableContent = 
+			tableContent =
 				totalRow +
 				tableContent +
 				CreateDetailedRow(parentCategoryName, '', '', type, parentCategorySum, 'b-reportstable-row-category') +
 				parentCategoryContent +
 				CreateDetailedRow(categoryName, '', '', type, categorySum, 'b-reportstable-row-subcategory') +
-                categoryContent +				
+                categoryContent +
 				totalRow;			
 		}
 
