@@ -27,10 +27,10 @@ class BudgetManager
         //средний показатель рассчитываем по трем предыдущим месяцам
         $meanRateMonthsAmount = 3;
 
-        $beginDate = date_sub($startDate, new DateInterval("P" . $meanRateMonthsAmount . "M"));
+        $beginDate = date_sub(clone $startDate, new DateInterval("P" . $meanRateMonthsAmount . "M"));
 
         //дата конца - последнее число заданного месяца, т.е. "начало месяца + 1 месяц - 1 день"
-        $endDate = date_sub(date_add($startDate, new DateInterval("P1M")), new DateInterval("P1D"));
+        $endDate = date_sub(date_add(clone $startDate, new DateInterval("P1M")), new DateInterval("P1D"));
 
         //получим выборку операций за рассчитанный период
         $operations = new OperationCollection();
@@ -39,7 +39,7 @@ class BudgetManager
         //получим бюджет на месяц (коллекцию статей бюджета на заданный месяц)
         $budget = new Budget();
 
-        $budget->fill($startDate);
+        $budget->fill($user, $startDate);
 
         //валюта нужна для подсчета сумм операций
         $mainCurrency = $user->getCurrency();
@@ -79,10 +79,11 @@ class BudgetManager
 
             else
                 $currentBudgetArticle->calendarFuture += $operationContributionAmount;
+
         }
 
         //возвращаем уже заполненные категории
-        return $monthBudget;
+        return $budget->getBudgetArticles();
     }
 }
 

@@ -150,13 +150,15 @@ class model_AccountTest extends myUnitTestCase
     {
         $operation = $this->helper->makeOperation();
         $account   = $operation->getAccount();
-        $operationId = $operation->getId();
 
         $account->delete();
         // Убираем поведение SoftDelete
-        Doctrine::getTable('Operation')->getRecordListener()->setOption('disabled', true);
-        $operation->refresh();
+        $operations = Doctrine::getTable('Operation')->findByAccountId($account->getId());
 
-        $this->assertEquals($operation->getUpdatedAt(), $operation->getDeletedAt());
+        $this->assertEquals(
+            0,
+            $operations->count(),
+            'Операций по счёту не должно остаться после удаления счёта'
+        );
     }
 }

@@ -31,15 +31,12 @@ class BudgetCategoryTable extends Doctrine_Table
     public function getBudget(User $user, DateTime $start)
     {
         $alias  = 'b';
-        $userId = $user->getId();
+
         $q = $this->createQuery($alias)
             ->innerJoin("{$alias}.Category c")
-                ->andWhere("c.id = {$alias}.category_id")
-            ->where("{$alias}.date_start = '?'", $start->format('Y-m-d'))
-                ->andWhere("c.deleted_at IS NULL")
-                ->andWhere("{$alias}.user_id = '?'", $userId)
-                ->orderBy("c.parent_id ASC");
+            ->andWhere("{$alias}.date_start = ?", $start->format('Y-m-d'))
+            ->andWhere("{$alias}.user_id = ?", $user->getId());
 
-        return $q->execute()->detData();
+        return $q->execute()->getData();
     }
 }

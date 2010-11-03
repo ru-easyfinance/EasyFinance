@@ -372,6 +372,12 @@ Category:
       type: one
       foreignType: many
       autoComplete: false         # User ничего не узнает
+    SystemCategory:
+      local: system_id
+      foreign: id
+      type: one
+      foreignType: many
+      autoComplete: false
 
 
 # Системные категории (100% - OK)

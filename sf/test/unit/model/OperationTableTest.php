@@ -430,36 +430,6 @@ class model_OperationTableTest extends myUnitTestCase
 
 
     /**
-     * Считаем средний расход за 3 месяца по категориям
-     */
-    public function testGetMeanByCategory()
-    {
-        $user = $this->helper->makeUser();
-        $expected = $this->makeFixturesForGetSumByCategory($user);
-
-        $rate = $this->getContext()->getMyCurrencyExchange()
-            ->getRate($user->getCurrencyId());
-
-        $monthCount = 5;
-        $expected = $expected / $monthCount;
-
-        $result = Doctrine::getTable("Operation")
-            ->getMeanByCategory(
-                $user,
-                date('Y-m-d', strtotime('+1 month')),
-                $monthCount
-        );
-
-        $this->assertEquals(
-            $expected,
-            (float) array_pop($result),
-            'Средний расход с учётом валют',
-            0.001
-        );
-    }
-
-
-    /**
      * Считаем фактический расход месяц по категориям
      */
     public function testGetFactByCategory()

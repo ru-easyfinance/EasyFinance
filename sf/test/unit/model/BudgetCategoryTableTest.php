@@ -41,8 +41,7 @@ class model_BudgetCategoryTableTest extends myUnitTestCase
     public function testQueryLoadBudget()
     {
         $user = $this->helper->makeUser();
-        $dateStart = date('Y-m-01');
-        //$this->helper = new myTestObjectHelper();
+        $dateStart = new DateTime(date('Y-m-01'));
 
         $category1 = $this->helper->makeCategory($user);
         $category2 = $this->helper->makeCategory($user);
@@ -50,12 +49,12 @@ class model_BudgetCategoryTableTest extends myUnitTestCase
         $budget1  = array(
             'drain' => 1,
             'category_id' => $category1->getId(),
-            'date_start' => $dateStart
+            'date_start' => $dateStart->format('Y-m-d')
         );
         $budget2  = array(
             'drain' => 1,
             'category_id' => $category2->getId(),
-            'date_start' => $dateStart
+            'date_start' => $dateStart->format('Y-m-d')
         );
 
         $budget1  = $this->helper->makeBudgetCategory($user, $budget1);

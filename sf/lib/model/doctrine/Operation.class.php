@@ -141,7 +141,7 @@ class Operation extends BaseOperation
     public function getAmountForBudget(Currency $currency, $signed)
     {
         if ($this->getType() == self::TYPE_BALANCE) {
-            throw new InvalidOperationTypeException(
+            throw new Exception(
                 'В бюджете не должно быть балансовых операций'
             );
         }
@@ -175,13 +175,15 @@ class Operation extends BaseOperation
     public function getCategory()
     {
         if (
+            $this->getType() == self::TYPE_TRANSFER
+            &&
             $this->getTransferAccount()->isDebt()
             &&
             !$this->getAccount()->isDebt()
         ) {
-            return Category::getDebtCategoryInstance();
+            return Category::getDebtCategoryInstance($this->getUser());
         } else {
-            return parent::getCategory();
+            return $this->_get('Category');
         }
     }
 

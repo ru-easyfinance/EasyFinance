@@ -26,10 +26,10 @@ class OperationCollection {
         $alias = 'op';
         $query = Doctrine::getTable('Operation')
             ->createQuery($alias)
-            ->andWhere("{$alias}.date >= ? ", $startDate)
-            ->andWhere("{$alias}.date <= ? ", $endDate);
+            ->andWhere("{$alias}.date >= ? ", $startDate->format('Y-m-d'))
+            ->andWhere("{$alias}.date <= ? ", $endDate->format('Y-m-d'));
 
-        $this->_operations = $query->execute(array());
+        $this->_operations = $query->execute(array())->getData();
     }
 
     /**

@@ -7,90 +7,50 @@ require_once dirname(__FILE__).'/../../bootstrap/all.php';
  */
 class model_BudgetTest extends myUnitTestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+        $yamlPath = dirname(__FILE__) . '/fixtures/budget.yml';
+        Doctrine::loadData($yamlPath);
+    }
+
     /**
      * Посчитать бюджет на текущий месяц
      */
     public function testLoadBudget()
     {
-        $user = $this->helper->makeUser();
-        $dateStart = date('Y-m-01');
-        //$this->helper = new myTestObjectHelper();
+        $user = Doctrine::getTable('User')->findOneByLogin('tester');
+        $dateStart = new DateTime('2010-11-01');
 
-        $category1 = $this->helper->makeCategory($user);
-        $category2 = $this->helper->makeCategory($user);
-        // OK
-        $budget1  = array(
-            'drain' => 1,
-            'category_id' => $category1->getId(),
-            'date_start' => $dateStart
-        );
-        $budget2  = array(
-            'drain' => 1,
-            'category_id' => $category2->getId(),
-            'date_start' => $dateStart
-        );
-
-        $budget1  = $this->helper->makeBudgetCategory($user, $budget1);
-        $budget2  = $this->helper->makeBudgetCategory($user, $budget2);
-
-
-        $account = $this->helper->makeAccount($user);
-        $cc      = $this->helper->makeCalendarChain($account);
-        // Запланировали в календаре, потратили
-        $op1     = $this->helper->makeCalendarOperation(
-            $cc,
-            $account,
-            '',
-            0,
-            array(
-                'amount'   => 100,
-                'accepted' => 1,
-                'category_id' => $category1->getId()
-            )
-        );
-        // Потратили без календаря
-        $op2      = $this->helper->makeOperation(
-            $account,
-            array(
-                'amount'   => 200,
-                'accepted' => 1,
-                'category_id' => $category1->getId()
-            )
-        );
-        // Запланировали в календаре, не потратили
-        $op3      = $this->helper->makeCalendarOperation(
-            $cc,
-            $account,
-            '',
-            0,
-            array(
-                'amount'   => 50,
-                'accepted' => 0,
-                'category_id' => $category1->getId()
-            )
-        );
-
-        $budget = new Budget();
-        $data = $budget->load($user, $dateStart);
-
-        $this->assertEquals(
-            $budget1->getAmount(),
-            $data[$budget1->getCategoryId()]->getAmount()
-        );
-
-        $this->assertEquals(
-            150,
-            $data[$budget1->getCategoryId()]->getCalendarPlan(),
-            'Сумма по запланированным в календаре операциям'
-        );
-
-        $this->assertEquals(
-            200,
-            $data[$budget1->getCategoryId()]->getNotCalendarPlan(),
-            'Сумма по незапланированным, но подтверждённым операциям'
-        );
-
-        $this->assertEquals($budget2->getAmount(),
-            $data[$budget2->getCategoryId()]->getAmount());
+        $budgetManager = new BudgetManager();
+        $data = $budgetManager->load($user, $dateStart);
+        // Смотри фикстуру budget.yml
+        $expectations = array(
+                1 => array(
+                    'mean' => 100,
+                    'plan' => 500,
+                    'adhoc' => 200,
+                    'calendarAccepted' => 100,
+                    'calendarFuture' => 50
+                ),
+                2 => array(
+                    'mean' => 0,
+                    'plan' => 1000,
+                    'adhoc' => 0,
+                    'calendarAccepted' => 0,
+                    'calendarFuture' => 0
+                )
+            );
+        $this->markTestIncomplete('Допиши меня');
+        foreach ($data as $budgetArticle) {
+            $expectation = $expectations[$budgetArticle->key];
+            foreach ($expectation as $field => $value) {
+                $this->assertEquals(
+                    $value,
+                    $budgetArticle->$field,
+                    "Поле $field статьи бюджета {$budgetArticle->key}"
+                );
+            }
+        }
     }
 }

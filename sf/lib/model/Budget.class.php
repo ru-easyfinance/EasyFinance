@@ -10,16 +10,22 @@ class Budget {
     protected $_startDate;
 
     /**
+     * @var User
+     */
+    protected $_user;
+
+    /**
      * @var array
      */
     protected $_budgetArticles;
 
     /**
      * Наполняет статьи бюджета на указанный месяц
+     * @param User $user
      * @param DateTime $startDate
      * @return void
      */
-    public function fill(DateTime $startDate)
+    public function fill(User $user, DateTime $startDate)
     {
         $this->_startDate = $startDate;
         $budgetArticles = Doctrine::getTable('BudgetCategory')
@@ -54,5 +60,13 @@ class Budget {
         $budgetArticle->setDateStart($this->_startDate->format('Y-m-d'));
 
         return $budgetArticle;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBudgetArticles()
+    {
+        return $this->_budgetArticles;
     }
 }

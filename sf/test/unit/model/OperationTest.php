@@ -196,7 +196,7 @@ class model_OperationTest extends myUnitTestCase
 
         $this->assertEquals(
             $debtCategory->getId(),
-            $operation->getCategoryId(),
+            $operation->getCategory()->getId(),
             'Должна подставляться долговая категория'
         );
     }

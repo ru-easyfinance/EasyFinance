@@ -19,15 +19,8 @@ class BudgetCategory extends BaseBudgetCategory
     //будущие (неподтвержденные) траты в календаре за выбранный месяц
     public $calendarFuture = 0;
 
-    public function getData()
+    public function getPlan()
     {
-        //throw new Exception("форматировать данные должен вызывающий код контроллера! вынесите это туда.");
-        $data = parent::getData();
-        $data['plan'] = $this->getAmount();
-        $data['adhoc'] = $this->adhoc;
-        $data['calendar_accepted'] = $this->calendarAccepted;
-        $data['calendar_future'] = $this->calendarFuture;
-        $data['mean'] = $this->mean;
-        return $data;
+        return $this->getAmount();
     }
 }

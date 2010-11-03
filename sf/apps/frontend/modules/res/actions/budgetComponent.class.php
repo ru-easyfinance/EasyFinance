@@ -18,10 +18,10 @@ class budgetComponent extends sfComponent
 
         $returnJSON = $this->getVar('returnJSON') ? true : false;
 
-        $budget = new Budget;
+        $budget = new BudgetManager();
         $rate = $this->getContext()
             ->getMyCurrencyExchange()->getRate($user->getCurrencyId());
-        $budgetCategories = $budget->load($user, $start);
+        $budgetCategories = $budget->load($user, new DateTime($start));
 
         $this->setVar('budgetCategories', $budgetCategories, $noEscape = true);
         $this->setVar('returnJSON', $returnJSON);

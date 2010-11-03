@@ -60,34 +60,6 @@ class OperationTable extends Doctrine_Table
 
 
     /**
-     * Посчитать среднее за 3 месяца
-     *
-     * @param  sfUser $user
-     * @param  string $date
-     * @param  string $rate курс пользовательской валюты
-     * @param  string $monthCount
-     * @return array
-     */
-    public function getMeanByCategory(
-        User $user, $date, $rate = 1, $monthCount = 3
-    )
-    {
-        $alias = 'foo';
-
-        $query = $this->querySumByCategory($user, $rate, $alias)
-            ->select("category_id, sum(amount*cu.rate/$rate)/$monthCount AS mean")
-            ->andWhere("{$alias}.accepted = 1")
-            ->andWhere("{$alias}.date > ADDDATE('$date',
-                INTERVAL -$monthCount MONTH)")
-            ->andWhere("{$alias}.date < '$date'");
-
-        $data = $query->execute(array(), 'FetchPair');
-
-        return $data;
-    }
-
-
-    /**
      * Посчитать фактический расход по категориям за месяц
      *
      * @param  sfUser $user

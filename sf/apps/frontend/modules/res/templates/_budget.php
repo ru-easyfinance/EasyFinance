@@ -13,14 +13,15 @@ $budget = array(
     )
 );
 
-foreach ($budgetCategories as $budgetEntry) {
-    $drainOrProfit = ($budgetEntry->getType()) ? 'd' : 'p';
-    $budget['list'][$drainOrProfit][$budgetEntry->getCategoryId()] = array(
-        'amount' => $budgetEntry->getAmount(),
-        'money'  => $budgetEntry->getFact(),
-        'mean'   => $budgetEntry->getThreeMonthMean(),
-        'calendar_plan' => $budgetEntry->getCalendarPlan(),
-        'not_calendar_plan' => $budgetEntry->getNotCalendarPlan()
+foreach ($budgetCategories as $budgetArticle) {
+    $drainOrProfit = $budgetArticle->getType() == BudgetCategory::TYPE_EXPENCE
+        ? 'd' : 'p';
+    $budget['list'][$drainOrProfit][$budgetArticle->getCategoryId()] = array(
+        'mean' => $budgetArticle->mean,
+        'plan' => $budgetArticle->plan,
+        'adhoc' => $budgetArticle->adhoc,
+        'calendar_accepted' => $budgetArticle->calendarAccepted,
+        'calendar_future' => $budgetArticle->calendarFuture,
     );
 }
 
