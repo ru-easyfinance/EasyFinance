@@ -1,6 +1,7 @@
 var feedback = (function(selector) {
     var container,
-        dialog, // i hate jquery.ui and strive for destroy it
+        dialog,
+        dlgButtons,
         that = this,
         frm,
         tabs,
@@ -57,7 +58,7 @@ var feedback = (function(selector) {
         }
         frm[0]["plugins"].value = getClientPlugins();
 
-        utils.ajaxForm(frm, false, false, false, 'json');
+        utils.ajaxForm(frm, function() { dialog.dialog('close') }, false, false, 'json');
 
         return false;
     }
@@ -65,9 +66,11 @@ var feedback = (function(selector) {
     function onTabs(e) {
        if (tabs.tabs('option', 'selected') == 0) {
            tabs.tabs('select', 1);
+           dialog.dialog('option', 'buttons', dlgButtons);
        }
        else {
            tabs.tabs('select', 0)
+           dialog.dialog('option', 'buttons', {});
        }
        dialog.dialog('option', 'title', $(e.target).attr('title'));
     }
@@ -90,6 +93,9 @@ var feedback = (function(selector) {
             document.write = function(){};
             dialog.prompt(utils.getParams(dialog));
             dialog.dialog('open');
+
+            dlgButtons = dialog.dialog('option', 'buttons'); // сохраняем кнопки
+            dialog.dialog('option', 'buttons', {});
         });
 
         container.bind('widget.ok', function() {
