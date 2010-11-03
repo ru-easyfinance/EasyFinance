@@ -14,7 +14,7 @@
     )
 ?>
 <div class="b-feedback js-widget js-widget-feedback hidden">
-    <div class="js-feedback-dialogue" ondblclick="return {width: 770, height: 640, title: 'Идеи и отзывы'}">
+    <div class="js-feedback-dialogue" ondblclick="return {width: 770, height: 'auto', title: 'Идеи и отзывы', modal: true}">
         <div style="margin-top: 1em;">
             <div id="feedbacktabs" class="b-feedback-tabs js-control js-control-tabs">
                 <div id="feedbacktabs-1">
@@ -66,6 +66,13 @@
                             <div class="b-col">
                                 <div class="b-col-indent">
                                     <?php include_partial('global/common/ui/textfield', $mail); ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="b-row">
+                            <div class="b-col text-right">
+                                <div class="b-col-indent">
+                                    <?php include_partial('global/common/ui/simplebutton', array()); ?>
                                 </div>
                             </div>
                         </div>

@@ -1,7 +1,6 @@
 var feedback = (function(selector) {
     var container,
         dialog,
-        dlgButtons,
         that = this,
         frm,
         tabs,
@@ -52,6 +51,15 @@ var feedback = (function(selector) {
     function onSubmit(e) {
         e.preventDefault();
 
+        var emptyFields = frm.find('input[type="text"], textarea');
+        emptyFields.filter(function(index) {
+            return emptyFields.eq(index).val() == '';
+        });
+        if (emptyFields.length) {
+            utils.notifyUser('Все поля обязательны для заполнения')
+            return false;
+        }
+
         var displayMods = getClientDisplayMods();
         for (var key in displayMods) {
             frm[0][key].value = displayMods[key];
@@ -66,11 +74,9 @@ var feedback = (function(selector) {
     function onTabs(e) {
        if (tabs.tabs('option', 'selected') == 0) {
            tabs.tabs('select', 1);
-           dialog.dialog('option', 'buttons', dlgButtons);
        }
        else {
            tabs.tabs('select', 0)
-           dialog.dialog('option', 'buttons', {});
        }
        dialog.dialog('option', 'title', $(e.target).attr('title'));
     }
@@ -91,11 +97,8 @@ var feedback = (function(selector) {
 
         $('#btnFeedback, #footerAddMessage, #linkMainMenuFeedback').bind('click', function() {
             document.write = function(){};
-            dialog.prompt(utils.getParams(dialog));
+            dialog.dialog(utils.getParams(dialog));
             dialog.dialog('open');
-
-            dlgButtons = dialog.dialog('option', 'buttons'); // сохраняем кнопки
-            dialog.dialog('option', 'buttons', {});
         });
 
         container.bind('widget.ok', function() {
