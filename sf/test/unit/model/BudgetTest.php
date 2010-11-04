@@ -27,21 +27,21 @@ class model_BudgetTest extends myUnitTestCase
         // Смотри фикстуру budget.yml
         $expectations = array(
                 1 => array(
-                    'mean' => 100,
-                    'plan' => 500,
-                    'adhoc' => 200,
+                    'mean'             => 400 / 3,
+                    'plan'             => 500,
+                    'adhoc'            => 200,
                     'calendarAccepted' => 100,
-                    'calendarFuture' => 50
+                    'calendarFuture'   => 50
                 ),
                 2 => array(
-                    'mean' => 0,
-                    'plan' => 1000,
-                    'adhoc' => 0,
+                    'mean'             => 0,
+                    'plan'             => 1000,
+                    'adhoc'            => 0,
                     'calendarAccepted' => 0,
-                    'calendarFuture' => 0
+                    'calendarFuture'   => 0
                 )
             );
-        $this->markTestIncomplete('Допиши меня');
+
         foreach ($data as $budgetArticle) {
             $expectation = $expectations[$budgetArticle->key];
             foreach ($expectation as $field => $value) {

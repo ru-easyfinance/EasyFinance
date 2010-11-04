@@ -1,7 +1,7 @@
 # В первой категории
 #   - adhoc: 200
 #   - plan:  500
-#   - mean:  100 (300 / число_месяцев)
+#   - mean:  133.33 (400 / число_месяцев)
 #   - calendarAccepted: 100
 #   - calendarFuture: 50
 #
@@ -117,11 +117,20 @@ Operation:
     accepted: false
     CalendarChain: CalendarChain_1
   Operation_5:
-    comment: 'Расход 300 р. за прошлый месяц'
+    comment: 'Расход 400 р. за прошлый месяц'
     User: User_1
     Account: Account_1
     Category: Category_1
-    amount: '-300.00'
+    amount: '-400.00'
     date: '2010-10-03'
+    type: '0'
+    accepted: false
+  Operation_6:
+    comment: 'Расход 800 р. 4 месяца назад'
+    User: User_1
+    Account: Account_1
+    Category: Category_1
+    amount: '-800.00'
+    date: '2010-07-03'
     type: '0'
     accepted: false

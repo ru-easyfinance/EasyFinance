@@ -1,6 +1,6 @@
 <?php
 /**
- * Данные для вывода виджета счетов res.budget
+ * Данные для вывода виджета бюджета
  *
  * @param  array $budgetCategories список статей бюджета
  * @param  array $returnJSON флаг JSON или res
@@ -25,9 +25,4 @@ foreach ($budgetCategories as $budgetArticle) {
     );
 }
 
-?>
-<?php if (!$returnJSON) : ?>
-    res.budget = <?php echo json_encode($budget) ?>;
-<?php else : ?>
-    <?php echo json_encode($budget) ?>
-<?php endif; ?>
+echo json_encode($budget);

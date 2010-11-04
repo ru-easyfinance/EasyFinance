@@ -41,20 +41,17 @@ class BudgetManager
 
         $budget->fill($user, $startDate);
 
-        //валюта нужна для подсчета сумм операций
-        $mainCurrency = $user->getCurrency();
+        $calculator = new BudgetArticleIncrementCalculator(
+            $startDate,
+            $user->getCurrency(),
+            $meanRateMonthsAmount
+        );
 
         //TODO: всю логику подсчета можно вынести в отдельный калькулятор бюджета и тестить его уже модульно,
         //без привлечения базы, передавая готовые операции и статьи бюджета
 
         //по каждой операции определим ее вклад в соотв. статью бюджета или средний показатель
         foreach ($operations->getOperations() as $operation) {
-
-            //получаем модуль вклада операции в бюджет:
-            //получаем в основной валюте и без знака
-            $signed = false;
-            $operationContributionAmount = $operation->getAmountForBudget($mainCurrency, $signed);
-
             //определяем, к какой категории относится операция, и по ней определяем статью бюджета
             //категорию берем не напрямую из связи операции, а вычисляем для корректного учета переводов
             //если категория не запланирована, создается и возвращается пустая
@@ -62,24 +59,9 @@ class BudgetManager
                 $operation->getCategory()
             );
 
-            //в зависимости от свойств операции учтем ее сумму в среднем показателе или статье бюджета:
+            $increment = $calculator->calculate($operation);
 
-            //операция - из предыдущих месяцев => только в средний показатель
-            if($operation->getDate() < $budget->getStartDate())
-                $currentBudgetArticle->mean += $operationContributionAmount;
-
-            //иначе учитываем операцию в текущем бюджете:
-            //операцию не из календаря учтем как ad hoc
-            else if (!$operation->isFromCalendar())
-                $currentBudgetArticle->adhoc += $operationContributionAmount;
-
-            //подтвержденные и неподтвержденные учтем отдельно
-            else if ($operation->isAccepted())
-                $currentBudgetArticle->calendarAccepted += $operationContributionAmount;
-
-            else
-                $currentBudgetArticle->calendarFuture += $operationContributionAmount;
-
+            $increment->apply($currentBudgetArticle);
         }
 
         //возвращаем уже заполненные категории

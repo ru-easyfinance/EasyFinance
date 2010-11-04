@@ -67,6 +67,6 @@ class Budget {
      */
     public function getBudgetArticles()
     {
-        return $this->_budgetArticles;
+        return (array) $this->_budgetArticles;
     }
 }
