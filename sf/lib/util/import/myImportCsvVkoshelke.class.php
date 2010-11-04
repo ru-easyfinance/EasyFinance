@@ -92,6 +92,7 @@ class myImportCsvVkoshelke
             $category = !$csvOperation['Category'] ? null : array(
                 'user_id' => $user->getId(),
                 'name' => $csvOperation['Category'],
+                'custom' => 1,
                 'type' =>
                     ($csvOperation['TransactionType'] == 'Доход' ? 1 : -1)
             );
