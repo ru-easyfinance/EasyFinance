@@ -41,7 +41,7 @@ var tplBudgetRow =
                 <span class="js-planned">{%strPlan%}</span>\
                 <span class="js-planning hidden">\
                     <input type="text" value="{%planValue%}"/><br/>\
-                    <small><em>В календаре: {%planValueCalendar%}</em></small>\
+                    <em>В календаре: {%planValueCalendar%}</em>\
                 </span>\
             </div>\
         </td>\
@@ -115,178 +115,113 @@ var tplbudgetHeader =
      * Печатает инфо-блок
      */
     function _printInfo(){
-        var _totalInfo =  _model.returnInfo();
+        var _totalInfo =  _model.getTotal();
 
         var vals = {
             currencyName: easyFinance.models.currency.getDefaultCurrencyText(),
-            planProfit: formatCurrency(_totalInfo.plan_profit, true, false),
-            realProfit: formatCurrency(_totalInfo.real_profit, true, false),
-            diffProfit: formatCurrency(_totalInfo.real_profit - _totalInfo.plan_profit, true, false),
-            planDrain: formatCurrency(_totalInfo.plan_drain, true, false),
-            realDrain: formatCurrency(_totalInfo.real_drain, true, false),
-            diffDrain: formatCurrency(_totalInfo.plan_drain - _totalInfo.real_drain, true, false),
-            profitClassName: ( _totalInfo.plan_profit < _totalInfo.real_profit) ? 'green' : 'red',
-            drainClassName: (_totalInfo.real_drain < _totalInfo.plan_drain) ? 'green' : 'red'
+
+            planProfit: formatCurrency(_totalInfo.planProfit, true, false),
+            realProfit: formatCurrency(_totalInfo.realProfit, true, false),
+            diffProfit: formatCurrency(_totalInfo.realProfit - _totalInfo.planProfit, true, false),
+            planDrain: formatCurrency(_totalInfo.planDrain, true, false),
+            realDrain: formatCurrency(_totalInfo.realDrain, true, false),
+            diffDrain: formatCurrency(_totalInfo.planDrain - _totalInfo.realDrain, true, false),
+
+            profitClassName: ( _totalInfo.planProfit < _totalInfo.realProfit) ? 'green' : 'red',
+            drainClassName: (_totalInfo.realDrain < _totalInfo.planDrain) ? 'green' : 'red'
         }
 
         $('#budget .budget.info').html(templetor(tplSummary, vals));
         return false;
     }
-    _printInfo();
 
     var _categories = easyFinance.models.category.getUserCategoriesTreeOrdered();
 
     var elapsedPercent;
 
-    function _printList(type, categories, parentId) { // 0 == drain
-        var prefix = (type == 1) ? 'p' : 'd'; // profit / drain
 
-        var budgets = _model.returnList()[prefix],
-            budget;
-
-        var temp = {},
-            dhtml = '',
-
-            catId,
-            catName,
-            catType,
-
-            amount,
-            money,
-            totalAmount = 0,
-            totalMoney = 0,
-            totalCalendarPlan = 0,
-            totalNotCalendarPlan = 0,
-            calendarPlan = 0,
-            notCalendarPlan = 0;
-
-        for (var key in categories) {
-            catType = categories[key].type;
-
-            if ((type == 0 && catType < 1) || (type == 1 && catType > -1)) {
-                catId = categories[key].id;
-                catName = categories[key].name;
-
-                budget = {
-                    money: 0,
-                    amount: 0,
-                    calendar_plan: 0,
-                    not_calendar_plan: 0
-                }
-
-                budget = $.extend(budget, budgets[catId]);
-
-                if (categories[key].children.length) {
-                    temp = _printList(type, categories[key].children, catId);
-                }
-                else {
-                    temp = {
-                        xhtml: '',
-                        totalAmount: 0,
-                        totalMoney: 0,
-                        totalCalendarPlan: 0,
-                        totalNotCalendarPlan: 0
-                    };
-                }
-
-                totalAmount += temp.totalAmount + budget.amount;
-
-                totalMoney += temp.totalMoney + budget.money;
-
-                totalCalendarPlan += temp.totalCalendarPlan + budget.calendar_plan;
-
-                totalNotCalendarPlan += temp.totalNotCalendarPlan + budget.not_calendar_plan;
-
-                amount = temp.totalAmount + budget.amount;
-
-                money = temp.totalMoney + budget.money;
-
-                calendarPlan = temp.totalCalendarPlan + budget.calendar_plan;
-
-                notCalendarPlan = temp.notCalendarPlan + budget.not_calendar_plan;
-
-                if (amount > 0 || money !== 0) {
-                    var drainprc = Math.abs(Math.round(money*100/amount));
-
-                    var cls = parentId ? 'child' : 'parent open';
-                    if (cls == 'parent open' && !temp.xhtml) {
-                        cls = 'nochild';
-                    }
-
-                    var params = {
-                        id: catId,
-                        type: prefix,
-                        parent: parentId,
-                        cls: cls,
-                        cat: catName,
-                        plan: amount,
-                        fact: money,
-                        diff: Math.abs(Math.abs(amount) - Math.abs(money)),
-                        calendarPlan: calendarPlan,
-                        notCalendarPlan: notCalendarPlan,
-                        drain: drainprc
-                    };
-
-                    dhtml += _buildTableRow(params);
-
-                    dhtml += temp.xhtml || '';
-                }
-            }
-        }
-
-        return {
-            xhtml: dhtml,
-            totalAmount: totalAmount,
-            totalMoney: totalMoney,
-        	totalCalendarPlan: totalCalendarPlan,
-        	totalNotCalendarPlan: totalNotCalendarPlan
-        };
-    }
-
-    function _buildTableRow(params) {
-        var diff = 0,
+    function renderArticlesTree(articlesTree, parentId) {
+        var tail = '',
+            article,
+            vals = {},
             diffClass = '',
-            strPlan = '';
+            className = '',
+            id;
 
-        if (params.plan > 0) {
-            strPlan = formatCurrency(params.plan, true, false);
+        for (var articleIndex in articlesTree) {
+            article = articlesTree[articleIndex];
+            if (article.isEmpty() && !article.isTopLevel()) {
+                continue;
+            }
+
+            var recomend = article.getRecomendation(getDate());
+
+            if (article.isProfit) {
+                diffClass = recomend.budgetOverheaded ? 'sumGreen' : 'sumRed';
+            }
+            else {
+                diffClass = recomend.budgetOverheaded ? 'sumRed' : 'sumGreen';
+            }
+
+            if (parseInt(parentId)) {
+                className = 'child';
+            }
+            else if (!article.children.length) {
+                className = 'nochild'
+            }
+            else if (!article.isTopLevel()) {
+                className = 'parent open'
+            }
+            else {
+                className = 'open'
+            }
+
+            if (article.id == 'd') {
+                id = 'drain'
+            }
+            else if (article.id == 'p') {
+                id = 'profit'
+            }
+            else {
+                id = article.id
+            }
+            
+            vals = {
+                id: id,
+                catName: article.name,
+                type: article.isProfit ? 'p' : 'd',
+                parent: parentId != undefined ? 'parent="' + parentId + '"' : '',
+                className: className,
+
+                strPlan: formatCurrency(article.getPlan(), true, false),
+                planValue: article.getPlan(),
+                planValueCalendar: article.getTotalCalendar(),
+                factValue: article.getFact(),
+
+                diffValue: recomend.budgetLeft,
+                diffMenu: article.isEditable() ? '<div class="menuwrapper"><div class="menu"><a title="Редактировать" class="edit"></a></div></div>' : '',
+                diffClass: diffClass,
+
+                title : renderRecommendation(article),
+
+                indicator: renderIndicator(recomend.color, article.getCompletePercent())
+            }
+
+            tail += utils.templator(tplBudgetRow, vals);
+
+            tail += renderArticlesTree(article.children, article.id)
         }
-        else {
-            strPlan = (params.cls != 'parent open') ? '<FONT COLOR="#FF0000"> запланировать </FONT>' : '0';
-        }
 
-        var tooltipParams = getTooltip(params);
 
-        var vals = {
-            id: params.id,
-            className: params.cls,
-            type: params.type,
-            parent: params.parent != undefined ? 'parent="' + params.parent + '"' : '',
-            catName: shorter(params.cat, 20),
-            indicator: _buildIndicatorString(tooltipParams.color, params.drain),
-            strPlan: strPlan,
-            planValue: formatCurrency(params.plan, true, false),
-            factValue: formatCurrency(params.fact, true, false),
-            diffClass: diffClass,
-            diffValue: formatCurrency(diff, true, false),
-            diffMenu: (params.cls == 'nochild' || params.cls == 'child') ? '<div class="menuwrapper"><div class="menu"><a title="Редактировать" class="edit">&nbsp;</a><a title="Удалить" class="remove">&nbsp;</a></div></div>' : '',
-            title: tooltipParams.title
-        }
-
-        return templetor(tplBudgetRow, vals);
+        return tail;
     }
 
-    function getTooltip(params) {
-        // calendarPlan -- все то, что в календаре, подтв. и неподтв.
-        // notCalendarPlan -- все, что подверждено не в календаре
-        // fact -- все подтвежденное вообще
+    function renderRecommendation(article) {
+        if (article.isEmpty()) {
+            return "<span class='warning'>Ничего не запланировано</span>"
+        }
 
-        var budgetTotal = params.plan;
-        var adhoc = parseFloat(params.notCalendarPlan || 0);
-        var calendarAccepted = params.fact - adhoc;
-        var calendarPlanned = params.calendarPlan - calendarAccepted;
-        var daysInMonth = _getMonthDays(_currentDate);
-        var currentDay = _currentDate.getDate();
+        var rec = article.getRecomendation(getDate());
 
         var msg = {
             drain: {
@@ -314,66 +249,37 @@ var tplbudgetHeader =
             color,
             resultMessage;
 
-        //оставшийся бюджет
-        var budgetLeft = budgetTotal - adhoc - calendarAccepted
+        var messageSrc = (article.isProfit ? msg.profit : msg.drain);
 
-        //сколько останется, если будем тратить с неизменной скоростью и календарем
-        var marginTotal = budgetLeft - calendarPlanned - (daysInMonth - currentDay) / currentDay * adhoc
-
-        //насколько урезать спонтанные траты, чтобы выйти в 0
-        var changeAdhoc = Math.abs(marginTotal / (daysInMonth - currentDay))
-        var canChangeAdhoc = changeAdhoc < adhoc / currentDay;
-
-        //насколько урезать календарь, чтобы выйти в 0
-        var changeCalendar = Math.abs(marginTotal);
-        var canChangeCalendar = changeCalendar < calendarPlanned;
-
-        var canChangeBoth = canChangeAdhoc == canChangeCalendar;
-
-        var budgetOverheaded = budgetLeft < 0;
-        var marginZero = marginTotal == 0;
-        var marginPositive = marginTotal > 0;
-
-        var messageSrc = (params.type == 'd' ? msg.drain : msg.profit);
-
-        if (budgetOverheaded) {
+        if (rec.budgetOverheaded) {
             message = messageSrc.BudgetOverhead;
         }
-        else if (marginZero) {
+        else if (rec.marginZero) {
             message = messageSrc.ZeroMargin
         }
-        else if (marginPositive) {
+        else if (rec.marginPositive) {
             message = messageSrc.PositiveMargin
         }
         else {
             message = messageSrc.ChangeGeneral;
-            if (canChangeAdhoc) {
+            if (rec.canChangeAdhoc) {
                 message += messageSrc.ChangeAdhoc
             }
-            if (canChangeCalendar) {
+            if (rec.canChangeCalendar) {
                 message += messageSrc.ChangeCalendar
             }
             message += messageSrc.ChangeClosing
         }
 
-        if (params.type == 'd') {
-            color = (budgetOverheaded || marginTotal < 0) ? 'red' : marginTotal == 0 ? 'yellow' : 'green';
-        }
-        else {
-            color = (budgetOverheaded || marginTotal < 0) ? 'green' : marginTotal == 0 ? 'yellow' : 'red';
-        }
-
-        resultMessage = templetor(message, {
-            budgetLeft: formatCurrencyDefault(Math.abs(budgetLeft)),
-            marginTotal: formatCurrencyDefault(Math.abs(marginTotal)),
-            changeAdhoc: formatCurrencyDefault(changeAdhoc),
-            changeCalendar: formatCurrencyDefault(changeCalendar)
-        })
-
-        return {color: color, title: resultMessage};
+        return utils.templator(message, {
+            budgetLeft: formatCurrencyDefault(Math.abs(rec.budgetLeft)),
+            marginTotal: formatCurrencyDefault(Math.abs(rec.marginTotal)),
+            changeAdhoc: formatCurrencyDefault(rec.changeAdhoc),
+            changeCalendar: formatCurrencyDefault(rec.changeCalendar)
+        });
     }
 
-    function _buildIndicatorString(color, drainPercent) {
+    function renderIndicator(color, drainPercent) {
         drainPercent = drainPercent > 100 ? 100 : drainPercent;
         var width;
 
@@ -436,64 +342,17 @@ var tplbudgetHeader =
         $(".budgetPeriodEnd").text(days + ' ' + getMonthName(_currentDate.getMonth()).substr(0, 3));
     }
 
-    function printBudget(){
+    function printBudget() {
         _updateElapsed();
 
-        _data = _model.returnList();
-
-        var params = null,
-            drainprc,
-            str = '',
-            temp = _printList(1, _categories, 0);
-
-        if (temp.totalAmount > 0) {
-            drainprc = Math.abs(Math.round(temp.totalMoney * 100 / temp.totalAmount));
-        }
-        else {
-            drainprc = 100;
-        }
-
-        str = templetor(tplbudgetHeader, {currencyName: easyFinance.models.currency.getDefaultCurrencyText()})
-
-        params = {
-            id: "profit",
-            type: "p",
-            cat: "Доходы",
-            cls: "open",
-            drain: drainprc,
-            plan: temp.totalAmount,
-            fact: temp.totalMoney
-        };
-
-        str += _buildTableRow(params);
-
-        str += temp.xhtml;
-
-        temp = _printList(0, _categories, 0);
-        if (temp.totalAmount > 0) {
-            drainprc = Math.abs(Math.round(temp.totalMoney * 100 / temp.totalAmount));
-        }
-        else {
-            drainprc = 100;
-        }
-
-        params = {
-            id: "drain",
-            type: "d",
-            cat: "Расходы",
-            cls: "open",
-            drain: drainprc,
-            plan: temp.totalAmount,
-            fact: temp.totalMoney
-        };
-
-        str += _buildTableRow(params);
-
-        str += temp.xhtml;
+        var str = renderArticlesTree(_model.getArticlesTree())
 
         $("#budgetTimeLine").show();
 
-        $budgetBody.html('<table style="width: 100%;" class="efTableWithTooltips">' + str + '</table>');
+        $budgetBody.html(
+            '<table style="width: 100%;" class="efTableWithTooltips">'
+            + utils.templator(tplbudgetHeader, {currencyName: easyFinance.models.currency.getDefaultCurrencyText()}) 
+            + str + '</table>');
 
         _updateTimeLine();
     }
@@ -516,17 +375,6 @@ var tplbudgetHeader =
         var type = $(this).closest('tr').attr('type');
         $('#budget .list.budget .child[type="' + type + '"][parent="' + id + '"]').show();
         $(this).closest('tr').addClass('open').removeClass('close');
-    });
-
-    $('#budget .list a.remove').live('click', function() {
-        if (confirm('Вы действительно хотите удалить бюджет по данной категории?')) {
-            var id = $(this).closest('tr').attr('id');
-            var type = $(this).closest('tr').attr('type');
-            _model.del(_currentDate, id, type, function(){
-                _printInfo();
-                printBudget();
-            });
-        }
     });
 
     $('#budget .list a.edit').live('click', function() {
@@ -587,8 +435,7 @@ var tplbudgetHeader =
             parentEl.find('.js-planned').removeClass('hidden');
 
             _model.edit(_currentDate, type, id, value, function() {
-                _printInfo();
-                printBudget();
+                reload(_currentDate)
             });
         }
         else if (e.keyCode == 27) {

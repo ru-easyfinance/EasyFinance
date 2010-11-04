@@ -1,17 +1,18 @@
 var widgetBudget = null;
 
-$(document).ready(function() {
-    easyFinance.widgets.calendarMonthPicker.init("#budgetMonthPicker");
-
+$(function() {
     // обновляем бюджет при изменении месяца в виджете выбора месяца
-    $(document).bind('monthPickerChanged', function(e) {
-        widgetBudget && widgetBudget.reload(e.startDate);
-    });
+    $(document).bind('monthPickerChanged', onMonthChanged);
+    function onMonthChanged(evt) {
+        var dt = evt.startDate
+        widgetBudget && widgetBudget.reload(dt);
+    }
 
-    easyFinance.models.category.load(function() {
-        var modelBudget = easyFinance.models.budget;
-        modelBudget.load(res.budget);
-        widgetBudget = easyFinance.widgets.budget(modelBudget);
-        easyFinance.widgets.budgetMaster(modelBudget, widgetBudget);
-    });
+
+    var modelBudget = easyFinance.models.budget;
+    widgetBudget = easyFinance.widgets.budget(modelBudget);
+    easyFinance.widgets.budgetMaster(modelBudget, widgetBudget);
+
+
+    easyFinance.widgets.calendarMonthPicker.init("#budgetMonthPicker");
 })

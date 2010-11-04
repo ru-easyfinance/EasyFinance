@@ -282,6 +282,45 @@ var utils = (function() {
         }
     }
 
+    function getDaysCount(monthDate) {
+        var m = monthDate.getMonth();
+        var t = new Date(monthDate);
+        for (var i = 29; i < 32; i++) {
+            t.setDate(i);
+            if (m != t.getMonth()){
+                return (i-1)
+            }
+        }
+        return (i);
+    }
+
+    function getMonthPartElapsed(monthDate) {
+        var daysInMonth = getDaysCount(monthDate);
+
+        var now = new Date()
+
+        var currentTimeElapsed;
+
+        if (now.getMonth() == monthDate.getMonth()) {
+            currentTimeElapsed = now.getDate() / daysInMonth;
+        }
+        else {
+            currentTimeElapsed = (now > monthDate) ? 1 : 0;
+        }
+
+        return currentTimeElapsed
+    }
+
+    function getMonthPartRatio(monthDate) {
+        var currentTimeElapsed = getMonthPartElapsed(monthDate);
+
+        if (!currentTimeElapsed) {
+            currentTimeElapsed = 1 / getDaysCount(monthDate)
+        }
+
+        return (1 - currentTimeElapsed) / currentTimeElapsed;
+    }
+
     return {
         // variuos utils
         toPhone: toPhone,
@@ -301,7 +340,11 @@ var utils = (function() {
         defaultOnSuccess: defaultOnSuccess,
         ajax: ajax,
         ajaxForm: ajaxForm,
-        ajaxUpload: ajaxUpload
+        ajaxUpload: ajaxUpload,
+
+        getDaysCount: getDaysCount,
+        getMonthPartElapsed: getMonthPartElapsed,
+        getMonthPartRatio: getMonthPartRatio
     }
 })();
 

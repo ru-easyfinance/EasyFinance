@@ -54,7 +54,7 @@ class Budget {
         $budgetArticle->setType(
             $category->getType() == Category::TYPE_PROFIT ?
             BudgetCategory::TYPE_PROFIT :
-            BudgetCategory::TYPE_EXPENCE
+            BudgetCategory::TYPE_EXPENSE
         );
         $budgetArticle->setUser($category->getUser());
         $budgetArticle->setDateStart($this->_startDate->format('Y-m-d'));

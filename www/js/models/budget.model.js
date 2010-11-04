@@ -1,45 +1,175 @@
+var emptyArticle = {
+    mean: 0,
+    plan: 0,
+    adhoc: 0,
+    calendarAccepted: 0,
+    calendarFuture: 0
+};
+
+function BudgetArticle(catInfo, children, budget_articles) {
+    this.id = catInfo.id;
+    this.name = catInfo.name,
+    this.isProfit = catInfo.type == '1',
+    this.isEditable = function() {
+        return !this.children.length && !this.isTopLevel()
+    }
+    this.isTopLevel = function() {
+        return this.id == 'd' || this.id == 'p'
+    }
+
+    var myBudgetData = budget_articles[this.id] || emptyArticle;
+
+    this.children = [];
+
+    var fields = 'plan mean adhoc calendarAccepted calendarFuture'.split(' ');
+    for (var fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
+        this[fields[fieldIndex]] = myBudgetData[fields[fieldIndex]]
+    }
+
+    this.getFact = function() {
+        return this.adhoc + this.calendarAccepted;
+    }
+
+    this.getPlan = function() {
+        return this.plan;
+    }
+
+    this.getCompletePercent = function() {
+        if (this.getFact() == 0) {
+            return 0;
+        }
+        if (this.getPlan() == 0) {
+            return 100;
+        }
+        else {
+            return Math.abs( Math.round(this.getFact() * 100 / this.getPlan()) );
+        }
+    }
+
+    this.getTotalCalendar = function() {
+        return this.calendarAccepted + this.calendarFuture
+    }
+
+    this.isEmpty = function() {
+        return !this.getPlan() && !this.getFact() && !this.calendarFuture
+    }
+
+    var childArticle;
+    for(var childIndex = 0, childrenCount = children.length; childIndex < childrenCount; childIndex++) {
+        childArticle = new BudgetArticle(children[childIndex], children[childIndex].children, budget_articles);
+        if (childArticle) {
+            this.children.push(childArticle);
+
+            for (fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
+                this[fields[fieldIndex]] += childArticle[fields[fieldIndex]]
+            }
+        }
+    }
+
+    this.getRecomendation = function(viewDate) {
+        var currentElapsedRatio = utils.getMonthPartRatio(viewDate);
+        var now = new Date();
+
+        var recomendation = {};
+
+        //оставшийся бюджет
+        recomendation.budgetLeft = this.getPlan() - this.getFact();
+
+        //сколько останется, если будем тратить с неизменной скоростью и календарем
+        recomendation.marginTotal = recomendation.budgetLeft - this.calendarFuture - currentElapsedRatio * this.adhoc;
+
+        //насколько урезать спонтанные траты, чтобы выйти в 0
+        recomendation.changeAdhoc = recomendation.marginTotal / (utils.getDaysCount(viewDate) - now.getDate())
+        recomendation.canChangeAdhoc = recomendation.changeAdhoc < this.adhoc / now.getDate();
+
+        //насколько урезать календарь, чтобы выйти в 0
+        recomendation.changeCalendar = recomendation.marginTotal;
+        recomendation.canChangeCalendar = recomendation.changeCalendar < this.calendarFuture;
+
+        recomendation.canChangeBoth = !(recomendation.canChangeAdhoc && recomendation.canChangeCalendar);
+
+        recomendation.budgetOverheaded = recomendation.budgetLeft < 0;
+        recomendation.marginZero = recomendation.marginTotal == 0;
+        recomendation.marginPositive = recomendation.marginTotal > 0;
+
+        if (this.isProfit) {
+            recomendation.color = (recomendation.budgetOverheaded || recomendation.marginTotal < 0) ? 'green' : recomendation.marginTotal == 0 ? 'yellow' : 'red';
+        }
+        else {
+            recomendation.color = (recomendation.budgetOverheaded || recomendation.marginTotal < 0) ? 'red' : recomendation.marginTotal == 0 ? 'yellow' : 'green';
+        }
+
+        return recomendation
+    }
+
+
+    return this;
+}
+
 /**
  * @desc Модель бюджета
  * @author rewle
  */
 easyFinance.models.budget = function(){
-        /**
-         * @desc устанавливает список
-         * @param data {}
-         * @return void
-         */
         var _data;
+        var categoriesModel = easyFinance.models.category;
+        var articlesTree;
+
         function load (data) {
-            var real = {p: 0, d: 0},
-                plan = {p: 0, d: 0};
-            
             var currentBudgetArticle;
             
-            //перебираем все статьи, вычисляя итог
-            for (var drainOrProfit in data.list) {
-                for (var categoryId in data.list[drainOrProfit]) {
-                    currentBudgetArticle = data.list[drainOrProfit][categoryId];
-                    
-                    //приводим все значения к float, т.к. изначально в JSON-е они криво отформатированы                    
-                    var fields = 'plan mean adhoc calendarAccepted calendarFuture'.split(' ');
-                    for (var fieldIndex = 0, fieldsCount = fields.length; fieldIndex < fieldsCount; i++) {
-                        currentBudgetArticle[fields[i]] =  Math.abs( parseFloat(currentBudgetArticle[fields[i]]));
-                    }
-                    
-                    plan.p += currentBudgetArticle.plan;
-                    real.p += currentBudgetArticle.adhoc + currentBudgetArticle.calendarAccepted + currentBudgetArticle.calendarFuture;
+            for (var categoryId in data.list) {
+                currentBudgetArticle = data.list[categoryId];
+
+                //приводим все значения к float, т.к. изначально в JSON-е они криво отформатированы
+                var fields = 'plan mean adhoc calendarAccepted calendarFuture'.split(' ');
+                for (var fieldIndex = 0, fieldsCount = fields.length; fieldIndex < fieldsCount; fieldIndex++) {
+                    currentBudgetArticle[fields[fieldIndex]] =  Math.abs( parseFloat(currentBudgetArticle[fields[fieldIndex]]));
                 }
             }
 
-            _data = {
-                list : data.list,
-                main: {
-                    plan_profit : plan.p,
-                    real_profit : real.p,
-                    plan_drain : plan.d,
-                    real_drain : real.d
-                }
+            articlesTree = getBudgetArticlesTree(data);
+
+        }
+
+        function getTotal() {
+            var total = {
+                real_profit: 0,
+                real_drain: 0,
+                plan_profit: 0,
+                plan_drain: 0
+            };
+
+            total.realProfit = articlesTree[0].getFact();
+            total.realDrain = articlesTree[1].getFact();
+            total.planProfit = articlesTree[0].getPlan();
+            total.planDrain = articlesTree[1].getPlan();
+
+            return total;
+        }
+
+        function getBudgetArticlesTree(budgetData) {
+            var rootIndex;
+
+            var tree = categoriesModel.getUserCategoriesTreeOrdered();
+
+            var topChildren = [[], []];
+
+            for (var i = 0, l = tree.length; i < l; i++) {
+                rootIndex = tree[i].type == "-1" ? 1 : 0; // вычисляем, в какую из корневых категорий отправить категорию
+                topChildren[rootIndex].push(tree[i]);
             }
+
+            budgetData['p'] = emptyArticle;
+            budgetData['d'] = emptyArticle;
+
+
+            var resultTree = [
+                new BudgetArticle({name: "Доходы", id: "p", type: "1"}, topChildren[0], budgetData),
+                new BudgetArticle({name: "Расходы", id: "d", type: "-1"}, topChildren[1], budgetData)
+            ];
+
+            return resultTree;
         }
 
         function reload (date, callback) {
@@ -49,26 +179,20 @@ easyFinance.models.budget = function(){
             }
             
             $.post(
-                '/my/budget/load/',
+                '/my/dev.php/budget/load/',
                 {
                     start: date.getFullYear() + '-' + month + '-01'
                 },
                 function(data) {
                     load(data);
-                    if(typeof callback == "function") {
-                        callback(_data.main.real_drain,_data.main.real_profit)
-                    }
+                    callback && callback()
                 },
                 'json'
             )
         }
 
-        /**
-         * @desc возвращает список бюджетов
-         * @return {}
-         */
-        function returnList(){
-            return _data.list;
+        function getArticlesTree() {
+            return articlesTree;
         }
 
         /**
@@ -92,9 +216,7 @@ easyFinance.models.budget = function(){
                 function(data) {
                     if (!data['error'] || data.error == []) {
                         $.jGrowl("Бюджет сохранён", {theme: 'green'});
-                        if (typeof callback == "function") {
-                            callback(date);
-                        }
+                        callback && callback(date)
                     }
                     else{
                         var err = '<ul>';
@@ -128,20 +250,7 @@ easyFinance.models.budget = function(){
                     if (!data['error'] || data.error == []) {
                         $.jGrowl("Бюджет удалён", {theme: 'green'});
 
-                        if (type == 'p'){
-                            _data.main.plan_profit = _data.main.plan_profit - _data.list[type][id]['amount']
-                            _data.main.real_profit = _data.main.real_profit - _data.list[type][id]['money']
-                            delete _data.list[type][id];
-                        }
-                        else {
-                            _data.main.plan_drain = _data.main.plan_drain - _data.list[type][id]['amount']
-                            _data.main.real_drain = _data.main.real_drain - _data.list[type][id]['money']
-                            delete _data.list[type][id]['amount'];
-                        }
-
-                        if (typeof callback == "function"){
-                            callback();
-                        }
+                        callback && callback()
                     }
                     else {
                         var err = '<ul>';
@@ -182,18 +291,7 @@ easyFinance.models.budget = function(){
                     if (!data['error'] || data.error == []) {
                         $.jGrowl("Бюджет изменён", {theme: 'green'});
 
-                        if (type =='p') {
-                            _data.main.plan_profit = _data.main.plan_profit - _data.list[type][id]['amount'] + parseFloat(value)
-                            _data.list[type][id]['amount'] = value;
-                        }
-                        else{
-                            _data.main.plan_drain = _data.main.plan_drain - _data.list[type][id]['amount'] + parseFloat(value)
-                            _data.list[type][id]['amount'] = value;
-                        }
-
-                        if (typeof callback == "function"){
-                            callback();
-                        }
+                        callback && callback()
                     }
                     else {
                         var err = '<ul>';
@@ -206,28 +304,6 @@ easyFinance.models.budget = function(){
                 ,'json'
             )
         }
-        /**
-         * @desc возвращает общее сформированное инфо о бюджете
-         * @return {}
-         */
-        function returnInfo(){
-            return _data.main;
-        }
-
-        /**
-         * @desc возвращает объект для редактирования и тп
-         * @return {} {}
-         */
-        function get_data(p_id, c_id){
-            var tmp = _data.list[p_id]['children'];
-            
-            for (var key in tmp) {
-                if (tmp[key]['id'] == c_id) {
-                    return tmp[key];
-                }
-            }
-            return {};
-        }
 
         return {
             reload : reload,
@@ -235,9 +311,7 @@ easyFinance.models.budget = function(){
             save : save,
             del : del,
             edit : edit,
-            get_data : get_data,
-            returnList : returnList,
-            getNormalizedList : getNormalizedList,
-            returnInfo : returnInfo
+            getArticlesTree : getArticlesTree,
+            getTotal: getTotal
         }
 }();

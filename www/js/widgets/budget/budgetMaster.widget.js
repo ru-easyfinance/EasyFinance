@@ -60,33 +60,23 @@ easyFinance.widgets.budgetMaster = function(model,widget){
 
     var tplStepHeader = 'Шаг {%stepNum%} из 3. {%stepType%} — Планирование бюджета на {%date%}';
 
-    function _printMasterRow(category, bdgt, isDrain) {
-        if ( (isDrain && category.type > 0) || (!isDrain && category.type < 0) ) {
-            return '';
-        }
-
+    function _printMasterRow(article) {
         var vals = {
-            catId: category.id,
-            catName: category.name,
+            catId: article.id,
+            catName: article.name,
             planValue: '',
             budgetMean: '0',
             calendarPlanned: ''
         };
 
-        bdgt = $.extend({}, bdgt);
+        vals.planValue = formatCurrency( article.getPlan() )
+        vals.budgetMean = formatCurrency( article.mean )
 
-        if ("amount" in bdgt) {
-            vals.planValue = formatCurrency( bdgt.amount )
-        }
-        if ("mean" in bdgt) {
-            vals.budgetMean = formatCurrency( bdgt.mean )
+        if (article.getTotalCalendar()) {
+            vals.calendarPlanned = '<em>В календаре: <strong>' + formatCurrency( article.getTotalCalendar() ) + '</strong></em>'
         }
 
-        if ("calendar_plan" in bdgt && bdgt.calendar_plan != 0) {
-            vals.calendarPlanned = '<small>В календаре: <strong>' + formatCurrency( bdgt.calendar_plan ) + '</strong></small>'
-        }
-
-        return templetor(tplCategoryRow, vals);
+        return utils.templator(tplCategoryRow, vals);
     }
 
     /**
@@ -95,8 +85,10 @@ easyFinance.widgets.budgetMaster = function(model,widget){
      * @return void
      */
     function _printMaster(type) {
-        var prefix = (type == '1') ? 'p' : 'd';
-        var _data = model.returnList()[prefix]
+        var prefix = (type == 0) ? 'p' : 'd';
+        //throw "not implemented"
+        var _data = model.getArticlesTree()[type].children;
+
         var children,
             str = '',
             ret ='';
@@ -110,43 +102,39 @@ easyFinance.widgets.budgetMaster = function(model,widget){
             row = '',
             vals = {};
 
-        var _categories = easyFinance.models.category.getUserCategoriesTreeOrdered();
+        //var _categories = easyFinance.models.category.getUserCategoriesTreeOrdered();
 
-        for (var i = 0, l = _categories.length; i < l; i++) {
-            categoryType = _categories[i].type;
+        for (var parentCatIndex = 0; parentCatIndex < _data.length; parentCatIndex++) {
+            parentId = _data[parentCatIndex].id;
+            parentName = _data[parentCatIndex].name;
+            children = _data[parentCatIndex].children;
 
-            if ( (type == 0 && categoryType < 1) || (type == 1 && categoryType > -1) ) {
-                parentId = _categories[i].id;
-                parentName = _categories[i].name;
-                children = _categories[i].children;
+            cat_rows = [];
 
-                cat_rows = [];
-
-                for (var k in children) {
-                    row = _printMasterRow(children[k], _data[children[k].id], type == 0)
-                    if (row.length) {
-                        cat_rows.push(row);
-                    }
+            for (var k in children) {
+                row = _printMasterRow(children[k])
+                if (row.length) {
+                    cat_rows.push(row);
                 }
+            }
 
-                vals = {
-                    parentId: parentId,
-                    parentName: parentName,
-                    amount: formatCurrency(_data[parentId] ? _data[parentId]['amount'] : 0)
-                }
+            vals = {
+                parentId: parentId,
+                parentName: parentName,
+                amount: formatCurrency(_data[parentCatIndex].getPlan())
+            }
 
-                if (!cat_rows.length) {
-                    vals.mean = formatCurrency(_data[parentId] ? _data[parentId]['amount'] : 0)
-                    cat_types.push( templetor(tplEmptyParentCategory, vals) );
-                }
-                else {
-                    vals.children = '<table class="b-budgetwizard-table b-budgetwizard-table__content">' + cat_rows.join('') + '</table>'
-                    cat_types.push( templetor(tplParentCategory, vals) );
-                }
+            if (!cat_rows.length) {
+                vals.mean = formatCurrency(_data[parentId] ? _data[parentId]['plan'] : 0)
+                cat_types.push( utils.templator(tplEmptyParentCategory, vals) );
+            }
+            else {
+                vals.children = '<table class="b-budgetwizard-table b-budgetwizard-table__content">' + cat_rows.join('') + '</table>'
+                cat_types.push( templetor(tplParentCategory, vals) );
             }
         }
 
-        if (type) {
+        if (!type) {
             $('#master #step2 .list.body').html(cat_types.join(''))
         }
         else {

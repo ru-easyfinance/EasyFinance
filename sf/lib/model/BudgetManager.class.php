@@ -52,16 +52,19 @@ class BudgetManager
 
         //по каждой операции определим ее вклад в соотв. статью бюджета или средний показатель
         foreach ($operations->getOperations() as $operation) {
-            //определяем, к какой категории относится операция, и по ней определяем статью бюджета
-            //категорию берем не напрямую из связи операции, а вычисляем для корректного учета переводов
-            //если категория не запланирована, создается и возвращается пустая
-            $currentBudgetArticle = $budget->getBudgetArticleByCategory(
-                $operation->getCategory()
-            );
 
-            $increment = $calculator->calculate($operation);
+            // отсутствие категории -- штатная ситуация
+            // например, перевод или неподтвежденная операция в календаре
+            if ($category = $operation->getCategory()) {
+                //определяем, к какой категории относится операция, и по ней определяем статью бюджета
+                //категорию берем не напрямую из связи операции, а вычисляем для корректного учета переводов
+                //если категория не запланирована, создается и возвращается пустая
+                $currentBudgetArticle = $budget->getBudgetArticleByCategory($category);
+                $increment = $calculator->calculate($operation);
 
-            $increment->apply($currentBudgetArticle);
+                $increment->apply($currentBudgetArticle);
+            }
+
         }
 
         //возвращаем уже заполненные категории
