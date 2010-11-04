@@ -14,13 +14,13 @@ easyFinance.models.budget = function(){
                 plan = {p: 0, d: 0};
             var currentBudgetArticle;
 
-            for (var key in data.list.p) {
-                currentBudgetArticle = data.list.p[key];
+            for (var categoryId in data.list.p) {
+                currentBudgetArticle = data.list.p[categoryId];
                 plan.p += Math.abs(parseFloat(currentBudgetArticle.amount))
                 real.p += Math.abs(parseFloat(currentBudgetArticle.money))
             }
-            for (key in data.list.d) {
-                currentBudgetArticle = data.list.d[key];
+            for (categoryId in data.list.d) {
+                currentBudgetArticle = data.list.d[categoryId];
                 plan.d += Math.abs(parseFloat(currentBudgetArticle.amount))
                 real.d += Math.abs(parseFloat(currentBudgetArticle.money))
             }
