@@ -141,7 +141,7 @@ var tplbudgetHeader =
     function _printList(type, categories, parentId) { // 0 == drain
         var prefix = (type == 1) ? 'p' : 'd'; // profit / drain
 
-        var budgets = _model.getNormalizedList()[prefix],
+        var budgets = _model.returnList()[prefix],
             budget;
 
         var temp = {},

@@ -19,8 +19,15 @@ easyFinance.models.budget = function(){
             for (var drainOrProfit in data.list) {
                 for (var categoryId in data.list[drainOrProfit]) {
                     currentBudgetArticle = data.list[drainOrProfit][categoryId];
-                    plan.p += Math.abs(parseFloat(currentBudgetArticle.amount));
-                    real.p += Math.abs(parseFloat(currentBudgetArticle.money));
+                    
+                    //приводим все значения к float, т.к. изначально в JSON-е они криво отформатированы                    
+                    var fields = 'plan mean adhoc calendarAccepted calendarFuture'.split(' ');
+                    for (var fieldIndex = 0, fieldsCount = fields.length; fieldIndex < fieldsCount; i++) {
+                        currentBudgetArticle[fields[i]] =  Math.abs( parseFloat(currentBudgetArticle[fields[i]]));
+                    }
+                    
+                    plan.p += currentBudgetArticle.plan;
+                    real.p += currentBudgetArticle.adhoc + currentBudgetArticle.calendarAccepted + currentBudgetArticle.calendarFuture;
                 }
             }
 
@@ -62,26 +69,6 @@ easyFinance.models.budget = function(){
          */
         function returnList(){
             return _data.list;
-        }
-
-        /**
-         * @desc возвращает список бюджетов, в котором значения приведены к float'ам
-         * Это нужно только лишь потому, что PHP-шный генератор JSON -- коряв и богопротивен.
-         */
-        function getNormalizedList() {
-            var fields = 'amount calendar_plan mean money not_calendar_plan'.split(' ');
-
-            var result = $.extend({}, _data.list, {}); // копируем список, а то вдруг он кому-то понадобится
-
-            for (var type in result) { // 'p' or 'd'
-                for (var catId in result[type]) {
-                    for (var i = 0, l = fields.length; i < l; i++) {
-                        result[type][catId][fields[i]] = Math.abs( parseFloat(result[type][catId][fields[i]]) )
-                    }
-                }
-            }
-
-            return result;
         }
 
         /**
