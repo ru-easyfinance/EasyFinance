@@ -179,7 +179,7 @@ easyFinance.models.budget = function(){
             }
             
             $.post(
-                '/my/dev.php/budget/load/',
+                '/my/budget/load/',
                 {
                     start: date.getFullYear() + '-' + month + '-01'
                 },
