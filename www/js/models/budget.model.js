@@ -12,14 +12,17 @@ easyFinance.models.budget = function(){
         function load (data) {
             var real = {p: 0, d: 0},
                 plan = {p: 0, d: 0};
+            var currentBudgetArticle;
 
             for (var key in data.list.p) {
-                plan.p += Math.abs(parseFloat(data.list.p[key].amount))
-                real.p += Math.abs(parseFloat(data.list.p[key].money))
+                currentBudgetArticle = data.list.p[key];
+                plan.p += Math.abs(parseFloat(currentBudgetArticle.amount))
+                real.p += Math.abs(parseFloat(currentBudgetArticle.money))
             }
             for (key in data.list.d) {
-                plan.d += Math.abs(parseFloat(data.list.d[key].amount))
-                real.d += Math.abs(parseFloat(data.list.d[key].money))
+                currentBudgetArticle = data.list.d[key];
+                plan.d += Math.abs(parseFloat(currentBudgetArticle.amount))
+                real.d += Math.abs(parseFloat(currentBudgetArticle.money))
             }
 
             _data = {
