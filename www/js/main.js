@@ -485,7 +485,7 @@ $(document).ready(function(){
         // главный тахометр - финансовое состояние
         var flashvars = {
             title: 'Финансовое состояние',
-            value: res.informers[0].value,
+            value: res.informers ? res.informers[0].value : null ,
             bgimage: ""
         };
         var params = {
