@@ -38,8 +38,11 @@ var tplBudgetRow =
         <td class="w2 efTdWithTooltips" title="{%title%}">{%indicator%}</td>\
         <td class="w3">\
             <div class="cont">\
-                <span>{%strPlan%}</span>\
-                <input type="text" value="{%planValue%}"/>\
+                <span class="js-planned">{%strPlan%}</span>\
+                <span class="js-planning hidden">\
+                    <input type="text" value="{%planValue%}"/><br/>\
+                    <small><em>В календаре: {%planValueCalendar%}</em></small>\
+                </span>\
             </div>\
         </td>\
         <td class="w5">{%factValue%}</td>\
@@ -564,29 +567,33 @@ var tplbudgetHeader =
         id = isNaN(id) ? '0' : id;
 
         if (!parent || !$(this).closest('table').find('tr[parent="'+id+'"]').length) {
-            $('#budget .list tr .w3 input').hide();
-            $('#budget .list tr .w3 span').show();
-            var v = formatCurrency($(this).find('.w3 span').text().replace(/[^0-9\.]/g,''), true, false);
+            $(this).find('.w3 .js-planned').addClass('hidden');
+            $(this).find('.w3 .js-planning').removeClass('hidden');
+            var v = formatCurrency($(this).find('.w3 .js-planned').text().replace(/[^0-9\.]/g,''), true, false);
             $(this).find('.w3 input').val(v == "0" ? '' : v).show().focus();
-            $(this).find('.w3 span').hide();
         }
     });
     
-    $('#budget .list tr input').live('keypress', function(e){
-        if (e.keyCode == 13){
-            var id = $(this).closest('tr').attr('id');
-            var type = $(this).closest('tr').attr('type');
-            var value = calculate($(this).val());
-            $('#budget .list tr .w3 input').hide();
-            $('#budget .list tr .w3 span').show();
+    $('#budget .list tr input').live('keypress', function(e) {
+        if (e.keyCode == 13) {
+            var parentEl = $(this).closest('.w3');
+            var tr = parentEl.parent('tr');
+
+            var id = tr.attr('id');
+            var type = tr.attr('type');
+            var value = calculate(this.value);
+
+            parentEl.find('.js-planning').addClass('hidden');
+            parentEl.find('.js-planned').removeClass('hidden');
+
             _model.edit(_currentDate, type, id, value, function() {
                 _printInfo();
                 printBudget();
             });
         }
         else if (e.keyCode == 27) {
-            $('#budget .list tr .w3 input').hide();
-            $('#budget .list tr .w3 span').show();
+            parentEl.find('.js-planning').addClass('hidden');
+            parentEl.find('.js-planned').removeClass('hidden');
         }
     });
 

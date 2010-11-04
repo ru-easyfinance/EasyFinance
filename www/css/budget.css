@@ -246,6 +246,7 @@ thead.budget-header {
 .budget .list table .indicator div {
     height: 19px;
     background-position: 0 -100px;
+    padding-left: 3px;
 }
 
 .budget .list table .indicator .red {
