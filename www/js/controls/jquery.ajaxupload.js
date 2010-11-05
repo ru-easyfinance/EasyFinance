@@ -1,6 +1,10 @@
 (function($){
-    $.fn.ajaxupload = function(options) {
+    $.fn.ajaxupload = function(params) {
         var that = this;
+
+        var defaults = {
+        }
+        var options = $.extend({}, defaults, params);
 
         function onSubmit(evt) {
             evt.preventDefault();

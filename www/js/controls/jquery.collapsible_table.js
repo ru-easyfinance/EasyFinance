@@ -1,11 +1,11 @@
 (function($){
     $.fn.collapsible_table = function(params) {
-        var defaultSettings = {
+        var defaults = {
             collapserSelector: ".js-collapsible_table-collapser",
             collapsedClass: 'b-collapsible_table-thead__collapsed',
             expandedClass: 'b-collapsible_table-thead__expanded'
         };
-        var settings = $.extend({}, defaultSettings, params);
+        var options = $.extend({}, defaults, params);
 
         var that = this;
 
@@ -14,9 +14,9 @@
             var thead = trgt.closest('thead');
 
             thead.next('tbody').toggleClass('hidden');
-            thead.toggleClass(settings.collapsedClass).toggleClass(settings.expandedClass);
+            thead.toggleClass(options.collapsedClass).toggleClass(options.expandedClass);
         };
 
-        $(settings.collapserSelector).live('click', onToggleCollapse);
+        $(options.collapserSelector).live('click', onToggleCollapse);
     }
 })(jQuery);

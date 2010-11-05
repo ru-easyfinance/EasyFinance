@@ -78,7 +78,8 @@ $phone = array(
     'label'         => 'Мобильный телефон',
     'name'          => 'mobile_number',
     'hint'          => '+7 (xxx) yyyyyyy',
-    'inputClass'    => 'js-control js-control-phonefield'
+    'inputClass'    => 'js-control js-control-phonefield',
+    'jsparams'      => '{forceRussia: true}'
 );
 
 $email = array(

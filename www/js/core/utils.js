@@ -5,7 +5,7 @@ var utils = (function() {
     }
 
     // нормализует строку к виду телефона: +7 (495) 123-45-67
-    function toPhone(str) {
+    function toPhone(str, forceRussia) {
         var result = str.replace(/[^0-9]/gi, '');
 
         if (result.length == 7) {
@@ -13,6 +13,12 @@ var utils = (function() {
         }
         else if (result.length == 10) {
             return toPhone10(result)
+        }
+        else if (forceRussia && result.length == 11) { // случай вида 8-926-123-45-67. У нас должна быть на первом месте "+7"
+            if (result.substr(0, 1) == '8') {
+                return '+7 ' + toPhone10(result.substr(1))
+            }
+
         }
         else if (result.length > 10) {
             var code = result.substr(0, result.length - 10);

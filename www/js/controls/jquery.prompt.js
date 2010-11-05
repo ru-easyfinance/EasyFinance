@@ -19,7 +19,9 @@
             }
         };
 
-        this.dialog( $.extend({}, defaults, params) );
+        var options = $.extend({}, defaults, params)
+
+        this.dialog(options);
 
         return this;
     }
