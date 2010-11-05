@@ -76,16 +76,27 @@ class Migration049_Create_Debt_Categories extends myBaseMigration
         $this->rawQuery(
             sprintf(
                 "UPDATE category c1
-                 LEFT JOIN category c2
+                 INNER JOIN category c2
                     ON c2.system_category_id = %d
                     AND c2.user_id = c1.user_id
                     AND c1.system_category_id = %d
-                 SET c1.`cat_parent` = c2.`cat_id`
-                 WHERE c1.system_category_id = %d",
+                 SET c1.`cat_parent` = c2.`cat_id`",
                  self::DEBT,
-                 self::INTEREST_ON_LOANS,
                  self::INTEREST_ON_LOANS
              )
+        );
+
+        // Убираем у выплаты долгов предка, если она сама предок
+        $this->rawQuery(
+            sprintf(
+                "UPDATE category c
+                INNER JOIN category c_child
+                    ON c.system_category_id = %d
+                    AND c.user_id = c_child.user_id
+                    AND c.cat_id = c_child.cat_parent
+                SET c.cat_parent = 0",
+                self::INTEREST_ON_LOANS
+            )
         );
     }
 
