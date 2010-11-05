@@ -10,8 +10,14 @@ class OperationCollection {
      */
     private $_operations;
 
-    public function __construct()
+    /**
+     * @var User
+     */
+    private $_user;
+
+    public function __construct(User $user)
     {
+        $this->_user = $user;
     }
 
 
@@ -26,6 +32,10 @@ class OperationCollection {
         $alias = 'op';
         $query = Doctrine::getTable('Operation')
             ->createQuery($alias)
+            ->innerJoin("{$alias}.Account")
+            ->leftJoin("{$alias}.TransferAccount")
+            ->leftJoin("{$alias}.Category")
+            ->andWhere("{$alias}.user_id = ? ", $this->_user->getId())
             ->andWhere("{$alias}.date >= ? ", $startDate->format('Y-m-d'))
             ->andWhere("{$alias}.date <= ? ", $endDate->format('Y-m-d'));
 

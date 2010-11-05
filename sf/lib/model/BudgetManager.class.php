@@ -33,7 +33,7 @@ class BudgetManager
         $endDate = date_sub(date_add(clone $startDate, new DateInterval("P1M")), new DateInterval("P1D"));
 
         //получим выборку операций за рассчитанный период
-        $operations = new OperationCollection();
+        $operations = new OperationCollection($user);
         $operations->fillForPeriod($beginDate, $endDate);
 
         //получим бюджет на месяц (коллекцию статей бюджета на заданный месяц)
@@ -52,10 +52,11 @@ class BudgetManager
 
         //по каждой операции определим ее вклад в соотв. статью бюджета или средний показатель
         foreach ($operations->getOperations() as $operation) {
+            $category = $operation->getCategory();
 
             // отсутствие категории -- штатная ситуация
             // например, перевод или неподтвежденная операция в календаре
-            if ($category = $operation->getCategory()) {
+            if ($category) {
                 //определяем, к какой категории относится операция, и по ней определяем статью бюджета
                 //категорию берем не напрямую из связи операции, а вычисляем для корректного учета переводов
                 //если категория не запланирована, создается и возвращается пустая

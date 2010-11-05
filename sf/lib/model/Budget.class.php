@@ -28,6 +28,7 @@ class Budget {
     public function fill(User $user, DateTime $startDate)
     {
         $this->_startDate = $startDate;
+        $this->_user = $user;
         $budgetArticles = Doctrine::getTable('BudgetCategory')
             ->getBudget($user, $startDate);
 
@@ -49,6 +50,7 @@ class Budget {
             return $this->_budgetArticles[$category->getId()];
 
         $budgetArticle = new BudgetCategory();
+        $this->_budgetArticles[$category->getId()] = $budgetArticle;
 
         $budgetArticle->setCategory($category);
         $budgetArticle->setType(
@@ -56,7 +58,7 @@ class Budget {
             BudgetCategory::TYPE_PROFIT :
             BudgetCategory::TYPE_EXPENSE
         );
-        $budgetArticle->setUser($category->getUser());
+        $budgetArticle->setUser($this->_user);
         $budgetArticle->setDateStart($this->_startDate->format('Y-m-d'));
 
         return $budgetArticle;
