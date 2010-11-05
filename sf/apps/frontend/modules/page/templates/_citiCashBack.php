@@ -146,7 +146,7 @@ $email = array(
                 <li>Безопасная оплата покупок и услуг в сети Интернет</li>
             </ul>
             <br/>
-            <p><span class="pseudo js-toform">Заполните онлайн-заявку на оформление кредитной карты</span></p>
+            <p><big><strong class="pseudo js-toform">Заполните анкету на оформление кредитной карты</strong></big></p>
 
             <div class="b-citipage-footnotes">
                 <ol class="b-citipage-noteslist">
