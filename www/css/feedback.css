@@ -8,6 +8,7 @@
         margin-bottom: 1em;
     }
         .b-feedback-notice .b-feedback-notice-header {
+            margin-bottom: .5em;
             font-size: 125%;
             color: #ef6300;
         }

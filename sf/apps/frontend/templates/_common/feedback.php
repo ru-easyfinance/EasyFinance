@@ -14,7 +14,7 @@
     )
 ?>
 <div class="b-feedback js-widget js-widget-feedback hidden">
-    <div class="js-feedback-dialogue b-feedback-container" ondblclick="return {width: 530, height: 'auto', title: 'Поддержка — решение Ваших проблем'}">
+    <div class="js-feedback-dialogue b-feedback-container" ondblclick="return {width: 530, height: 'auto', title: 'Поддержка — решение Ваших проблем', modal: false}">
         <div class="l-dialog-content">
 
             <div class="b-feedback-notice">
