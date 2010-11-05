@@ -79,14 +79,19 @@ function BudgetArticle(catInfo, children, budget_articles) {
         recomendation.marginTotal = recomendation.budgetLeft - this.calendarFuture - currentElapsedRatio * this.adhoc;
 
         //насколько урезать спонтанные траты, чтобы выйти в 0
-        recomendation.changeAdhoc = recomendation.marginTotal / (utils.getDaysCount(viewDate) - now.getDate())
-        recomendation.canChangeAdhoc = recomendation.changeAdhoc < this.adhoc / now.getDate();
+        recomendation.changeAdhoc = recomendation.marginTotal / (utils.getDaysCount(viewDate) - now.getDate());
+        var canChangeAdhoc = this.adhoc > 0;
+        recomendation.changeAdhocOnlyIsEnough = canChangeAdhoc && recomendation.changeAdhoc <= (this.adhoc / now.getDate());
 
         //насколько урезать календарь, чтобы выйти в 0
         recomendation.changeCalendar = recomendation.marginTotal;
-        recomendation.canChangeCalendar = recomendation.changeCalendar < this.calendarFuture;
+        var canChangeCalendar = this.calendarFuture > 0;
+        recomendation.changeCalendarOnlyIsEnough = canChangeCalendar && recomendation.changeCalendar <= this.calendarFuture;
 
-        recomendation.canChangeBoth = !(recomendation.canChangeAdhoc && recomendation.canChangeCalendar);
+        recomendation.needChangeBoth =
+            (!recomendation.changeAdhocOnlyIsEnough || !recomendation.changeCalendarOnlyIsEnough)
+            && canChangeAdhoc
+            && canChangeCalendar;
 
         recomendation.budgetOverheaded = recomendation.budgetLeft < 0;
         recomendation.marginZero = recomendation.marginTotal == 0;

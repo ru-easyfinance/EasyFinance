@@ -228,10 +228,10 @@ var tplbudgetHeader =
                 BudgetOverhead: "<span class='danger'>Внимание! Бюджет уже превышен на <strong>{%budgetLeft%}</strong></span>",
                 PositiveMargin: "<span class='ok'>Поздравляем! Вы сэкономите <strong>{%marginTotal%}</strong> к концу месяца, если сохраните текущие темпы трат</span>",
                 ZeroMargin: "<span class='warning'>Будьте аккуратны: бюджет расходуется точно по плану</span>",
-                ChangeGeneral: "<span class='danger'>Внимание! Вам нужно снизить траты, чтобы уложиться в план.</span> Возможные действия:<ul><li>&bull; снизить в сумме на <strong>{%marginTotal%}</strong> внеплановые траты и траты, запланированные в календаре</li>",
+                ChangeGeneral: "<span class='danger'>Внимание! Вам нужно снизить траты, чтобы уложиться в план.</span> Возможные действия:<ul>",
                 ChangeAdhoc: "<li>&bull; снизить внеплановые траты на <strong>{%changeAdhoc%}</strong> в день<li>",
                 ChangeCalendar: "<li>&bull; снизить запланированные в календаре траты на <strong>{%changeCalendar%}</strong></li>",
-                ChangeBoth: "",
+                ChangeBoth: "<li>&bull; снизить в сумме на <strong>{%marginTotal%}</strong> внеплановые траты и траты, запланированные в календаре</li>",
                 ChangeClosing: "</ul>"
             },
             profit: {
@@ -245,9 +245,7 @@ var tplbudgetHeader =
                 ChangeClosing: ""
             }
         }
-        var message = [],
-            color,
-            resultMessage;
+        var message = [];
 
         var messageSrc = (article.isProfit ? msg.profit : msg.drain);
 
@@ -262,20 +260,19 @@ var tplbudgetHeader =
         }
         else {
             message = messageSrc.ChangeGeneral;
-            if (rec.canChangeAdhoc) {
-                message += messageSrc.ChangeAdhoc
-            }
-            if (rec.canChangeCalendar) {
-                message += messageSrc.ChangeCalendar
-            }
+
+            rec.changeAdhocOnlyIsEnough && (message += messageSrc.ChangeAdhoc);
+            rec.changeCalendarOnlyIsEnough && (message += messageSrc.ChangeCalendar);
+            rec.needChangeBoth && (message += messageSrc.ChangeBoth);
+
             message += messageSrc.ChangeClosing
         }
 
         return utils.templator(message, {
             budgetLeft: formatCurrencyDefault(Math.abs(rec.budgetLeft)),
             marginTotal: formatCurrencyDefault(Math.abs(rec.marginTotal)),
-            changeAdhoc: formatCurrencyDefault(rec.changeAdhoc),
-            changeCalendar: formatCurrencyDefault(rec.changeCalendar)
+            changeAdhoc: formatCurrencyDefault(Math.abs(rec.changeAdhoc)),
+            changeCalendar: formatCurrencyDefault(Math.abs(rec.changeCalendar))
         });
     }
 
