@@ -57,14 +57,20 @@ var citipage = (function(selector) {
 
 
         function onOk(data) {
-            utils.defaultOnSuccess(data);
-            frm.find('input[type="submit"]').removeAttr('disabled');
-            phone_field.attr('name', 'mobile_number');
+            if (!data.error) {
+                utils.defaultOnSuccess(data);
+                frm.find('input[type="submit"]').removeAttr('disabled');
+                phone_field.attr('name', 'mobile_number');
 
-            renderNotice();
+                renderNotice();
+            }
+            else {
+                onError(data)
+            }
         }
         function onError(data) {
-            notifyUser('Произошла непредвиденная ошибка. Попробуйте еще раз через несколько минут.')
+
+            utils.notifyUser(data.error.text)
             frm.find('input[type="submit"]').removeAttr('disabled');
             phone_field.attr('name', 'mobile_number');
         }
