@@ -27,18 +27,29 @@ class easybankActions extends myBaseFrontendJsonActions
 
         if ($form->isValid()) {
             $this->_sendEmail($form->getValues());
-            return $this->renderJsonSuccess('Анкета отправлена');
+            return $this->renderJsonSuccess('Анкета успешно отправлена');
         }
 
         $errors = $form->getErrorSchema()->getErrors();
         $errorMessages = array();
 
-        foreach ($errors as $fieldName => $error) {
-            $errorMessages[] = sprintf("[%s] %s %s\n",
-                $fieldName, $error->getValue(), $error->getMessage());
+        //TODO: refactor: все сообщения русским языком должны создаваться на клиенте,
+        //сервер должен слать только код поля (например, "email") и сообщение валидатора
+
+        $humanFieldNames = array(
+            "email" => "Email",
+            "birthday" => "Дата рождения",
+            "name" => "Имя",
+            "patronymic" => "Отчество",
+            "surname" => "Фамилия",
+            "mobile_phone" => "Мобильный телефон",
+        );
+
+        foreach ($errors as $fieldName) {
+            $errorMessages[] = sprintf("%s", $humanFieldNames[$fieldName]);
         }
 
-        return $this->renderJsonError("Анкета не прошла валидацию: \n" . implode('', $errorMessages));
+        return $this->renderJsonError("Пожалуйста, исправьте заполнение полей: \n" . implode(', ', $errorMessages));
     }
 
     /**
