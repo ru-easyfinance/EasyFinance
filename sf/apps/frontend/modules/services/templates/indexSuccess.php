@@ -2,6 +2,7 @@
     <div class="ct">
         <div class="head">
             <h2>Список услуг</h2>
+            <?php include_partial('global/common/blockmenu', array('clipno' => 1))?>
         </div>
     </div>
     <div id="servicesDescription">

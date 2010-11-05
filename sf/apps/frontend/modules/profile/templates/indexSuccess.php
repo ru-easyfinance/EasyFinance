@@ -25,7 +25,6 @@
     <div class="ct">
         <div class="head">
             <h2>Личные данные</h2>
-            <ul class="action"><li class="over3"> </li></ul>
         </div>
     </div>
     <div id="content" class="inside form">
@@ -99,7 +98,7 @@
     <div class="ct">
         <div class="head">
             <h2>Валюты</h2>
-            <ul class="action"><li class="over3"> </li></ul>
+            <?php include_partial('global/common/blockmenu', array('clipno' => 1))?>
         </div>
     </div>
     <div id="content" class="inside form">
@@ -136,7 +135,7 @@
     <div class="ct">
         <div class="head">
             <h2>Напоминания для запланированных операций</h2>
-            <ul class="action"><li class="over3"> </li></ul>
+            <?php include_partial('global/common/blockmenu', array('clipno' => 1))?>
         </div>
     </div>
     <?php include_partial('reminders') ?>
