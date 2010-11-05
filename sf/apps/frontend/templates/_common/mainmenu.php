@@ -1,18 +1,10 @@
-<?php
-/**
- * Основное меню
- *
- * TODO: написать функциональный тест
- * TODO: убрать html-ные комментарии - нужны комменты - через php
- */
-?>
 <div class="menu3 icon-menu3">
     <ul class="dropdown">
         <li id="m1">
             <a href="/info/" class="top-level"></a>
         </li>
         <li id="m2">
-            <a href="/accounts/" class="top-level"></a>
+            <a href="/operation/" class="top-level"></a>
             <ul class="dd-sub">
                 <li><span class="spacer"></span><a href="/operation/">Операции</a></li>
                 <li><span class="spacer"></span><a href="/category/">Категории</a></li>
