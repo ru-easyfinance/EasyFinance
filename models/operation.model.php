@@ -381,15 +381,20 @@ class Operation_Model
             $this->db->query("START TRANSACTION");
 
             foreach ($operationsArray as $operation) {
+                $tags = is_array($operation['tags'])
+                    ? $operation['tags']
+                    : array_map('trim', explode(',', $operation['tags']));
+                $tags = (array) $tags;
+
                 $this->addTransfer(
                     $operation['amount'],
                     $operation['convert'],
-                    $operation['exchange_rate'],
+                    $operation['currency'],
                     $operation['date'],
                     $operation['account'],
                     $operation['toAccount'],
                     $operation['comment'],
-                    $operation['tags'],
+                    $tags,
                     $operation['accepted'],
                     $operation['chain'],
                     false
