@@ -45,7 +45,7 @@ class easybankActions extends myBaseFrontendJsonActions
             "mobile_phone" => "Мобильный телефон",
         );
 
-        foreach ($errors as $fieldName) {
+        foreach ($errors as $fieldName => $error) {
             $errorMessages[] = sprintf("%s", $humanFieldNames[$fieldName]);
         }
 
