@@ -41,7 +41,14 @@ var wdgtReview = (function() {
         $('.b-review-clip-preview').live('click', onPreviewClick);
 
         dialog = container.find('.js-review-dialog');
-        dialog.dialog({title: "Обзор", bgiframe: true, autoOpen: false, modal: true, width: 'auto'});
+        dialog.dialog(
+            {
+                title: "Обзор",
+                bgiframe: true,
+                autoOpen: false,
+                modal: true,
+                width: $.browser.msie ? 710 : 'auto',
+                height: 'auto'});
 
         playerContainer = dialog.find('.js-review-playercontainer');
 

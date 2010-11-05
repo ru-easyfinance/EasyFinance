@@ -159,3 +159,7 @@ form.op_addoperation .b-custom-select-wrap {
 .b-feedback-tabs .b-row {
     width: 95% !important;
 }
+
+.b-review {
+    padding-top: 1em;
+}
