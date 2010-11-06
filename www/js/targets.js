@@ -136,6 +136,9 @@ $(document).ready(function(){
         bgiframe: true,
         autoOpen: false,
         width: 450,
+        open: function() {
+            $('.b-custom-select.active', $(this)).trigger('change');
+        },
         buttons: {
             'Отмена': function() {
                 clearForm();
