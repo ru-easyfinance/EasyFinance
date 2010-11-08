@@ -271,7 +271,7 @@ $email = array(
                 </div>
                 <div class="b-citipage-notice js-form-notice hidden">
                     <p>
-                        <big><span class="js-username"></span> <span class="js-userpatronymic"></span></big>,<br/>
+                        <big><span class="js-username"></span>&nbsp;<span class="js-userpatronymic"></span></big>,<br/>
                         спасибо за интерес, проявленный к Ситибанку. Специалист Ситибанка перезвонит вам
                         в течение одного рабочего дня по указанному телефону:
                         +7 (<span class="js-usermobile_code"></span>) <span class="js-usermobile_phone"></span>.
