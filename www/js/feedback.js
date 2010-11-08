@@ -6,7 +6,13 @@ var feedback = (function(selector) {
         tabs,
         tabsSwitches;
 
-
+    // строковые ресурсы
+    var messages = {
+        onSending: 'Заявка отправляется&hellip;',
+        onSendOk: 'Спасибо, ваша заявка отправлена. На ваш e-mail адрес придет уведомление.',
+        onSendError: 'Не удалось отправить заявку из-за технического сбоя. Попробуйте еще раз через несколько минут.',
+        onInvalidate: 'Все поля обязательны для заполнения.'
+    }
 
     // Получает сведения о графических данных браузера и монитора клиента
     function getClientDisplayMods() {
@@ -15,7 +21,7 @@ var feedback = (function(selector) {
 
         var width = screen.width, height = screen.height;
         var color = screen.colorDepth;
-        if ('CSS1Compat' && !window.opera) {
+        if ((document.compatMode == 'CSS1Compat') && !window.opera) {
             cwidth = document.documentElement.clientWidth;
             cheight = document.documentElement.clientHeight;
         }
@@ -51,23 +57,33 @@ var feedback = (function(selector) {
     function onSubmit(e) {
         e.preventDefault();
 
+        // валидация
         var emptyFields = frm
             .find('input[type="text"], textarea')
             .filter(function(index) {
                 return $(this).val() == '';
             });
         if (emptyFields.length) {
-            utils.notifyUser('Все поля обязательны для заполнения')
+            utils.notifyUser(messages.onInvalidate)
             return false;
         }
 
+        // дополнительные сведения о браузере
         var displayMods = getClientDisplayMods();
         for (var key in displayMods) {
             frm[0][key].value = displayMods[key];
         }
         frm[0]["plugins"].value = getClientPlugins();
 
-        utils.ajaxForm(frm, function() { dialog.dialog('close') }, false, false, 'json');
+        // отправка
+        utils.notifyUser(messages.onSending, 'process')
+        utils.ajaxForm(
+            frm,
+            function() {dialog.dialog('close');utils.notifyUser(messages.onSendOk, 'ok');},
+            function() {utils.notifyUser(messages.onSendError)},
+            false,
+            'json'
+        );
 
         return false;
     }
