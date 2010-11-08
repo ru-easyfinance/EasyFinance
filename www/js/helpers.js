@@ -74,15 +74,17 @@ $(document).ready(function() {
     // используется в списке счетов в левой панеи
     $(".efListWithTooltips li.account").efLiveTooltip();
 
-    /* Тахометры (by Jet, тикет #552) */
-    if (res.informers) {
-        $('#divInformer0').attr("title", '<b>' + res.informers[0].title + '</b><br><br>' + res.informers[0].description);
 
-        for (var i=0;i<res.informers.count;i++) {
-            $('#tdInformer' + i).attr("title", '<b>' + res.informers[i].title + '</b><br><br>' + res.informers[i].description);
-        }
+    /* Тахометры */
+    if (res.informers) {
+        var tahometers = $('div.flash td.informerGauge');
+        tahometers.each(function(index, elem){
+            var title = '<b>' + res.informers[index].title + '</b><br><br>' + res.informers[index].description
+            tahometers.eq(index).attr('title', title)
+        });
+
+        $('.b-rightpanel .informerGauge').attr('title', tahometers.eq(0).attr('title'));
     }
-    /* EOF Тахометры */
 
     // используем bassistance tooltip
     // для всех элементов с классом efTooltip,
