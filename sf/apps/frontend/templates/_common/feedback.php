@@ -20,7 +20,7 @@
             <div class="b-feedback-notice">
                 <h6 class="b-feedback-notice-header">Внимание!</h6>
                 <p>Идеи, вопросы по функционалу, сообщения об ошибках и отзывы просим оставлять на
-                    <a class="b-feedback-notice-reformal" href="http://easyfinanceru.reformal.ru">странице обсуждения</a>.</p>
+                    <a class="b-feedback-notice-reformal" href="http://easyfinanceru.reformal.ru" target="_blank">странице обсуждения</a>.</p>
                 <p>Здесь просим сообщать только о Ваших персональных проблемах: например, проблемах со входом или необходимости восстановить данные.</p>
             </div>
 
