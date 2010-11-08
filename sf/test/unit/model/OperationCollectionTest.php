@@ -19,9 +19,9 @@ class model_OperationCollectionTest extends myUnitTestCase
         $dateStart = new DateTime(date('Y-m-01'));
         $dateEnd   = date_add(clone $dateStart, new DateInterval('P1M'));
 
-        $this->helper->makeOperation();
+        $op = $this->helper->makeOperation();
 
-        $operationCollection = new OperationCollection();
+        $operationCollection = new OperationCollection($op->getUser());
         $operationCollection->fillForPeriod($dateStart, $dateEnd);
         $this->assertNotEquals(0, count($operationCollection->getOperations()));
     }

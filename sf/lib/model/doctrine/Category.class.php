@@ -9,19 +9,25 @@ class Category extends BaseCategory
     const DEBT_SYSTEM_CATEGORY_ID = 25;
 
 
+    /**
+     * @param $user
+     * @return Category или NULL
+     */
     public static function getDebtCategoryInstance(User $user)
     {
-        static $systemCategory = array();
+        static $debtCategoryByUserId = array();
 
-        if (!isset($systemCategory[$user->getId()])) {
-            $systemCategory[$user->getId()] = Doctrine::getTable('Category')
+        if (!array_key_exists($user->getId(), $debtCategoryByUserId)) {
+            $category = Doctrine::getTable('Category')
                 ->findOneBySystemIdAndUserId(
                     Category::DEBT_SYSTEM_CATEGORY_ID,
                     $user->getId()
                 );
+            $debtCategoryByUserId[$user->getId()] = ($category !== false) ?
+                $category : null ;
         }
 
-        return $systemCategory[$user->getId()];
+        return $debtCategoryByUserId[$user->getId()];
     }
 
 

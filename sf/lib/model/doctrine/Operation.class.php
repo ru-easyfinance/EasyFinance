@@ -171,20 +171,27 @@ class Operation extends BaseOperation
     /**
      * Возвращает категорию
      * Применяется в бюджете
+     * @return Category или null
      */
     public function getCategory()
     {
         if (
             $this->getType() == self::TYPE_TRANSFER
             &&
+            $this->getTransferAccount()
+            &&
+            $this->getAccount()
+            &&
             $this->getTransferAccount()->isDebt()
             &&
             !$this->getAccount()->isDebt()
         ) {
-            return Category::getDebtCategoryInstance($this->getUser());
+            $category = Category::getDebtCategoryInstance($this->getUser());
         } else {
-            return $this->_get('Category');
+            $category = $this->_get('Category');
         }
+
+        return $category;
     }
 
 

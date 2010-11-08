@@ -77,7 +77,6 @@ class profileActions extends myBaseFrontendJsonActions
             }
         }
 
-        $this->getResponse()->setStatusCode(400);
         return $this->renderText(json_encode(array('error' => array('text' => $string))));
     }
 
