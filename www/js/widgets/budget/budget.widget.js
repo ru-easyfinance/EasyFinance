@@ -196,9 +196,9 @@ var tplbudgetHeader =
                 strPlan: formatCurrency(article.getPlan(), true, false),
                 planValue: article.getPlan(),
                 planValueCalendar: article.getTotalCalendar(),
-                factValue: article.getFact(),
+                factValue: formatCurrency(article.getFact(), true, false),
 
-                diffValue: recomend.budgetLeft,
+                diffValue: formatCurrency(recomend.budgetLeft, true, false),
                 diffMenu: article.isEditable() ? '<div class="menuwrapper"><div class="menu"><a title="Редактировать" class="edit"></a></div></div>' : '',
                 diffClass: diffClass,
 
