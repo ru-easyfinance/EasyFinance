@@ -1,6 +1,7 @@
 .b-citipage {
     width: 650px;
     margin: auto;
+    padding-top: 1em;
 }
 
 .b-citipage .ui-tabs-nav {
@@ -27,7 +28,6 @@
         color: #3366ff;
         font-weight: bold;
         font-size: 180%;
-        margin-top: 1em;
         margin-bottom: 3px;
     }
     .b-citipage h3 {
