@@ -4,7 +4,7 @@ $(document).ready(function(){
             loadTargets(data);
         }, 'json');
     var showall = 0;// показать все .
-// <editor-fold defaultstate="collapsed" desc=" Инициализация объектов ">
+
     $('#tg_amount,#amountf').live('keyup',function(e) {
         FloatFormat(this,String.fromCharCode(e.which) + $(this).val())
     })
@@ -147,9 +147,7 @@ $(document).ready(function(){
         }
     });
 
-// </editor-fold>
 
-// <editor-fold defaultstate="collapsed" desc=" Функции ">
     /**
      * Очищает форму для добавления финансовой цели
      */
@@ -164,38 +162,43 @@ $(document).ready(function(){
     function loadTargets(data) {
         res.user_targets = data;
 
-        var s = '';
+        var s = '',
+            a,
+            targetcurrency;
+
         for(v in data) {
             if ( (data[v]["done"] == 0) || showall){
             a = data[v]['title'].replace(" ","%20");
-            for (i=5; i>0; i--)
-            a = a.replace(" ","%20");
+            for (var i = 5; i > 0; i--) {
+                a = a.replace(" ","%20");
+            }
             s += '<div class="object" tid='+data[v]["id"]+' category='+data[v]["category"]+  ' name='+a+' amount=' +data[v]["amount"]+ ' start='+data[v]["start"]+' end='+data[v]["end"]+' money='+data[v]["money"]+' account='+data[v]["account"]+ ' visible='+data[v]["visible"]+' comment=' + data[v]["comment"] + '><div class="ban"></div>'
                 +'<div class="descr">';
                 //alert(data[v]['category']);
                 targetcurrency = easyFinance.models.accounts.getAccountCurrency( data[ v ]["account"]).text;
-                if (data[v]['category']==2)
-                    s += '<img src="/img/i/avto.png" alt="" />'
-                else if (data[v]['category']==3)
-                    s += '<img src="/img/i/rest.png" alt="" />'
-                else if (data[v]['category']==1)
-                    s += '<img src="/img/i/home.png" alt="" />'
-                else if (data[v]['category']==6)
-                    s += '<img src="/img/i/wedd.png" alt="" />'
-                else if (data[v]['category']==7)
-                    s += '<img src="/img/i/bitv.png" alt="" />'
-                else if (data[v]['category']==8)
-                    s += '<img src="/img/i/comp.png" alt="" />'
-                else
-                s += (data[v]['photo']!='')? '<img src="/img/i/fintarget1.jpg" alt="" />' : '<img src="/img/images/pic2.gif" alt="" />';
-                    s += '<a href="#">'+data[v]['title']+'</a>'+data[v]['comment']
-                    +'</div><div class="indicator_block"><div class="money">'
-                    +data[v]['amount'] + ' '+ targetcurrency +' <br /><span>'
-                    +data[v]['amount_done'] + ' ' + targetcurrency +' </span></div><div class="indicator">'
-                    +'<div style="width:'+data[v]['percent_done']+'%;"><span>'+data[v]['percent_done']
-                    +'%</span></div></div></div><div class="date">Целевая дата: '
-                    +data[v]['end']+' &nbsp;&nbsp;&nbsp;</div><ul><li><a href="#" class="f_f_edit">редактировать</a></li>'
-                    +'<li><a href="#" class="f_f_copy">копировать</a></li><li><a href="#" class="f_f_del">удалить</a></li></ul></div>';
+                var photoes = {
+                    1: 'home',
+                    2: 'avto',
+                    3: 'rest',
+                    6: 'wedd',
+                    7: 'bitv',
+                    8: 'comp'
+                }
+                if (data[v].category in photoes) {
+                    s += '<img src="/img/i/' + photoes[data[v].category] + '.png" alt=""/>'
+                }
+                else {
+                    s += (data[v]['photo']!='')? '<img src="/img/i/fintarget1.jpg" alt="" />' : '<img src="/img/images/pic2.gif" alt="" />';
+
+                }
+                s += '<a href="#">' + data[v]['title'] + '</a>' + data[v]['comment']
+                + '</div><div class="indicator_block"><div class="money">'
+                + formatCurrency(data[v]['amount']) + ' '+ targetcurrency + ' <br /><span>'
+                + formatCurrency(data[v]['amount_done']) + ' ' + targetcurrency + ' </span></div><div class="indicator">'
+                + '<div style="width:' + data[v]['percent_done'] + '%;"><span>' + data[v]['percent_done']
+                + '%</span></div></div></div><div class="date">Целевая дата: '
+                + data[v]['end' ] + ' &nbsp;&nbsp;&nbsp;</div><ul><li><a href="#" class="f_f_edit">редактировать</a></li>'
+                + '<li><a href="#" class="f_f_copy">копировать</a></li><li><a href="#" class="f_f_del">удалить</a></li></ul></div>';
             }
         }
         MakeOperation();
