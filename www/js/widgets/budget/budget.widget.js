@@ -332,7 +332,7 @@ var tplbudgetHeader =
         $('div.timeline').removeClass('hidden');
         $("#budgetTimeLine").css({
             left: elapsedPercent + '%',
-            height: ($budgetBody.height()) + 'px'
+            height: $budgetBody.height() - 50 + 'px'
         });
 
         var days = 32 - new Date(_currentDate.getFullYear(), _currentDate.getMonth(), 32).getDate();
@@ -342,14 +342,28 @@ var tplbudgetHeader =
     function printBudget() {
         _updateElapsed();
 
-        var str = renderArticlesTree(_model.getArticlesTree());
+        var str = renderArticlesTree(_model.getArticlesTree()),
+            template = '<table style="width: 100%;" class="efTableWithTooltips">'+
+            '<tr class="b-income">'+
+                '<td class="w1"><span>Доходы</span></td>'+
+                '<td class="w2">' + '</td>'+
+                '<td class="w3">' + formatCurrency(_totalInfo.plan_profit, true, false) + '</td>'+
+                '<td class="w5">' + formatCurrency(_totalInfo.real_profit, true, false) + '</td>'+
+                '<td class="w6">' + formatCurrency(_totalInfo.real_profit - _totalInfo.plan_profit, true, false) + '</td>'+
+            '</tr>'+
+            '<tr class="b-costs">'+
+                '<td class="w1"><span>Расходы</span></td>'+
+                '<td class="w2">' + '</td>'+
+                '<td class="w3">' + formatCurrency(_totalInfo.plan_drain, true, false) + '</td>'+
+                '<td class="w5">' + formatCurrency(_totalInfo.real_drain, true, false) + '</td>'+
+                '<td class="w6">' + formatCurrency(_totalInfo.plan_drain - _totalInfo.real_drain, true, false) + '</td>'+
+            '</tr>' 
+            + utils.templator(tplbudgetHeader, {currencyName: easyFinance.models.currency.getDefaultCurrencyText()}) 
+            + str + '</table>';
 
         $("#budgetTimeLine").show();
-
-        $budgetBody.html(
-            '<table style="width: 100%;" class="efTableWithTooltips">'
-            + utils.templator(tplbudgetHeader, {currencyName: easyFinance.models.currency.getDefaultCurrencyText()}) 
-            + str + '</table>');
+        
+        $budgetBody.html(template);
 
         _updateTimeLine();
     }
