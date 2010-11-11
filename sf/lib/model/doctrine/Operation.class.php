@@ -34,13 +34,15 @@ class Operation extends BaseOperation
         $account         = $table->findOneById($data['account_id']);
         $transferAccount = $table->findOneById($data['transfer_account_id']);
 
-        $rate = sfContext::getInstance()->getMyCurrencyExchange()
-            ->getRate(
-                $account->getCurrencyId(),
-                $transferAccount->getCurrencyId()
-            );
+        if ($account && $transferAccount) {
+            $rate = sfContext::getInstance()->getMyCurrencyExchange()
+                ->getRate(
+                    $account->getCurrencyId(),
+                    $transferAccount->getCurrencyId()
+                );
 
-        $data['transfer_amount'] = ($rate ? $rate : 1) * abs($data['amount']);
+            $data['transfer_amount'] = ($rate ? $rate : 1) * abs($data['amount']);
+        }
 
         return $data;
     }
