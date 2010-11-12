@@ -91,6 +91,14 @@ thead.budget-header th {
     padding-bottom: 6px;
 }
 
+.budget#budget .list .list.body .b-preloader {
+    width: 32px;
+    height: 32px;
+    background: url(../img/i/spinner.gif) no-repeat;
+    margin: 30px auto;
+    display: block;
+}
+
 .heightSmall .budget#budget .list .list.body {
     overflow-y: auto;
     overflow-x: hidden;
@@ -251,6 +259,7 @@ thead.budget-header th {
     padding-left: 21px;
     font-weight: bold;
     color: #313131;
+    display: block;
 }
 
 .budget#budget .list .nochild a {

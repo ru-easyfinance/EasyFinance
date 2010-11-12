@@ -39,9 +39,9 @@
                 <div id="budgetTimeLine" class="line hidden" style="position: absolute; z-index: 2000; left: 0%; width: 1px; height: 226px; background-color: #AAAAAA;"></div>
             </div>
             <div class="list body">
-                загрузка&hellip;
+                <i class="b-preloader"></i>
             </div>
-            <div class="timeline  hidden" style="position: relative; left: 204px; width: 64px; height: 20px; padding-top: 10px; ">
+            <div class="timeline hidden" style="position: relative; left: 204px; width: 64px; height: 20px; padding-top: 10px; ">
                 <div style="position: absolute; left: -10px; width: 20px;">1</div>
                 <div class="budgetPeriodEnd" style="position: absolute; left: 70px; width: 60px;"></div>
                 <div style="position: relative; left: 0px; top: 7px; width: 64px; height: 1px; background-color: rgb(170, 170, 170);"></div>
