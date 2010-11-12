@@ -12,6 +12,6 @@ class Currency extends BaseCurrency
      */
     public function convert($amount, Currency $currencyFrom)
     {
-        return ($amount * $this->getRate()) / $currencyFrom->getRate();
+        return ($amount * $currencyFrom->getRate()) / $this->getRate();
     }
 }
