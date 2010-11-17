@@ -263,65 +263,6 @@ class api_sync_InOperationTest extends api_sync_in
 
 
     /**
-     * Принять балансовую операцию
-     */
-    public function testBalanceOperation()
-    {
-        $expectedData = array(
-            'amount'      => 100,
-            'type'        => 3, // тип - балансовая операция
-            'cid'         => 2,
-            'date'        => "0000-00-00",
-            'category_id' => null,
-        );
-
-        $xml = $this->getXMLHelper()->make($expectedData);
-
-        $this->myXMLPost($xml, 200);
-
-        $recordData = $expectedData;
-        unset($recordData['cid']); // у записи нет такого поля
-        $this->browser
-            ->with('model')->check('Operation', $recordData, 1, $foundList);
-
-        // Ответ
-        $this->browser
-            ->with('response')->begin()
-                ->checkElement('resultset', 1)
-                ->checkElement(sprintf('resultset[type="Operation"] record[id="%d"][cid="%d"][success="true"]',
-                        $foundList->getFirst()->getId(),
-                        $expectedData['cid'])
-                    , 'OK')
-            ->end();
-
-        $this->assertEquals("0000-00-00", $foundList->getFirst()->getDate(), "приняли 0ую дату и правильно ее записали");
-
-        // Попробуем поменять балансовую операцию с известным нам ИД
-        $expectedData['id'] = $foundList->getFirst()->getId();
-        $expectedData['amount'] = $newAmount = 123;
-
-        $xml = $this->getXMLHelper()->make($expectedData);
-        $this->myXMLPost($xml, 200);
-
-        $recordData = $expectedData;
-        unset($recordData['cid']); // у записи нет такого поля
-        $this->browser
-            ->with('model')->check('Operation', $recordData, 1, $foundList);
-
-        $this->browser
-            ->with('response')->begin()
-                ->checkElement('resultset', 1)
-                ->checkElement(sprintf('resultset[type="Operation"] record[id="%d"][cid="%d"][success="true"]',
-                        $foundList->getFirst()->getId(),
-                        $expectedData['cid'])
-                    , 'OK')
-            ->end();
-
-       $this->assertEquals($newAmount, $foundList->getFirst()->getAmount(), "приняли новый баланс");
-    }
-
-
-    /**
      * Принять перевод между счетами
      */
     public function testTransferNew()
@@ -543,4 +484,57 @@ class api_sync_InOperationTest extends api_sync_in
             ->end();
     }
 
+
+    /**
+     * Отправляем две балансовые операции для одного счёта
+     */
+    public function testDuplicateBalanceOperations()
+    {
+        $account = $this->helper->makeAccount($this->_user);
+
+        $balanceOperation = Doctrine::getTable('Operation')
+            ->findOneByAccountIdAndType(
+                $account->getId(),
+                Operation::TYPE_BALANCE
+            )
+            ->getData();
+
+        $xmlData = array(
+            array(
+                'id'         => $balanceOperation['id'],
+                'amount'     => 200,
+                'account_id' => $account->getId(),
+                'type'       => Operation::TYPE_BALANCE,
+                'accepted'   => 1,
+                'cid'        => 1,
+            ),
+            array(
+                'amount'     => 400,
+                'account_id' => $account->getId(),
+                'type'       => Operation::TYPE_PROFIT,
+                'accepted'   => 1,
+                'cid'        => 2,
+            ),
+            array(
+                'amount'     => 100,
+                'account_id' => $account->getId(),
+                'type'       => Operation::TYPE_BALANCE,
+                'accepted'   => 1,
+                'cid'        => 3,
+            ),
+        );
+
+        $xml = $this->getXMLHelper()->makeCollection(2, $xmlData);
+
+        $this->myXMLPost($xml, 200);
+
+        // Ответ
+        $this->browser
+            ->with('response')->begin()
+                ->checkElement('resultset[type="Operation"]', 1)
+                ->checkElement('record[cid="1"][success="true"]', 'OK')
+                ->checkElement('record[cid="2"][success="true"]', 'OK')
+                ->checkElement('record[cid="3"][success="false"]')
+            ->end();
+    }
 }

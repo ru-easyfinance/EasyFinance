@@ -119,6 +119,7 @@ Account:
       type: one
       foreignType: many
       foreignAlias: Accounts      # User->Accounts
+      autoComplete: true
     Currency:
       local: currency_id
       foreign: id
@@ -371,7 +372,8 @@ Category:
       foreign: id
       type: one
       foreignType: many
-      autoComplete: false         # User ничего не узнает
+      foreignAlias: Categories
+      autoComplete: true
     SystemCategory:
       local: system_id
       foreign: id

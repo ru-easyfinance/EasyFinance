@@ -10,21 +10,11 @@ class mySyncInOperationForm extends BaseFormDoctrine
      */
     public function configure()
     {
-        $accounts = Doctrine_Query::create()
-            ->select("a.id key, a.id value")
-            ->from("Account a")
-            ->andWhere(
-                "a.user_id = ?", $this->getUser()->getUserRecord()->getId()
-            )
-            ->execute(array(), 'FetchPair');
+        $accounts = $this->getUser()->getUserRecord()->getAccounts()
+            ->toKeyValueArray('id', 'id');
 
-        $categories = Doctrine_Query::create()
-            ->select("c.id, c.id type_id")
-            ->from("Category c")
-            ->andWhere(
-                "c.user_id = ?", $this->getUser()->getUserRecord()->getId()
-            )
-            ->execute(array(), 'FetchPair');
+        $categories = $this->getUser()->getUserRecord()->getCategories()
+            ->toKeyValueArray('id', 'id');
 
         $accounts[]   = null;
         $categories[] = null;
@@ -60,7 +50,16 @@ class mySyncInOperationForm extends BaseFormDoctrine
             'created_at'  => new myValidatorDatetimeIso8601(),
             'updated_at'  => new myValidatorDatetimeIso8601(),
             'deleted_at'  => new myValidatorDatetimeIso8601(array('required' => false)),
-            'transfer_account_id' => new sfValidatorInteger(array('min' => 1)),
+            'transfer_account_id' => new sfValidatorChoice(
+                array(
+                    'choices'     => $accounts,
+                    'required'    => false,
+                    'empty_value' => null
+                ),
+                array(
+                    'invalid' => 'No such transfer account %value%'
+                )
+            ),
             'transfer_amount'     => new sfValidatorNumber(),
         ));
 
@@ -88,6 +87,19 @@ class mySyncInOperationForm extends BaseFormDoctrine
             case Operation::TYPE_BALANCE:
                 unset($this['date'], $this['transfer_account_id'], $this['transfer_amount']);
                 $values['accepted'] = true;
+                $validator = new sfValidatorDoctrineUnique(
+                    array(
+                        'model'  => 'Operation',
+                        'column' => array('account_id', 'type')
+                    ),
+                    array(
+                        'invalid' => sprintf(
+                            'Duplicate balance operations for account %s',
+                            $values['account_id']
+                        )
+                    )
+                );
+                $validator->clean($values);
                 break;
             case Operation::TYPE_TRANSFER:
                 unset($this['category_id']);
