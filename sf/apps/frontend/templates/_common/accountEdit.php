@@ -50,7 +50,7 @@
                     </tr>
                     <tr><td>Валюта счёта:</td></tr>
                     <tr><td><select name="currency_id" id="acc_currency"></select>
-                    &nbsp;<a href="/profile/#currency">настроить валюты</a></td></tr>
+                    &nbsp;<a href="/my/profile/#currency">настроить валюты</a></td></tr>
                 </table>
             </div>
         </div>
