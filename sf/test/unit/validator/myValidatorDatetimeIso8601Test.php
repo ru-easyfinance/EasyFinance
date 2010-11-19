@@ -102,7 +102,10 @@ class validator_myValidatorDatetimeIso8601Test extends myUnitTestCase
         $validator = new myValidatorDatetimeIso8601;
         if ($pass) {
             $expected = new DateTime($input);
-            $this->assertEquals($expected->format(DATE_ISO8601), $validator->clean($input));
+            $actual = new DateTime($validator->clean($input));
+            $expected->setTimezone(new DateTimeZone('Europe/Paris'));
+            $actual->setTimezone(new DateTimeZone('Europe/Paris'));
+            $this->assertEquals($expected->format(DATE_ISO8601), $actual->format(DATE_ISO8601));
         } else {
             try {
                 $validator->clean($input);

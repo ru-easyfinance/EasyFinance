@@ -33,8 +33,8 @@ abstract class mySyncOutQuery
         $modelName = $this->getModelName();
         $table = Doctrine::getTable($modelName);
 
-        $dateStart = $range->getStart()->format(DATE_ISO8601);
-        $dateEnd   = $range->getEnd()->format(DATE_ISO8601);
+        $dateStart = $range->getStart()->format('Y-m-d H:i:s');
+        $dateEnd   = $range->getEnd()->format('Y-m-d H:i:s');
 
         $this->_query = Doctrine_Query::create()
             ->from("{$modelName} {$alias}")

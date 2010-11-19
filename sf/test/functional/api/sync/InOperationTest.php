@@ -524,7 +524,7 @@ class api_sync_InOperationTest extends api_sync_in
             ),
         );
 
-        $xml = $this->getXMLHelper()->makeCollection(2, $xmlData);
+        $xml = $this->getXMLHelper()->makeCollection(3, $xmlData);
 
         $this->myXMLPost($xml, 200);
 
@@ -535,6 +535,77 @@ class api_sync_InOperationTest extends api_sync_in
                 ->checkElement('record[cid="1"][success="true"]', 'OK')
                 ->checkElement('record[cid="2"][success="true"]', 'OK')
                 ->checkElement('record[cid="3"][success="false"]')
+            ->end();
+    }
+
+
+    /**
+     * Отправляем две балансовые операции для одного счёта
+     */
+    public function testOperationDatesWithTimezones()
+    {
+        $account = $this->helper->makeAccount($this->_user);
+
+        $dateStart   = new DateTime('1 month ago');
+        $dateBetween = new DateTime('1 week ago');
+        $dateEnd     = new DateTime('now');
+
+        $dateBetween->setTimezone(new DateTimeZone('Europe/Paris'));
+
+        $xmlData = array(
+            array(
+                'amount'     => 400,
+                'account_id' => $account->getId(),
+                'type'       => Operation::TYPE_PROFIT,
+                'accepted'   => 1,
+                'cid'        => 1,
+                'comment'    => 'CID=1',
+                'updated_at' => $dateBetween->format(DATE_ISO8601),
+                'created_at' => $dateBetween->format(DATE_ISO8601),
+            ),
+        );
+
+        $xml = $this->getXMLHelper()->makeCollection(1, $xmlData);
+
+        $this->myXMLPost($xml, 200);
+
+        // Ответ
+        $this->browser
+            ->with('response')->begin()
+                ->checkElement('resultset[type="Operation"]', 1)
+                ->checkElement('record[cid="1"][success="true"]', 'OK')
+            ->end();
+
+        $sxml     = new SimpleXMLElement($this->browser->getResponse()->getContent());
+        $record   = $sxml->xpath('resultset/record[@cid="1"]');
+        $recordId = (int) $record[0]['id'];
+
+        $dateBetween->setTimezone(new DateTimeZone(date_default_timezone_get()));
+
+        $this->browser
+            ->getAndCheck(
+                'sync',
+                'syncOut',
+                $this->generateUrl(
+                    'sync_get_modified',
+                    array(
+                        'model'   => 'operation',
+                        'from'    => $dateStart->format(DATE_ISO8601),
+                        'to'      => $dateEnd->format(DATE_ISO8601)
+                    )
+                ),
+                200
+            )
+            ->with('response')->begin()
+                ->isValid()
+                ->checkElement(
+                    "record[id=\"$recordId\"] created_at",
+                    $dateBetween->format(DATE_ISO8601)
+                )
+                ->checkElement(
+                    "record[id=\"$recordId\"] updated_at",
+                    $dateBetween->format(DATE_ISO8601)
+                )
             ->end();
     }
 }

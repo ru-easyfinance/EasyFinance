@@ -558,7 +558,7 @@ class Operation_Model
      * @return bool true - в случае успеха, false - в случае ошибки
      */
     function deleteOperation($id = 0) {
-        $sql = "UPDATE operation o SET deleted_at=NOW() WHERE user_id = ? AND id = ?";
+        $sql = "UPDATE operation o SET deleted_at=NOW(), updated_at=NOW() WHERE user_id = ? AND id = ?";
 
         return (bool) $this->db->query($sql, $this->_user->getId(), $id);
     }
@@ -580,7 +580,7 @@ class Operation_Model
             $this->_user->getId(), $accountId, $accountId);
 
         if ($opIds) {
-            $this->db->query("UPDATE operation o SET deleted_at=NOW() WHERE id IN (?a)", $opIds);
+            $this->db->query("UPDATE operation o SET deleted_at=NOW(), updated_at=NOW() WHERE id IN (?a)", $opIds);
         }
     }
 

@@ -38,6 +38,8 @@ class myValidatorDatetimeIso8601 extends sfValidatorDate
             throw new sfValidatorError($this, 'invalid');
         }
 
+        $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
+
         return $date->format(DATE_ISO8601);
     }
 

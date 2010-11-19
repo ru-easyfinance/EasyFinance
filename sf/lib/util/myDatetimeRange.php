@@ -25,6 +25,19 @@ class myDatetimeRange
         $this->_dateStart = clone $dateStart;
         $this->_dateEnd   = clone $dateEnd;
 
+        $this->setTimezone(new DateTimeZone(date_default_timezone_get()));
+    }
+
+
+    /**
+     * Если нужны даты в одном часовом поясе, cкажите в каком
+     * @param $timeZone
+     * @return void
+     */
+    public function setTimezone(DateTimeZone $timeZone)
+    {
+        $this->_dateStart->setTimezone($timeZone);
+        $this->_dateEnd->setTimezone($timeZone);
     }
 
 
