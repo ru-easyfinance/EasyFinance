@@ -18,6 +18,12 @@ require_once dirname(dirname(dirname(__FILE__))) . '/include/config.php';
 require_once SYS_DIR_INC . 'common.php';
 Core::getInstance()->db = DbSimple_Generic::connect("mysql://".SYS_DB_USER.":".SYS_DB_PASS."@".SYS_DB_HOST."/".SYS_DB_BASE."_test");
 
+$ex = new myCurrencyExchange();
+foreach(efCurrencyModel::loadAll() as $row) {
+    $ex->setRate($row['cur_id'], $row['rate'], myMoney::RUR);
+}
+sfConfig::set('ex', $ex);
+
 // И обработчик ошибок для бд
 Core::getInstance()->db->setErrorHandler('databaseErrorHandlerTest');
 
