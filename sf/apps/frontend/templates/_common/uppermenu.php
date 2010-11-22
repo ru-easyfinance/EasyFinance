@@ -6,5 +6,5 @@
     <li><a href="https://<?php echo URL_ROOT_WIKI; ?>tiki-view_articles.php" id="articles" title="Статьи о финансах">Статьи</a></li>
     <li><a href="https://<?php echo URL_ROOT_PDA; ?>" id="pda" title="Версия для использования с мобильного телефона">Мобильная версия</a></li>
     <li><a href="https://<?php echo URL_ROOT_WIKI; ?>tiki-read_article.php?articleId=14" id="help" style="font-weight:bold; color: white;" title="Помощь по использованию сервиса">Помощь</a></li>
-    <li style="background: none; margin-left: -1em;"><a href="https://<?php echo URL_ROOT_MAIN; ?>integration" style="font-weight:bold; color: yellow;" title="Интеграция с банками">EasyBank</a></li>
+    <li style="background: none; margin-left: -1em;"><a href="https://<?php echo URL_ROOT_MAIN; ?>my/easybank/" style="font-weight:bold; color: yellow;" title="Интеграция с банками">EasyBank</a></li>
 </ul>
