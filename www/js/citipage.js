@@ -89,6 +89,7 @@ var citipage = (function(selector) {
         frm.bind('submit', onFrmSubmit);
 
         container.find('.js-toform').bind('click', function() {
+            $('body').scrollTop(0);
             container.find('.js-control-tabs').tabs('select', 1);
         });
 
