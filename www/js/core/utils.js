@@ -15,7 +15,7 @@ var utils = (function() {
             return toPhone10(result)
         }
         else if (forceRussia && result.length == 11) { // случай вида 8-926-123-45-67. У нас должна быть на первом месте "+7"
-            if (result.substr(0, 1) == '8') {
+            if (result.substr(0, 1) == '8' || result.substr(0, 1) == '7') {
                 return '+7 ' + toPhone10(result.substr(1))
             }
 

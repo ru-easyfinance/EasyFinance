@@ -39,7 +39,7 @@ var citipage = (function(selector) {
 
         // превращаем поле с телефоном в ожидаемый сервером формат
         if (frm[0].mobile_number.value) {
-            var phone = frm[0].mobile_number.value.replace('+7 ', '').replace(/[^\d]/ig, '');
+            var phone = frm[0].mobile_number.value.replace(/\s+/, '').replace('+7', '').replace(/[^\d]/ig, '');
             frm[0].mobile_code.value = phone.substr(0, 3);
             frm[0].mobile_phone.value = phone.substr(3, 7);
             phone_field = $(frm[0].mobile_number)
