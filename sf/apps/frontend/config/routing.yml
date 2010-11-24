@@ -169,3 +169,12 @@ easybank_citi_cashback_apply:
   url:    /easybank/citi-cashback-apply
   class:  sfRoute
   params: { module: easybank, action: citiCashBackApplication }
+
+
+# Отчёты
+# ------------------------------------------------------------------------------
+
+reports:
+  url:    /reports/matrix
+  class:  sfRoute
+  params: { module: reports, action: matrix }
