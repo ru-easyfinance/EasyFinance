@@ -37,21 +37,23 @@
         margin-top: 1em;
         margin-bottom: 3px;
     }
+        .b-citipage .b-citipage-youearnmoney {
+            margin-bottom: 1em;
+        }
     .b-citipage p {
         text-align: justify;
     }
 
+    .b-citipage .b-citipage-fillform {
+        padding: 2em 0;
+        margin: 0;
+    }
+
     .b-citipage .b-footnote {
-        margin-left: 3px;
-        font-weight: bold;
+        margin-left: 1px;
         text-decoration: none;
-        font-size: smaller;
-    }
-    .b-citipage .b-footnote:before {
-        content: "["
-    }
-    .b-citipage .b-footnote:after {
-        content: "]"
+        font-size: 70%;
+        vertical-align: top;
     }
 
     .b-citipage .b-citipage-list {
@@ -59,12 +61,21 @@
     }
 
     .b-citipage .b-citipage-footnotes {
-        margin-top: 1.5em;
-        text-align: justify;
+        margin-top: 2em;
+        border-top: 1px solid #949494;
         color: #646464;
+        text-align: justify;
         font-size: smaller;
     }
-
+        .b-citipage-footnotes .b-citipage-noteslist {
+            width: 100%;
+            padding: 0;
+        }
+            .b-citipage-noteslist li {
+                list-style-position: inside;
+                text-indent: -1.3em;
+                padding-left: 1.3em;
+            }
 
 .b-citipage-banner {
     position: relative;
@@ -75,7 +86,7 @@
 }
     .b-citipage-banner .b-banner-circletxt {
         position: absolute;
-        top: 41px;
+        top: 30px;
         left: 3px;
         width: 97px;
         color: white;
@@ -90,20 +101,22 @@
         }
 
     .b-citipage-banner .b-banner-plaintxt {
-        position: absolute;
-        top: 3px;
-        left: 101px;
-        padding: 0 .5em;
+        margin-left: 101px;
+        padding: 1em .5em;
     }
         .b-banner-plaintxt .b-banner-header {
             font-size: 150%;
             color: red;
-            margin-bottom: .5em;
+            margin: 0 .5em .7em 0;
         }
         .b-banner-plaintxt .b-banner-text {
             font-size: 150%;
             font-weight: bold;
+            line-height: 105%
         }
+            .b-banner-text .b-footnote {
+                font-size: 50%;
+            }
 
 
         .b-citipage .b-citipage-notice {

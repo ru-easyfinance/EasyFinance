@@ -77,7 +77,7 @@ $surname = array(
 $phone = array(
     'label'         => 'Мобильный телефон',
     'name'          => 'mobile_number',
-    'hint'          => '+7 (xxx) yyyyyyy',
+    'hint'          => '+7 (123) 4567890',
     'inputClass'    => 'js-control js-control-phonefield',
     'jsparams'      => '{forceRussia: true}'
 );
@@ -104,46 +104,47 @@ $email = array(
             </h3>
             <p style="clear: both;">Кредитная карта CASH BACK создана для тех, кто умеет считать деньги и планировать свой бюджет. Вы просто
                 оплачиваете свои ежедневные покупки кредитной картой CASH BACK и получаете <strong>1% от потраченной суммы обратно
-                на Ваш счет</strong><a href="#fn1" class="b-footnote">1</a>. Погашая задолженность в срок, установленный в ежемесячной выписке,
-                Вы не платите проценты<a href="#fn2" class="b-footnote">2</a>.</p>
+                на Ваш счет</strong><a href="#fn1" class="b-footnote">[1]</a>. Погашая задолженность в срок, установленный в ежемесячной выписке,
+                Вы не платите проценты<a href="#fn2" class="b-footnote">[2]</a>.</p>
 
-            <h3>Оплачивая покупки кредитной картой CASH BACK, Вы зарабатываете деньги:</h3>
+            <h3 class="b-citipage-youearnmoney">Оплачивая покупки кредитной картой CASH BACK, Вы зарабатываете деньги:</h3>
             <ul class="b-citipage-list">
-                <li>1% от  суммы, потраченной по карте, возвращается обратно на Ваш счет<a href="#fn1" class="b-footnote">1</a></li>
+                <li>1% от  суммы, потраченной по карте, возвращается обратно на Ваш счет<a href="#fn1" class="b-footnote">[1]</a></li>
             </ul>
 
             <div class="b-citipage-banner">
-                <div class="b-banner-circletxt"><big>300</big><br/>рублей<br/>в подарок</div>
+                <div class="b-banner-circletxt"><big style="line-height: normal;">300</big><br/>рублей<br/>в подарок</div>
                 <div class="b-banner-plaintxt">
                     <h6 class="b-banner-header" style="color: red;">300 рублей в подарок</h6>
-                    <p class="b-banner-text">Совершите первую покупку по карте и получите
-                        300 рублей<a href="#fn1" class="b-footnote">1</a> на счет в подарок от Ситибанка!</p>
+                    <p class="b-banner-text">Совершите первую покупку по карте и получите<br/>
+                        300 рублей<a href="#fn1" class="b-footnote">[1]</a> на счет в подарок от Ситибанка!</p>
                 </div>
             </div>
 
             <h3>Другие преимущества</h3>
             <ul class="b-citipage-list">
                 <li>До 300 000 рублей — возобновляемая кредитная линия</li>
-                <li>0 % на срок до 50 дней — льготный период кредитования<a href="#fn2" class="b-footnote">2</a></li>
-                <li>До 20 % — скидки в магазинах-партнерах Ситибанка<a href="#fn3" class="b-footnote">3</a></li>
-                <li>До 3-х лет — оплата товаров и услуг в рассрочку<a href="#fn4" class="b-footnote">4</a></li>
+                <li>0 % на срок до 50 дней — льготный период кредитования<a href="#fn2" class="b-footnote">[2]</a></li>
+                <li>До 20 % — скидки в магазинах-партнерах Ситибанка<a href="#fn3" class="b-footnote">[3]</a></li>
+                <li>До 3-х лет — оплата товаров и услуг в рассрочку<a href="#fn4" class="b-footnote">[4]</a></li>
             </ul>
 
             <h3>А также:</h3>
             <ul class="b-citipage-list">
-                <li>Бесплатный интернет-банкинг<a href="#fn5" class="b-footnote">5</a> и мобильный банкинг<a href="#fn6" class="b-footnote">6</a></li>
+                <li>Бесплатный интернет-банкинг<a href="#fn5" class="b-footnote">[5]</a> и мобильный банкинг<a href="#fn6" class="b-footnote">[6]</a></li>
                 <li>Оплата мобильной связи, интернета и коммунальных услуг без комиссии</li>
                 <li>Дополнительные карты для Ваших близких</li>
                 <li>Безопасная оплата покупок и услуг в сети Интернет</li>
             </ul>
-            <br/>
-            <p><big><strong class="pseudo js-toform">Заполните Онлайн-заявку на оформление кредитной карты &gt;&gt;</strong></big></p>
+
+
+            <p class="b-citipage-fillform"><big><strong class="pseudo js-toform">Заполните Онлайн-заявку на оформление кредитной карты &gt;&gt;</strong></big></p>
 
             <p>Система <strong>EasyFinance.ru</strong> позволит Вам автоматически вести учет операций, срверешенных
                 по карте, у Вас не будет необходимости вручную вносить информацию по проведенным операциям,
-                и Вы сможете более рационально планировать свой бюджет, используя средства банка.<a href="#fn7" class="b-footnote">7</a></p>
+                и Вы сможете более рационально планировать свой бюджет, используя средства банка.<a href="#fn7" class="b-footnote">[7]</a></p>
             <p>А благодаря напоминаниям от <strong>EasyFinance.ru</strong> Вы своевременно сможете погашать задолженность
-                по кредитной карте и не платить проценты за пользование кредитными средствами банка.<a href="#fn8" class="b-footnote">8</a></p>
+                по кредитной карте и не платить проценты за пользование кредитными средствами банка.<a href="#fn8" class="b-footnote">[8]</a></p>
 
             <div class="b-citipage-footnotes">
                 <ol class="b-citipage-noteslist">
