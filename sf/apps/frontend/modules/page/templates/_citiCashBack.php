@@ -95,7 +95,7 @@ $email = array(
     <div class="w-citipage-wrapper js-control js-control-tabs">
         <ul>
             <li><a href="#cititabs-1">Преимущества</a></li>
-            <li><a href="#cititabs-2">Анкета</a></li>
+            <li><a href="#cititabs-2">Онлайн-заявка</a></li>
         </ul>
         <div id="cititabs-1" class="b-citipage-tabs b-citipage-advantages">
             <h3>
