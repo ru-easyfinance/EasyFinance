@@ -7,6 +7,29 @@ easyFinance.widgets.report = function() {
             <td class="{%color%}">{%money%}</td>\
         </tr>';
 
+    var tableHeads = {
+        compare: 
+            '<tr>\
+                <th class="col1">&nbsp;</th>\
+                <th class="col2">Период 1</th>\
+                <th class="col3">Период 2</th>\
+                <th class="col4">Разница</th>\
+            </tr>',
+        detailed:
+            '<tr>\
+                <th class="col1">Категория</th>\
+                <th class="col2">Дата</th>\
+                <th class="col3">Счёт</th>\
+                <th class="col4">Сумма</th>\
+            </tr>',
+        matrix:
+            '<tr>\
+                <th class="col1">Категория</th>\
+                <th class="col2">Объект 1</th>\
+                <th class="col3">Объект 2</th>\
+            </tr>'
+    }
+
 
     function init() {
         var reportType = '';
@@ -57,7 +80,7 @@ easyFinance.widgets.report = function() {
         }
         var currencyId = $('#currency :selected').val();
         var requestData = {
-            report: reportType,
+            report: reportType == 'matrix' ? 'txt_loss_difference' : reportType,
             dateFrom: $('#dateFrom').val(),
             dateTo: $('#dateTo').val(),
             account: $('#account :selected').val(),
@@ -90,6 +113,9 @@ easyFinance.widgets.report = function() {
                     break;
                 case "txt_profit_difference":
                     ShowCompareWaste(data, currencyId);
+                    break;
+                case "matrix":
+                    ShowMatrix(data, currencyId);
                     break;
             }
         });
@@ -203,6 +229,32 @@ easyFinance.widgets.report = function() {
         showReports('graphs');
     }
 
+    function ShowMatrix(data, currencyId) {
+        var tableContent =
+        '<tr class="b-reportstable-row-category">\
+            <th>Содержание дома</th>\
+            <td>400</td>\
+            <td>300</td>\
+        </tr>\
+        <tr class="b-reportstable-row-subcategory">\
+            <th>Садовник</th>\
+            <td>120</td>\
+            <td>45</td>\
+        </tr>\
+        <tr class="b-reportstable-row-subcategory">\
+            <th>Дизель для котельной</th>\
+            <td>280</td>\
+            <td>255</td>\
+        </tr>';
+
+        $('table.js-reports-body tbody.js-comparereport').html('');
+        $('table.js-reports-body tbody.js-detailreport').html(tableContent);
+        $('table.js-reports-body thead.js-detailreport').html(tableHeads.matrix);
+
+        showReports('tables');
+        showReportTables('detail');
+    }
+
     function CreateDetailedRow(categoryName, date, accountName, type, money, trClass) {
         var values = {
             categoryName: categoryName,
@@ -309,6 +361,7 @@ easyFinance.widgets.report = function() {
 
         $('table.js-reports-body tbody.js-comparereport').html('');
         $('table.js-reports-body tbody.js-detailreport').html(tableContent);
+        $('table.js-reports-body thead.js-detailreport').html(tableHeads.detailed);
 
         showReports('tables');
         showReportTables('detail');
