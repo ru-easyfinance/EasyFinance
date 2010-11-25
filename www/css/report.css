@@ -122,6 +122,7 @@ div.report {
     .b-reportstable-row-subcategory th {
         padding-left: 2em;
         text-align: left;
+        font-weight: normal;
     }
 
 .b-reportstable-head__detail,
