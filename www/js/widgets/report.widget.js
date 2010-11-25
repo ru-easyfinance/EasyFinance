@@ -8,7 +8,7 @@ easyFinance.widgets.report = function() {
         </tr>';
 
     var tableHeads = {
-        compare: 
+        compare:
             '<tr>\
                 <th class="col1">&nbsp;</th>\
                 <th class="col2">Период 1</th>\
@@ -48,21 +48,21 @@ easyFinance.widgets.report = function() {
         //загрузим сразу выбранный отчет - пользователю удобнее и приятнее
         applyChosenReport();
     }
-    
+
     function applyChosenReport() {
-    	var displayFieldsSettings = {
+        var displayFieldsSettings = {
             '#itogo': ["graph_profit", "graph_loss"],
             '.js-compare-fields': ["txt_loss_difference", "txt_profit_difference"],
             '#profitCategory': ["graph_profit", "txt_profit", "txt_profit_difference"],
             '#drainCategory': ["graph_loss", "txt_loss", "txt_loss_difference"]
-    	};
-    	
+        };
+
         var chosenReport = $('#report :selected').val();
 
         for (var field in displayFieldsSettings) {
-    		var displayField = $.inArray(chosenReport, displayFieldsSettings[field]) >= 0;
-    		$(field).toggleClass('hidden', !displayField);
-    	}
+            var displayField = $.inArray(chosenReport, displayFieldsSettings[field]) >= 0;
+            $(field).toggleClass('hidden', !displayField);
+        }
 
         loadChosenReport();
     }
@@ -230,7 +230,7 @@ easyFinance.widgets.report = function() {
     }
 
     function ShowMatrix(data, currencyId) {
-        var dd = easyFinance.models.report.generateMatrixTree();
+        var dd = easyFinance.models.report.generateMatrixTree(data);
 
         $('table.js-reports-body tbody.js-comparereport').html('');
         $('table.js-reports-body tbody.js-detailreport').html(dd.body);
@@ -252,35 +252,35 @@ easyFinance.widgets.report = function() {
 
         return utils.templator(tplDetailedRow, values);
     }
-    
+
     function ShowDetailed(data, type) {
 
         var tableContent = '';
         var totalSum = 0;
-        
+
         //TODO: если эта хрень окажется нужной в новых отчетах и доживет до рефакторинга,
-        // нужно грамотному JS'еру переделать ее на нормальный рекурсивный обход дерева, чтобы убрать явную обработку 
+        // нужно грамотному JS'еру переделать ее на нормальный рекурсивный обход дерева, чтобы убрать явную обработку
         // стоп-случаев смены категорий и родительских
-        // например, сделать так: 
+        // например, сделать так:
         // ПоРодительскимКатегориям {ПоКатегориям {ПоОперациям; ИтогПоКатегории}; ИтогПоРодительскойКатегории}
-    	
+
         var categorySum = 0;
         var categoryContent = '';
         var categoryName;
         var categoryId = null;
-    	
+
         var parentCategorySum = 0;
         var parentCategoryContent = '';
         var parentCategoryName;
         var parentCategoryId = null;
-        
+
         var tableData = data[0];
-        
+
         if (tableData.length > 0) {
-        	for (var key in data[0]) {
+            for (var key in data[0]) {
 
                 var currentData = tableData[key];
-        	
+
                 var currentCategoryId = currentData.category_id;
                 var currentParentCategoryId = currentData.parent_category_id;
                 var currentCategoryName = currentData.cat_name;
@@ -290,59 +290,59 @@ easyFinance.widgets.report = function() {
                 var currentMoney = currentData.money;
 
 
-	        	//Если сменилась дочерняя категория, занесем ее в родительскую
-	        	if (currentCategoryId != categoryId) {
-	        		
-	        		//проверяем, что какая-то предыдущая категория есть, т.е. мы не в начале массива
+                //Если сменилась дочерняя категория, занесем ее в родительскую
+                if (currentCategoryId != categoryId) {
+
+                    //проверяем, что какая-то предыдущая категория есть, т.е. мы не в начале массива
                     if (categoryId != null) {
-	                    parentCategoryContent += CreateDetailedRow(categoryName, '', '', type, categorySum, 'b-reportstable-row-subcategory') +
+                        parentCategoryContent += CreateDetailedRow(categoryName, '', '', type, categorySum, 'b-reportstable-row-subcategory') +
                         categoryContent;
-	        		}
-	        		categoryName = currentCategoryName;
-	        		categoryId = currentCategoryId;
-	
-	        		categoryContent = '';
-	        		categorySum = 0;
-	            } 	
-	        	
-	        	//Если сменилась родительская категория, занесем ее в общий результат
-	        	if (currentParentCategoryId != parentCategoryId) {
-	        		
-	        		//проверяем, что есть предыдущая родительская категория, и тогда выводим все данные по ней
+                    }
+                    categoryName = currentCategoryName;
+                    categoryId = currentCategoryId;
+
+                    categoryContent = '';
+                    categorySum = 0;
+                }
+
+                //Если сменилась родительская категория, занесем ее в общий результат
+                if (currentParentCategoryId != parentCategoryId) {
+
+                    //проверяем, что есть предыдущая родительская категория, и тогда выводим все данные по ней
                     if (parentCategoryId != null) {
                         tableContent += CreateDetailedRow(parentCategoryName, '', '', type, parentCategorySum, 'b-reportstable-row-category') +
                         parentCategoryContent;
-	        		}
-	        		parentCategoryId = currentParentCategoryId;
-	        		parentCategoryName = currentParentCategoryName;
-	        		
-	        		parentCategoryContent = '';
-	        		parentCategorySum = 0;
-	        		
-	        		//сбросим categoryId при нахождении новой родительской
-	        		//categoryId = null;
-	            }
-	        	
-	        	categorySum += currentMoney;
-        		parentCategorySum += currentMoney;
-        		totalSum += currentMoney;
-	           
-                categoryContent += CreateDetailedRow('', currentDate, currentAccountName, type, currentMoney, 'b-reportstable-row-operation');
-	        }
+                    }
+                    parentCategoryId = currentParentCategoryId;
+                    parentCategoryName = currentParentCategoryName;
 
-			//сформируем строку итоговой суммы для повторного использования
-			var totalRow = CreateDetailedRow('Всего', '', '', type, totalSum, 'b-reportstable-row-overall');
-        	
-			//выведем итоговую сумму и хвостовые категории, которые не вывели в самом теле for 
-			tableContent =
-				totalRow +
-				tableContent +
-				CreateDetailedRow(parentCategoryName, '', '', type, parentCategorySum, 'b-reportstable-row-category') +
-				parentCategoryContent +
-				CreateDetailedRow(categoryName, '', '', type, categorySum, 'b-reportstable-row-subcategory') +
+                    parentCategoryContent = '';
+                    parentCategorySum = 0;
+
+                    //сбросим categoryId при нахождении новой родительской
+                    //categoryId = null;
+                }
+
+                categorySum += currentMoney;
+                parentCategorySum += currentMoney;
+                totalSum += currentMoney;
+
+                categoryContent += CreateDetailedRow('', currentDate, currentAccountName, type, currentMoney, 'b-reportstable-row-operation');
+            }
+
+            //сформируем строку итоговой суммы для повторного использования
+            var totalRow = CreateDetailedRow('Всего', '', '', type, totalSum, 'b-reportstable-row-overall');
+
+            //выведем итоговую сумму и хвостовые категории, которые не вывели в самом теле for
+            tableContent =
+                totalRow +
+                tableContent +
+                CreateDetailedRow(parentCategoryName, '', '', type, parentCategorySum, 'b-reportstable-row-category') +
+                parentCategoryContent +
+                CreateDetailedRow(categoryName, '', '', type, categorySum, 'b-reportstable-row-subcategory') +
                 categoryContent +
-				totalRow;			
-		}
+                totalRow;
+        }
 
         $('table.js-reports-body tbody.js-comparereport').html('');
         $('table.js-reports-body tbody.js-detailreport').html(tableContent);

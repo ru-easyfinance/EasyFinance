@@ -1,48 +1,48 @@
 easyFinance.models.report = function() {
 
 var testMatrix = {
-	leftTree: {
-		label: "Всего",
-		index: "root",
-		children: [
-			{
-				label: "Содержание дома",
-				index: "parentCategory[1]",
-				children: [
-					{
+    leftTree: {
+        label: "Всего",
+        index: "root",
+        children: [
+            {
+                label: "Содержание дома",
+                index: "parentCategory[1]",
+                children: [
+                    {
                         label: "Садовник",
                         index: "parentCategory[1]childCategory[2]",
                         children: [ ]
                     },
-					{
+                    {
                         label: "Котельная",
                         index: "parentCategory[1]childCategory[3]",
                         children: [ ]
                     }
 
-				]
-			}
-		]
-	},
+                ]
+            }
+        ]
+    },
 
-	topTree: {
-		label: "Всего",
-		index: "root",
-		children: [
-			{
+    topTree: {
+        label: "Всего",
+        index: "root",
+        children: [
+            {
                 label: "Тэг1",
                 index: "tag[Тэг1]",
                 children: []
             }
-		]
-	},
+        ]
+    },
 
-	values: {
-		"parentCategory[1]tag[Тэг1]" : 400,
-		"parentCategory[1]childCategory[2]tag[Тэг1]" : 250,
-		"parentCategory[1]childCategory[3]tag[Тэг1]" : 150
-		}
-	}
+    values: {
+        "parentCategory[1]tag[Тэг1]" : 400,
+        "parentCategory[1]childCategory[2]tag[Тэг1]" : 250,
+        "parentCategory[1]childCategory[3]tag[Тэг1]" : 150
+        }
+    }
 
 
 var t1000 = {
@@ -95,7 +95,7 @@ var t1000 = {
 
     function generateMatrixTree(data) {
         data = data || t1000;
-        
+
         var root = data.leftTree;
 
         function generateValues(index, columns, values) {
@@ -154,7 +154,7 @@ var t1000 = {
     function load(requestData, callback) {
         var api_url = '/report/getData/?responseMode=json';
 
-        if (requestData.reportType == 'matrix') {
+        if (requestData.report == 'matrix') {
             api_url = '/my/reports/matrix';
         }
         $.get(
