@@ -98,11 +98,6 @@ $email = array(
             <li><a href="#cititabs-2">Онлайн-заявка</a></li>
         </ul>
 
-        <div class="b-citipage-additional_nav">
-            <a href="https://<?php echo URL_ROOT_WIKI; ?>tiki-index.php?page=Citibank_integration" target="_blank">Интеграция</a>
-            <a href="http://www.simpleshopping.ru/?icid=b5_simpleshopping2_rus" rel="nofollow" target="_blank">Скидки и специальные предложения</a>
-        </div>
-
         <div id="cititabs-1" class="b-citipage-tabs b-citipage-advantages">
             <h3>
                 <img src="/img/i/citi/card.png" alt="Кредитная карта CASH BACK" align="left" style="margin-right: .5em;"/>Кредитная карта Ситибанка CASH BACK<br/>
