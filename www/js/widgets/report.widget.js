@@ -387,7 +387,7 @@ easyFinance.widgets.report = function() {
                 }
                 delta = sum2 - sum1;
                 if (data[0][c].cat_name != null) {
-                    tr += '<tr><th>' + data[0][c].cat_name +
+                    tr += '<tr><th style="text-align: left;">' + data[0][c].cat_name +
                     '</th>' +
                     '<td class="' +
                     (sum1 >= 0 ? 'sumGreen' : 'sumRed') +
@@ -411,7 +411,7 @@ easyFinance.widgets.report = function() {
                 }
             }
         }
-        tr += '<tr><th>Итого:</th>' +
+        tr += '<tr><th style="text-align: left;">Итого:</th>' +
         '<td class="' +
         (ssum1 >= 0 ? 'sumGreen' : 'sumRed') +
         '"><span>' +
