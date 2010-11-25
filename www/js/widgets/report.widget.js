@@ -80,7 +80,7 @@ easyFinance.widgets.report = function() {
         }
         var currencyId = $('#currency :selected').val();
         var requestData = {
-            report: reportType == 'matrix' ? 'txt_loss_difference' : reportType,
+            report: reportType,
             dateFrom: $('#dateFrom').val(),
             dateTo: $('#dateTo').val(),
             account: $('#account :selected').val(),
@@ -230,26 +230,11 @@ easyFinance.widgets.report = function() {
     }
 
     function ShowMatrix(data, currencyId) {
-        var tableContent =
-        '<tr class="b-reportstable-row-category">\
-            <th>Содержание дома</th>\
-            <td>400</td>\
-            <td>300</td>\
-        </tr>\
-        <tr class="b-reportstable-row-subcategory">\
-            <th>Садовник</th>\
-            <td>120</td>\
-            <td>45</td>\
-        </tr>\
-        <tr class="b-reportstable-row-subcategory">\
-            <th>Дизель для котельной</th>\
-            <td>280</td>\
-            <td>255</td>\
-        </tr>';
+        var dd = easyFinance.models.report.generateMatrixTree();
 
         $('table.js-reports-body tbody.js-comparereport').html('');
-        $('table.js-reports-body tbody.js-detailreport').html(tableContent);
-        $('table.js-reports-body thead.js-detailreport').html(tableHeads.matrix);
+        $('table.js-reports-body tbody.js-detailreport').html(dd.body);
+        $('table.js-reports-body thead.js-detailreport').html(dd.head);
 
         showReports('tables');
         showReportTables('detail');

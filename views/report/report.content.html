@@ -20,6 +20,7 @@
                             {foreach from=$reports key=key item=item}
                                 <option value="{$key}" >{$item}</option>
                             {/foreach}
+                                <option value="matrix">Расход - матричный отчет</option>
                         {/capture}
                         {include file="ui/textfield.tpl" value="Отчеты" selectbox=$smarty.capture.selectbox selectid="report"}
                     </td>
