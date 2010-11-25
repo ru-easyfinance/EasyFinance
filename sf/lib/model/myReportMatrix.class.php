@@ -8,7 +8,8 @@ class myReportMatrix {
         $_matrix,
         $_currency,
         $_categories,
-        $_tags;
+        $_tags,
+        $_totalCategory;
 
     public function __construct(Currency $currency)
     {
@@ -26,6 +27,12 @@ class myReportMatrix {
 
         $this->_matrix = array();
 
+        $this->_totalCategory = new Category();
+        $this->_totalCategory->setId(-1);
+        $this->_totalCategory->setName("Итого:");
+        $this->_totalCategory->setParentId(null);
+
+
         foreach ($operations as $operation) {
             if ($account && $operation->getAccount() != $account)
                 continue;
@@ -36,7 +43,14 @@ class myReportMatrix {
 
             if ($tag && $category) {
                 $this->_addTagAndCategory($tag, $category, $operation);
+                $this->_addTagAndCategory($tag, $this->_totalCategory, $operation);
             }
+        }
+
+        if (isset($this->_categories[-1])) {
+            $tmpCat = $this->_categories[-1];
+            unset($this->_categories[-1]);
+            $this->_categories[-1] = $tmpCat;
         }
 
         $this->_buildHeaderLeft($this->_categories);
