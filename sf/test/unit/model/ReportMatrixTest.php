@@ -23,8 +23,8 @@ class model_ReportMatrixTest extends myUnitTestCase
         $dateStart = new DateTime();
         $dateEnd   = new DateTime();
 
-        $report = new ReportMatrix($user->getCurrency());
-        $report->fill($user, $dateStart, $dateEnd);
+        //$report = new ReportMatrix($user->getCurrency());
+        //$report->fill($user, $dateStart, $dateEnd);
 
         $this->markTestIncomplete('Доделай меня');
     }
