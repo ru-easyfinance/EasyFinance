@@ -1,15 +1,17 @@
 <div class="b-easybank">
-    <h2>EasyBank &mdash; это автоматизированный учет операций по банковским картам</h2>
-    <p>Например, если Вы оплачиваете своей карточкой с подключенным EasyBank покупки в магазине, вам не нужно вносить
-        информацию об этом вручную. Теперь данные автоматически обрабатываются системой, и Вам остается только их
-        подтвердить.</p>
-    <p>Проводите время с пользой и больше никаких стопок чеков, записок или электронных заметок. Так просто пользоваться
-        банком с <em class="b-easybank-emphasize">EasyFinance.ru</em>!</p>
+    <h2>Лучший способ управлять деньгами &mdash; мониторинг расходов в 2 клика!</h2>
+    <p>EasyBank &mdash; революционная услуга от сервиса EasyFinance.ru, автоматически распознает и учитывает расходы
+        по Вашим банковским картам.</p>
+    <p>Получайте выгоды от использования банковских карт с EasyFinance.ru!</p>
 
-    <h3>Выберите свой банк для подключения автоматического учета по его картам:</h3>
+    <h3><a href="<?php echo url_for('easybank_citi_cashback'); ?>#fillform">Получить карту!</a></h3>
+    <br/>
+
+    <h3>Выберите свой банк для оформления его карт и подключения автоматического учета по ним:</h3>
     <div class="b-easybank-banks b-easybank-banks__citi">
-        <h4 class="b-easybank-banks-title">CITIBANK</h4>
-        <p><img src="/img/i/pix.gif" class="b-easybank-banks-descr"/><strong>CITIBANK</strong>, дочерний банк <a href="http://www.citigroup.com/" rel="nofollow">Citigroup</a>,
+        <a class="b-easybank-banks-title" href="<?php echo url_for('easybank_citi_cashback'); ?>"></a>
+        <p><a href="<?php echo url_for('easybank_citi_cashback'); ?>"><img src="/img/i/pix.gif" class="b-easybank-banks-descr" alt="карта банка «CITIBANK»"/></a>
+            <strong>CITIBANK</strong>, дочерний банк <a href="http://www.citigroup.com/" rel="nofollow">Citigroup</a>,
             крупнейшей финансовой группы, начал свою деятельность в России в 1993 году, став одним из первых российских банков
             с иностранным капиталом. Сегодня ЗАО КБ "Ситибанк" входит в <strong>ТОП-20</strong> российских банков
             и представлен в 12 городах России (Москва, Санкт-Петербург, Екатеринбург, Самара, Тольятти, Ростов-на-Дону,
@@ -21,8 +23,9 @@
 
 
     <div class="b-easybank-banks b-easybank-banks__amt">
-        <h4 class="b-easybank-banks-title">AMT BANK</h4>
-        <p><img src="/img/i/pix.gif" class="b-easybank-banks-descr"/><strong>АМТ БАНК</strong> &mdash; динамично развивающийся банк, широко представленный в Москве,
+        <a class="b-easybank-banks-title" href="<?php echo url_for('easybank_amt_easyfinance'); ?>"></a>
+        <p><a href="<?php echo url_for('easybank_amt_easyfinance'); ?>"><img src="/img/i/pix.gif" class="b-easybank-banks-descr" alt="карта банка «АМТ БАНК»"/></a>
+            <strong>АМТ БАНК</strong> &mdash; динамично развивающийся банк, широко представленный в Москве,
             а также в Санкт-Петербурге, Владимире, Саратове, Калининграде, Воронеже, Волгоград, Астрахани, Ставрополе,
             Краснодаре, Новосибирске, Омске и Уфе.</p>
         <p>В 2009 году АМТ БАНК стал лауреатом Национальной премии «ИТ-лидер» в номинации «За выдающийся вклад в развитие

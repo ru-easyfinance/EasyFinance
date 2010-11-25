@@ -18,13 +18,11 @@
         clear: both;
     }
         .b-easybank-banks .b-easybank-banks-title {
+            display: block;
             height: 30px;
-            margin: .5em auto;
-            padding-top: 10px;
-            font-size: 180%;
+            width: 230px;
+            margin: .8em 0 .5em;
             background: url(/img/i/easybank/logos.png) left top no-repeat;
-            text-indent: 225px;
-
         }
             .b-easybank-banks__citi .b-easybank-banks-title {
                 background-position: 0 -40px;

@@ -88,12 +88,20 @@ var citipage = (function(selector) {
         frm = container.find('form').eq(0);
         frm.bind('submit', onFrmSubmit);
 
+        tabs = container.find('.js-control-tabs');
+
         container.find('.js-toform').bind('click', function() {
             $('body').scrollTop(0);
-            container.find('.js-control-tabs').tabs('select', 1);
+            tabs.tabs('select', 1);
         });
 
         notice_container = container.find('.js-form-notice');
+
+        // обработка случая, когда нам нужно сразу показать форму
+        var hash = window.location.hash.replace('#', '');
+        if (hash && hash == 'fillform') {
+            tabs.tabs('select', 1);
+        }
     }
 
     $(init);
