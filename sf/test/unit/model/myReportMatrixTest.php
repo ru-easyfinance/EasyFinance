@@ -15,7 +15,8 @@ class model_myReportMatrixTest extends myUnitTestCase
     }
 
     /**
-     *
+     * Проверяем что отчёт строится и в нём появляются заголовки
+     * и таблица с числами
      */
     public function testBuildReport()
     {
@@ -25,22 +26,58 @@ class model_myReportMatrixTest extends myUnitTestCase
         $currency  = $user->getCurrency();
 
         $report = new myReportMatrix($currency);
-        $report->buildReport($user, $dateStart, $dateEnd);
+        $report->buildReport($user, null, $dateStart, $dateEnd);
 
-        $result = array(
-            'headerLeft' => $report->getHeaderLeft(),
-            'headerTop'  => $report->getHeaderTop(),
-            'matrix'     => $report->getMatrix(),
+        $headerLeft = $report->getHeaderLeft();
+        $headerTop  = $report->getHeaderTop();
+        $matrix     = $report->getMatrix();
+
+        $this->assertEquals(
+            1200,
+            $matrix[$headerLeft[0]->flatIndex]['tag_bar'],
+            'Сумма в родительской категории'
         );
 
-        //print_r($result);
+        $this->assertEquals(
+            800,
+            $matrix[$headerLeft[0]->children[0]->flatIndex]['tag_bar'],
+            'Сумма в дочерней категории'
+        );
 
-        //$yamlDumper = new sfYamlDumper();
-        //$yaml = $yamlDumper->dump($result, 4);
+        $this->assertEquals(
+            50,
+            $matrix[$headerLeft[1]->flatIndex]['tag_foo'],
+            'Сумма в третьей категории'
+        );
+    }
 
-        //print_r($yaml);
-        //print_r(json_encode($result));
+    /**
+     * Проверим что операции фильтруются по счёту
+     */
+    public function testReportFiltredByAccount()
+    {
+        $user = Doctrine::getTable('User')->findOneByLogin('tester');
+        $dateStart = new DateTime('2010-05-01');
+        $dateEnd   = new DateTime('2010-12-01');
+        $currency  = $user->getCurrency();
 
-        $this->markTestIncomplete('Доделай меня');
+        list($account, $emptyAccount) = $user->getAccounts();
+
+        $report = new myReportMatrix($currency);
+        $report->buildReport($user, $account, $dateStart, $dateEnd);
+
+        $this->assertNotEmpty(
+            $report->getMatrix(),
+            'Счёт по которому есть операции'
+        );
+
+        $report = new myReportMatrix($currency);
+
+        $report->buildReport($user, $emptyAccount, $dateStart, $dateEnd);
+
+        $this->assertEmpty(
+            $report->getMatrix(),
+            'Счёт по которому нет операций'
+        );
     }
 }

@@ -15,7 +15,7 @@ class myReportMatrix {
         $this->_currency = $currency;
     }
 
-    public function buildReport(User $user, DateTime $startDate, DateTime $endDate)
+    public function buildReport(User $user, Account $account = null, DateTime $startDate, DateTime $endDate)
     {
         $operationCollection = new OperationCollection($user);
         $operationCollection->fillForPeriod($startDate, $endDate);
@@ -27,13 +27,15 @@ class myReportMatrix {
         $this->_matrix = array();
 
         foreach ($operations as $operation) {
+            if ($account && $operation->getAccount() != $account)
+                continue;
+
             $category = $operation->getCategory();
             $opTags = array_map('trim', explode(',', $operation->getTags()));
             $tag = (isset($opTags[0])) ? $opTags[0] : null ;
 
             if ($tag && $category) {
                 $this->_addTagAndCategory($tag, $category, $operation);
-
             }
         }
 

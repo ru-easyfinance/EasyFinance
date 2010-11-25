@@ -1,4 +1,3 @@
-
 Currency:
   Currency_RUR:
     code: 'RUR'
@@ -49,6 +48,13 @@ Account:
     state: '0'
     name: 'Название счета 1'
     description: 'Описание счета 1'
+  Account_2:
+    User: User_1
+    type_id: '1'
+    Currency: Currency_RUR
+    state: '0'
+    name: 'Пустой счёт'
+    description: 'Описание пустого счёта'
 
 Operation:
   Operation_1:
