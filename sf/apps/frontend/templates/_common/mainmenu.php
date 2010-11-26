@@ -31,7 +31,7 @@
             <a href="/report/" class="top-level"></a>
         </li>
         <li id="m6">
-            <a href="/integration/" class="top-level"></a>
+            <a href="/my/easybank/" class="top-level"></a>
         </li>
         <li id="m8">
             <a href="https://<?php echo URL_ROOT_WIKI; ?>tiki-view_blog.php?blogId=1" class="top-level"></a>

@@ -1,0 +1,46 @@
+.b-easybank {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.b-easybank h1,
+.b-easybank h2,
+.b-easybank h3,
+.b-easybank h4 {
+    color: #6CBD45;
+}
+    .b-easybank .b-easybank-emphasize {
+        color: #6CBD45;
+        font-style: normal;
+    }
+
+    .b-easybank-banks {
+        clear: both;
+    }
+        .b-easybank-banks .b-easybank-banks-title {
+            display: block;
+            height: 30px;
+            width: 230px;
+            margin: .8em 0 .5em;
+            background: url(/img/i/easybank/logos.png) left top no-repeat;
+        }
+            .b-easybank-banks__citi .b-easybank-banks-title {
+                background-position: 0 -40px;
+            }
+            .b-easybank-banks__amt .b-easybank-banks-title {
+                background-position: 0 3px;
+            }
+
+        .b-easybank-banks .b-easybank-banks-descr {
+            width: 170px;
+            height: 110px;
+            background: url(/img/i/easybank/cards.png) left top no-repeat;
+            float: left;
+        }
+
+            .b-easybank-banks__citi .b-easybank-banks-descr {
+                background-position: 0 -120px;
+            }
+            .b-easybank-banks__amt .b-easybank-banks-descr {
+                background-position: 0 0px;
+            }

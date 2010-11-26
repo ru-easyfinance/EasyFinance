@@ -39,7 +39,7 @@ var citipage = (function(selector) {
 
         // превращаем поле с телефоном в ожидаемый сервером формат
         if (frm[0].mobile_number.value) {
-            var phone = frm[0].mobile_number.value.replace('+7 ', '').replace(/[^\d]/ig, '');
+            var phone = frm[0].mobile_number.value.replace(/\s+/, '').replace('+7', '').replace(/[^\d]/ig, '');
             frm[0].mobile_code.value = phone.substr(0, 3);
             frm[0].mobile_phone.value = phone.substr(3, 7);
             phone_field = $(frm[0].mobile_number)
@@ -88,11 +88,20 @@ var citipage = (function(selector) {
         frm = container.find('form').eq(0);
         frm.bind('submit', onFrmSubmit);
 
+        tabs = container.find('.js-control-tabs');
+
         container.find('.js-toform').bind('click', function() {
-            container.find('.js-control-tabs').tabs('select', 1);
+            $('body').scrollTop(0);
+            tabs.tabs('select', 1);
         });
 
         notice_container = container.find('.js-form-notice');
+
+        // обработка случая, когда нам нужно сразу показать форму
+        var hash = window.location.hash.replace('#', '');
+        if (hash && hash == 'fillform') {
+            tabs.tabs('select', 1);
+        }
     }
 
     $(init);

@@ -77,7 +77,7 @@ $surname = array(
 $phone = array(
     'label'         => 'Мобильный телефон',
     'name'          => 'mobile_number',
-    'hint'          => '+7 (xxx) yyyyyyy',
+    'hint'          => '+7 (123) 4567890',
     'inputClass'    => 'js-control js-control-phonefield',
     'jsparams'      => '{forceRussia: true}'
 );
@@ -95,8 +95,9 @@ $email = array(
     <div class="w-citipage-wrapper js-control js-control-tabs">
         <ul>
             <li><a href="#cititabs-1">Преимущества</a></li>
-            <li><a href="#cititabs-2">Анкета</a></li>
+            <li><a href="#cititabs-2">Онлайн-заявка</a></li>
         </ul>
+
         <div id="cititabs-1" class="b-citipage-tabs b-citipage-advantages">
             <h3>
                 <img src="/img/i/citi/card.png" alt="Кредитная карта CASH BACK" align="left" style="margin-right: .5em;"/>Кредитная карта Ситибанка CASH BACK<br/>
@@ -107,16 +108,16 @@ $email = array(
                 на Ваш счет</strong><a href="#fn1" class="b-footnote">1</a>. Погашая задолженность в срок, установленный в ежемесячной выписке,
                 Вы не платите проценты<a href="#fn2" class="b-footnote">2</a>.</p>
 
-            <h3>Оплачивая покупки кредитной картой CASH BACK, Вы зарабатываете деньги:</h3>
+            <h3 class="b-citipage-youearnmoney">Оплачивая покупки кредитной картой CASH BACK, Вы зарабатываете деньги:</h3>
             <ul class="b-citipage-list">
                 <li>1% от  суммы, потраченной по карте, возвращается обратно на Ваш счет<a href="#fn1" class="b-footnote">1</a></li>
             </ul>
 
             <div class="b-citipage-banner">
-                <div class="b-banner-circletxt"><big>300</big><br/>рублей<br/>в подарок</div>
+                <div class="b-banner-circletxt"><big style="line-height: normal;">300</big><br/>рублей<br/>в подарок</div>
                 <div class="b-banner-plaintxt">
-                    <h6 class="b-banner-header" style="color: red;">300 рублей в подарок</h6>
-                    <p class="b-banner-text">Совершите первую покупку по карте и получите
+                    <h6 class="b-banner-header" style="color: red;">Специальное предложение!</h6>
+                    <p class="b-banner-text">Совершите первую покупку по карте и получите<br/>
                         300 рублей<a href="#fn1" class="b-footnote">1</a> на счет в подарок от Ситибанка!</p>
                 </div>
             </div>
@@ -136,8 +137,9 @@ $email = array(
                 <li>Дополнительные карты для Ваших близких</li>
                 <li>Безопасная оплата покупок и услуг в сети Интернет</li>
             </ul>
-            <br/>
-            <p><big><strong class="pseudo js-toform">Заполните Онлайн-заявку на оформление кредитной карты &gt;&gt;</strong></big></p>
+
+
+            <p class="b-citipage-fillform"><big><strong class="pseudo js-toform">Заполните Онлайн-заявку на оформление кредитной карты &gt;&gt;</strong></big></p>
 
             <p>Система <strong>EasyFinance.ru</strong> позволит Вам автоматически вести учет операций, срверешенных
                 по карте, у Вас не будет необходимости вручную вносить информацию по проведенным операциям,
@@ -189,7 +191,7 @@ $email = array(
             </div>
         </div>
         <div id="cititabs-2" class="b-citipage-tabs b-citipage-form">
-            <h2>Заполните заявку на оформление кредитной карты прямо сейчас</h2>
+            <h2>Заполните заявку на оформление кредитной карты</h2>
             <p>В течение одного рабочего дня сотрудник Ситибанка свяжется с Вами по указанному в заявке телефону и
                 договорится о встрече в любое удобное для Вас время и месте, чтобы помочь оформить заявление и собрать
                 пакет необходимых документов.</p>
