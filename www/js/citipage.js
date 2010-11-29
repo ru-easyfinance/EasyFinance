@@ -96,12 +96,6 @@ var citipage = (function(selector) {
         });
 
         notice_container = container.find('.js-form-notice');
-
-        // обработка случая, когда нам нужно сразу показать форму
-        var hash = window.location.hash.replace('#', '');
-        if (hash && hash == 'fillform') {
-            tabs.tabs('select', 1);
-        }
     }
 
     $(init);
