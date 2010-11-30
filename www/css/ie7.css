@@ -163,3 +163,19 @@ form.op_addoperation .b-custom-select-wrap {
 .b-review {
     padding-top: 1em;
 }
+
+.b-easybank-slogan .b-slogan-2click {
+    letter-spacing: 0.1ex;
+    word-spacing: 100%;
+}
+.b-easybank-slogan .b-slogan-autoaccounting {
+    line-height: 150%;
+}
+
+.b-getcard .b-getcard-title {
+    line-height: 19px;
+}
+
+.b-advantages-item .b-item-name {
+    line-height: 16px
+}

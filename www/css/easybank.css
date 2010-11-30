@@ -14,33 +14,161 @@
         font-style: normal;
     }
 
-    .b-easybank-banks {
-        clear: both;
+
+.b-easybank .b-easybank-slogan {
+    background-color: #e3ffdf;
+}
+    .b-easybank-slogan .w-easybank-slogan {
+        padding: 1em;
     }
-        .b-easybank-banks .b-easybank-banks-title {
-            display: block;
-            height: 30px;
-            width: 230px;
-            margin: .8em 0 .5em;
-            background: url(/img/i/easybank/logos.png) left top no-repeat;
+
+    .b-easybank-slogan .b-slogan-part {
+        float: left;
+        height: 102px;
+        background: url(/img/i/easybank/slogan.png) no-repeat;
+        margin-right: 27px;
+    }
+        .b-easybank-slogan .b-slogan-part__logo {
+            width: 137px;
+            background-position: center 0;
         }
-            .b-easybank-banks__citi .b-easybank-banks-title {
-                background-position: 0 -40px;
+        .b-easybank-slogan .b-slogan-part__plus {
+            width: 50px;
+            background-position: center -115px;
+        }
+        .b-easybank-slogan .b-slogan-part__cards {
+            width: 80px;
+            background-position: center -225px;
+        }
+        .b-easybank-slogan .b-slogan-part__equals {
+            width: 50px;
+            background-position: center -335px;
+        }
+        .b-easybank-slogan .b-slogan-part__whatis {
+            background: none;
+            margin-right: 0;
+            margin-left: 423px;
+            margin-top: -92px;
+            text-align: justify;
+        }
+            .b-easybank-slogan .b-slogan-2click {
+                font-size: 180%;
             }
-            .b-easybank-banks__amt .b-easybank-banks-title {
-                background-position: 0 3px;
+            .b-easybank-slogan .b-slogan-autoaccounting {
+                font-size: 160%;
+                line-height: 150%;
             }
 
-        .b-easybank-banks .b-easybank-banks-descr {
-            width: 170px;
-            height: 110px;
-            background: url(/img/i/easybank/cards.png) left top no-repeat;
-            float: left;
+    .b-easybank .b-easybank-choosecard {
+        font-size: 180%;
+        margin: 2em 0 1em;
+    }
+
+
+    .b-easybank-getcards {
+    }
+
+        .b-getcard {
+            position: relative;
+            margin-bottom: 2em;
+            background: url(/img/i/easybank/item-bg.png) bottom repeat-x;
+            border-top: 1px solid #e3ffdf;
         }
 
-            .b-easybank-banks__citi .b-easybank-banks-descr {
-                background-position: 0 -120px;
+            .b-getcard .b-getcard-banklogo {
+                position: absolute;
+                width: 210px;
+                height: 30px;
+                left: 5px;
+                top: 5px;
+                background: url(/img/i/easybank/logos.png) left top no-repeat;
             }
-            .b-easybank-banks__amt .b-easybank-banks-descr {
-                background-position: 0 0px;
+                .b-getcard__citi .b-getcard-banklogo {
+                    background-position: 0 -40px;
+                }
+                .b-getcard__amt .b-getcard-banklogo {
+                    background-position: 0 3px;
+                }
+
+            .b-getcard .b-getcard-title {
+                position: absolute;
+                left: 220px;
+                top: 10px;
+                font-size: 200%;
+                text-decoration: none;
             }
+
+            .b-getcard .b-getcard-cardimage {
+                position: absolute;
+                left: 5px;
+                top: 50px;
+                text-align: center;
+            }
+                .b-getcard-cardimage .b-cardimage-icon {
+                    display: block;
+                    background: url(/img/i/easybank/cards.png) left top no-repeat;
+                    width: 160px;
+                    height: 100px;
+                }
+
+                .b-getcard__citi .b-cardimage-icon {
+                    background-position: 0 -110px;
+                }
+                .b-getcard__amt .b-cardimage-icon {
+                    background-position: 0 -0px;
+                }
+
+            .b-getcard .b-getcard-button {
+                display: block;
+                position: absolute;
+                right: 5px;
+                bottom: 10px;
+                width: 164px;
+                height: 100px;
+                border-radius: 15px;
+                background: url(/img/i/easybank/getcard-bg.png) left bottom repeat-x;
+                cursor: pointer;
+                text-decoration: none;
+            }
+                .b-getcard .b-getcard-button:hover {
+                    background-position: left top;
+                }
+                .b-getcard-button div {
+                    margin-top: 29px;
+                    height: 100px;
+                    font-size: 200%;
+                    font-weight: bold;
+                    line-height: 100%;
+                    text-align: center;
+                    color: white;
+                }
+
+            .b-getcard .w-getcard-advantages {
+                margin: 90px 170px 0 220px;
+            }
+                .w-getcard-advantages .b-getcard-advantages{
+                    width: 100%;
+                }
+
+                    .b-getcard-advantages .b-advantages-item {
+                        text-align: center;
+                        vertical-align: middle;
+                        font-size: 110%;
+                        padding-right: 1em;
+                        margin-bottom: 20px;
+                        line-height: 61%;
+                    }                        
+                        .b-advantages-item .b-item-name {
+                            font-weight: bold;
+                            font-size: 140%;
+                            color: #565656;
+                        }
+                        .b-advantages-item .b-item-value {
+                            font-weight: bold;
+                            font-size: 150%;
+                            color: #6CBD45;
+                        }
+                        .b-advantages-item .b-item-explain {
+                            font-size: 140%;
+                            color: #676b6e;
+                        }

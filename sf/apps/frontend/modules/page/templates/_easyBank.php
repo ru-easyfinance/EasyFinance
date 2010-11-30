@@ -1,44 +1,95 @@
 <div class="b-easybank">
-    <h2>Лучший способ управлять деньгами &mdash; мониторинг расходов в 2 клика!</h2>
-    <p>EasyBank &mdash; революционная услуга от сервиса EasyFinance.ru, автоматически распознает и учитывает расходы
-        по Вашим банковским картам.</p>
-    <p>Получайте выгоды от использования банковских карт с EasyFinance.ru!</p>
+    <h2>EasyBank &mdash; лучший способ управлять деньгами</h2>
 
-    <h3><a href="<?php echo url_for('easybank_citi_cashback'); ?>#fillform">Получить карту!</a></h3>
-    <br/>
+    <div class="b-easybank-slogan">
+        <div class="w-easybank-slogan clearfix">
 
-    <h3>Выберите свой банк для оформления его карт и подключения автоматического учета по ним:</h3>
-    <div class="b-easybank-banks b-easybank-banks__citi">
-        <a class="b-easybank-banks-title" href="<?php echo url_for('easybank_citi_cashback'); ?>"></a>
-        <p><a href="<?php echo url_for('easybank_citi_cashback'); ?>"><img src="/img/i/pix.gif" class="b-easybank-banks-descr" alt="карта банка «CITIBANK»"/></a>
-            <strong>CITIBANK</strong>, дочерний банк <a href="http://www.citigroup.com/" rel="nofollow">Citigroup</a>,
-            крупнейшей финансовой группы, начал свою деятельность в России в 1993 году, став одним из первых российских банков
-            с иностранным капиталом. Сегодня ЗАО КБ "Ситибанк" входит в <strong>ТОП-20</strong> российских банков
-            и представлен в 12 городах России (Москва, Санкт-Петербург, Екатеринбург, Самара, Тольятти, Ростов-на-Дону,
-            Волгоград, Нижний Новгород, Казань, Новосибирск, Уфа и в Рязань).</p>
-        <p><a href="<?php echo url_for('easybank_citi_cashback'); ?>">Оформите кредитную карту Citibank CashBack</a>,
-            пользуйтесь льготным периодом кредитования и <strong>зарабатывайте 1%</strong> с каждой покупки,
-            попутно <a href="http://www.simpleshopping.ru/?icid=b5_simpleshopping2_rus" rel="nofollow">получая скидки от партнеров</a>.</p
+            <div class="b-slogan-part b-slogan-part__logo"></div>
+            <div class="b-slogan-part b-slogan-part__plus"></div>
+            <div class="b-slogan-part b-slogan-part__cards"></div>
+            <div class="b-slogan-part b-slogan-part__equals"></div>
+            
+            <div class="b-slogan-part b-slogan-part__whatis">
+                <h3 class="b-slogan-2click">EasyBank &mdash; контроль расходов в 2 клика:</h3>
+                <p class="b-slogan-autoaccounting">
+                    <span class="pseudo-active efTooltip" title="Вы совершаете операцию с картой &mdash; она сразу попадает к Вам в EasyFinance.ru">Автоматический учет</span> расходов по банковским картам
+                    в EasyFinance.ru</p>
+            </div>
+            <br style="clear: both;"/>
+        </div>
     </div>
 
+    <h3 class="b-easybank-choosecard">Выберите карту:</h3>
 
-    <div class="b-easybank-banks b-easybank-banks__amt">
-        <a class="b-easybank-banks-title" href="<?php echo url_for('easybank_amt_easyfinance'); ?>"></a>
-        <p><a href="<?php echo url_for('easybank_amt_easyfinance'); ?>"><img src="/img/i/pix.gif" class="b-easybank-banks-descr" alt="карта банка «АМТ БАНК»"/></a>
-            <strong>АМТ БАНК</strong> &mdash; динамично развивающийся банк, широко представленный в Москве,
-            а также в Санкт-Петербурге, Владимире, Саратове, Калининграде, Воронеже, Волгоград, Астрахани, Ставрополе,
-            Краснодаре, Новосибирске, Омске и Уфе.</p>
-        <p>В 2009 году АМТ БАНК стал лауреатом Национальной премии «ИТ-лидер» в номинации «За выдающийся вклад в развитие
-            информационных технологий», а также «Банк года», по версии Банки.ру, в номинации «2-е место в Народном рейтинге
-            по итогам 2009 года».</p>
-        <p><a href="<?php echo url_for('easybank_amt_easyfinance'); ?>">Оформите дебетовые карты AMT BANK</a>,
-            в том числе золотые Visa и MasterCard, на льготных условиях и получите
-            <a href="http://amtbank.com/ru/private/discount/">скидки и привилегии от партнеров</a>,
-            а также контроль бюджета с <strong>EasyBank</strong>.</p>
+    <div class="b-easybank-getcards">
+        <div class="b-getcard b-getcard__citi">
+            <a class="b-getcard-banklogo" href="/my/wikiwrapper/tiki-index.php?page=Partners"></a>
+            <a class="b-getcard-title" href="<?php echo url_for('easybank_citi_cashback'); ?>">Кредитная карта CITI CASH BACK</a>
+            <span class="b-getcard-cardimage">
+                <a href="<?php echo url_for('easybank_citi_cashback'); ?>">
+                    <img class="b-cardimage-icon" src="/img/i/pix.gif" alt="карта банка «CITIBANK»"/>
+                </a>
+                <a href="<?php echo url_for('easybank_citi_cashback'); ?>#cititabs-1">подробнее</a>
+            </span>
+            <a class="b-getcard-button" href="<?php echo url_for('easybank_citi_cashback'); ?>"><div>Получить карту</div></a>
+            <div class="w-getcard-advantages">
+                <table class="b-getcard-advantages">
+                    <tr>
+                        <td class="b-advantages-item">
+                            <p class="b-item-name">Бесплатно</p>
+                            <p class="b-item-value">50 дней</p>
+                            <p class="b-item-explain">без процентов</p>
+                        </td>
+                        <td class="b-advantages-item">
+                            <p class="b-item-name">Cash Back</p>
+                            <p class="b-item-value">1%</p>
+                            <p class="b-item-explain">возвращается</p>
+                        </td>
+                        <td class="b-advantages-item">
+                            <p class="b-item-name">Максимум</p>
+                            <p class="b-item-value">300 000 р</p>
+                            <p class="b-item-explain">лимит</p>
+                        </td>
+                        <td class="b-advantages-item">
+                            <p class="b-item-name">Стоимость</p>
+                            <p class="b-item-value">1199 р</p>
+                            <p class="b-item-explain">в год</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+        <div class="b-getcard b-getcard__amt">
+            <a class="b-getcard-banklogo" href="/my/wikiwrapper/tiki-index.php?page=Partners"></a>
+            <a class="b-getcard-title" href="<?php echo url_for('easybank_amt_easyfinance'); ?>">Банковская карта AMT EasyFinance</a>
+            <span class="b-getcard-cardimage">
+                <a href="<?php echo url_for('easybank_amt_easyfinance'); ?>">
+                    <img class="b-cardimage-icon" src="/img/i/pix.gif" alt="карта банка «АМТ БАНК»"/>
+                </a>
+                <a href="<?php echo url_for('easybank_amt_easyfinance'); ?>">подробнее</a>
+            </span>
+            <a class="b-getcard-button" href="<?php echo url_for('easybank_amt_easyfinance'); ?>"><div>Получить карту</div></a>
+            <div class="w-getcard-advantages">
+                <table class="b-getcard-advantages">
+                    <tr>
+                        <td class="b-advantages-item">
+                            <p class="b-item-name">Золотая карта</p>
+                            <p class="b-item-value">150 р / 2 года</p>
+                            <p class="b-item-explain">VISA / MasterCard</p>
+                        </td>
+                        <td class="b-advantages-item">
+                            <p class="b-item-name">Премиум-поддержка</p>
+                            <p class="b-item-value">Бесплатно</p>
+                            <p class="b-item-explain">от EasyFinance.ru</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
     </div>
 
+    <h3><a href="/my/wikiwrapper/tiki-index.php?page=Citibank_integration">Настройка автоматического учета за две минуты</a></h3>
 
-    <h2>Импорт данных из других программ и сервисов учета</h2>
-    <p>Также есть возможность импорта данных из других сервисов, например, vkoshelke.ru. Он подробно описан
-        в <a href="/my/wikiwrapper/tiki-index.php?page=Import">инструкции по импорту</a>.
 </div>
