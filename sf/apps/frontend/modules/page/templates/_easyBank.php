@@ -2,15 +2,17 @@
     <h2>EasyBank &mdash; лучший способ управлять деньгами</h2>
 
     <div class="b-easybank-slogan">
-        <div class="w-easybank-slogan">
+        <div class="w-easybank-slogan clearfix">
+
             <div class="b-slogan-part b-slogan-part__logo"></div>
             <div class="b-slogan-part b-slogan-part__plus"></div>
             <div class="b-slogan-part b-slogan-part__cards"></div>
             <div class="b-slogan-part b-slogan-part__equals"></div>
+            
             <div class="b-slogan-part b-slogan-part__whatis">
                 <h3 class="b-slogan-2click">EasyBank &mdash; контроль расходов в 2 клика:</h3>
                 <p class="b-slogan-autoaccounting">
-                    <span class="pseudo-active efTooltip" title="Вы совершаете операцию с картой &mdash; она сразу попадает к Вам в EasyFinance.ru">Автоматический учет</span> расходов по банковским картам<br/>
+                    <span class="pseudo-active efTooltip" title="Вы совершаете операцию с картой &mdash; она сразу попадает к Вам в EasyFinance.ru">Автоматический учет</span> расходов по банковским картам
                     в EasyFinance.ru</p>
             </div>
             <br style="clear: both;"/>

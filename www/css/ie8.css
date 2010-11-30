@@ -39,3 +39,8 @@ body .ui-dialog.edit .ui-dialog-title {
 .block1 .transaction .sum .amount {
     width: 160px;
 }
+
+.b-easybank-slogan .b-slogan-2click {
+    letter-spacing: 0.1ex;
+    word-spacing: 100%;
+}

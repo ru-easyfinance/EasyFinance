@@ -47,11 +47,12 @@
         .b-easybank-slogan .b-slogan-part__whatis {
             background: none;
             margin-right: 0;
+            margin-left: 423px;
+            margin-top: -92px;
+            text-align: justify;
         }
             .b-easybank-slogan .b-slogan-2click {
                 font-size: 180%;
-                letter-spacing: 0.16ex;
-                word-spacing: 0.3ex;
             }
             .b-easybank-slogan .b-slogan-autoaccounting {
                 font-size: 160%;
@@ -171,38 +172,3 @@
                             font-size: 140%;
                             color: #676b6e;
                         }
-
-
-
-
-/*
-    .b-easybank-banks {
-        clear: both;
-    }
-        .b-easybank-banks .b-easybank-banks-title {
-            display: block;
-            height: 30px;
-            width: 230px;
-            margin: .8em 0 .5em;
-            background: url(/img/i/easybank/logos.png) left top no-repeat;
-        }
-            .b-easybank-banks__citi .b-easybank-banks-title {
-                background-position: 0 -40px;
-            }
-            .b-easybank-banks__amt .b-easybank-banks-title {
-                background-position: 0 3px;
-            }
-
-        .b-easybank-banks .b-easybank-banks-descr {
-            width: 170px;
-            height: 110px;
-            background: url(/img/i/easybank/cards.png) left top no-repeat;
-            float: left;
-        }
-
-            .b-easybank-banks__citi .b-easybank-banks-descr {
-                background-position: 0 -120px;
-            }
-            .b-easybank-banks__amt .b-easybank-banks-descr {
-                background-position: 0 0px;
-            }*/
