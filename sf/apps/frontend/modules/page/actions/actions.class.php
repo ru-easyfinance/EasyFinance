@@ -27,6 +27,15 @@ class pageActions extends sfActions
 
         $this->setVar('pageName', $pageName);
         $this->setLayout('layoutClear');
+
+        if ($pageName == 'easyBank') {
+            $this->getResponse()->addMeta(
+                'title',
+                'EasyBank от EasyFinance.ru - автоматический учет расходов по кредитным картам, лучший способ управлять деньгами',
+                false,
+                false
+            );
+        }
         return sfView::SUCCESS;
     }
 }
