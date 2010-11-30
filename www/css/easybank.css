@@ -126,6 +126,8 @@
                 width: 164px;
                 height: 100px;
                 border-radius: 15px;
+                -moz-border-radius: 15px;
+                -o-border-radius: 15px;
                 background: url(/img/i/easybank/getcard-bg.png) left bottom repeat-x;
                 cursor: pointer;
                 text-decoration: none;

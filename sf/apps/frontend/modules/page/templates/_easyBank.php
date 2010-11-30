@@ -19,6 +19,8 @@
         </div>
     </div>
 
+    <h3 style="margin-top: 1em;"><a href="/my/wikiwrapper/tiki-index.php?page=Citibank_integration" target="_blanc">Как настроить автоматический учет?</a></h3>
+
     <h3 class="b-easybank-choosecard">Выберите карту:</h3>
 
     <div class="b-easybank-getcards">
@@ -29,7 +31,7 @@
                 <a href="<?php echo url_for('easybank_citi_cashback'); ?>">
                     <img class="b-cardimage-icon" src="/img/i/pix.gif" alt="карта банка «CITIBANK»"/>
                 </a>
-                <a href="<?php echo url_for('easybank_citi_cashback'); ?>#cititabs-1">подробнее</a>
+                <a href="<?php echo url_for('easybank_citi_cashback'); ?>">подробнее</a>
             </span>
             <a class="b-getcard-button" href="<?php echo url_for('easybank_citi_cashback'); ?>"><div>Получить карту</div></a>
             <div class="w-getcard-advantages">
@@ -90,10 +92,8 @@
         </div>
     </div>
 
-    <h3><a href="/my/wikiwrapper/tiki-index.php?page=Citibank_integration">Настройка автоматического учета за две минуты</a></h3>
-
     <iframe
-        src="http://www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2F%23%21%2Fpages%2FEasyFinanceru-sistema-upravlenia-licnymi-finansami%2F142011615821613%3Fv%3Dinfo&amp;width=600&amp;colorscheme=light&amp;connections=10&amp;stream=false&amp;header=false&amp;height=195"
+        src="https://www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2F%23%21%2Fpages%2FEasyFinanceru-sistema-upravlenia-licnymi-finansami%2F142011615821613%3Fv%3Dinfo&amp;width=600&amp;colorscheme=light&amp;connections=10&amp;stream=false&amp;header=false&amp;height=195"
         scrolling="no" frameborder="0" style="border:none; width:600px; height:195px; margin: 0 auto; display: block;" allowTransparency="true"></iframe>
 
 </div>
