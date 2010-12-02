@@ -8,13 +8,12 @@ define('INDEX', true);
 
 error_reporting( E_ALL );
 
-// Получаем обьект с параметрами запроса.
-$request = _Core_Request::getCurrent();
-
-define('PROTOCOL_SCHEME', $request->getScheme());
+//получим схему явно - в этом месте не удается инстанциировать request,
+//так как пути к нему заданы позже - в конфиге, который уже зависит от PROTOCOL_SCHEME
+define('PROTOCOL_SCHEME', ($_SERVER["SERVER_PORT"] == 443 )?'http':'https');
 
 function createUrlWithScheme($urlWithoutScheme) {
-    return PROTOCOL_SCHEME . $urlWithoutScheme;
+    return PROTOCOL_SCHEME . "://" . $urlWithoutScheme;
 }
 
 // Подключаем файл с общей конфигурацией проекта
@@ -23,6 +22,9 @@ require_once dirname(dirname(__FILE__)) . '/include/config.php';
 // Загружаем общие данные
 // @todo оторвать!
 require_once SYS_DIR_INC . 'common.php';
+
+// Получаем обьект с параметрами запроса.
+$request = _Core_Request::getCurrent();
 
 // Получаем текущий шаблонизатор на основании запроса
 $templateEngine = _Core_TemplateEngine::getPrepared( $request );
