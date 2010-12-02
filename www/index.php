@@ -64,15 +64,6 @@ try
                     setcookie('DO_WHANT_FULL_VERSION', true);
                 }
             }
-
-            // Если пользователь зашёл по незащищённому соединению и он не поисковый бот
-            if ( $_SERVER['SERVER_PORT'] == 80
-                && ( !Helper_DetectBrowser::detectSearchEngine() ) ) {
-
-                header( 'Location: ' . 'https://' . URL_ROOT );
-                exit;
-
-            }
         }
 
         $templateEngine->display( 'index.html' );
