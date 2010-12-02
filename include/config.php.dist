@@ -44,8 +44,8 @@ define('URL_ROOT_DEMO',    "${demo.url.root}/");
 define('HOST_ROOT_IFRAME', "iframe." . HOST_ROOT_MAIN);
 define('URL_ROOT_IFRAME', createUrlWithScheme(HOST_ROOT_IFRAME));
 
-define('HOST_ROOT_RAMBLER', createUrlWithScheme("rambler." . HOST_ROOT_MAIN));
-define('URL_ROOT_RAMBLER', HOST_ROOT_RAMBLER);
+define('HOST_ROOT_RAMBLER', "rambler." . HOST_ROOT_MAIN);
+define('URL_ROOT_RAMBLER', createUrlWithScheme(HOST_ROOT_RAMBLER));
 if (!isset($_SERVER['HTTP_HOST']) || strpos($_SERVER['HTTP_HOST'], 'rambler') === false) {
     define('URL_ROOT_WIKI', URL_ROOT_MAIN . 'my/wikiwrapper/');
 } else {
