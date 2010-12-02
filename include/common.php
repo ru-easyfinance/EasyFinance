@@ -20,12 +20,12 @@ spl_autoload_register('__autoload');
 // Подгружаем внешние библиотеки
 require_once SYS_DIR_LIBS . 'external/DBSimple/Mysql.php';
 
-
+$core = Core::getInstance();
 
 // Загрузить курсы валют
 // Старые
 require_once(dirname(__FILE__) . '/../core/currency.class.php');
-Core::getInstance()->currency = new oldCurrency();
+$core->currency = new oldCurrency();
 // Новые
 require_once SYS_DIR_ROOT . '/sf/lib/util/myMoney.php';
 require_once SYS_DIR_ROOT . '/sf/lib/util/myCurrencyExchange.php';
@@ -39,11 +39,26 @@ foreach(efCurrencyModel::loadAll() as $row) {
 sfConfig::set('ex', $ex);
 
 require_once(dirname(__FILE__) . '/../core/user.class.php');
-Core::getInstance()->user = new oldUser();
+$core->user = new oldUser();
 
+//если зашли на главную авторизованным пользователем,
+//по умолчанию кинем его на его стартовую страницу
+$currentUri = $_SERVER['REQUEST_URI'];
+$currentUriIsRoot = $currentUri == "/" || $currentUri == "/index.php";
 
+if($currentUriIsRoot && $core->CurrentUserIsAuthorized()) {
 
-Core::getInstance()->js = array(
+    //проверим, что еще не перекидывали,
+    //чтобы дать залогиненному возможность заходить на главную
+    $startRedirectFlagName = "REDIRECTED_TO_START_PAGE_ALREADY";
+    if(!isset($_SESSION[$startRedirectFlagName])) {
+
+            $_SESSION[$startRedirectFlagName] = true;
+            $core->redirectToStartPage();
+    }
+}
+
+$core->js = array(
     '' => array('welcome'), // слайды на главной
     'targets' => array('targets'),
     'report' => array('widgets/report.widget', 'models/report.model'),
@@ -160,4 +175,4 @@ if (!empty($_SERVER['HTTP_HOST']) && ($_SERVER['HTTP_HOST'] == 'easyfinance.ru' 
     sfConfig::set('mailCardAMT', 'devel_test@easyfinance.ru');
 }
 
-Core::getInstance()->mailer = Swift_Mailer::newInstance($mailTransport);
+$core->mailer = Swift_Mailer::newInstance($mailTransport);

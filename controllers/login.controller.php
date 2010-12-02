@@ -92,11 +92,7 @@ class Login_Controller extends _Core_Controller
             }
         } else {
             if (!$errorMessage) {
-                $redirectUrl = isset($_SESSION['REQUEST_URI']) ?
-                    $_SESSION['REQUEST_URI'] : '/info/';
-                header("Location: $redirectUrl");
-                unset($_SESSION['REQUEST_URI']);
-                exit;
+                Core::getInstance()->redirectToStartPage();
             }
         }
 

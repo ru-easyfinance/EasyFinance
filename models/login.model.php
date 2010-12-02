@@ -250,12 +250,6 @@ class Login_Model
             Core::getInstance()->user->save();
             self::_sendRegistrationLetter();
         }
-
-        // Устанавливаем дефолтный путь
-        if(!isset($_SESSION['REQUEST_URI'])) {
-            $_SESSION['REQUEST_URI'] = '/info/';
-        }
-
     }
 
 
