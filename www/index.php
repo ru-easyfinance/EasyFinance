@@ -13,6 +13,10 @@ $request = _Core_Request::getCurrent();
 
 define('PROTOCOL_SCHEME', $request->getScheme());
 
+function createUrlWithScheme($urlWithoutScheme) {
+    return PROTOCOL_SCHEME . $urlWithoutScheme;
+}
+
 // Подключаем файл с общей конфигурацией проекта
 require_once dirname(dirname(__FILE__)) . '/include/config.php';
 
