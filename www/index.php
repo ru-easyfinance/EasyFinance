@@ -8,15 +8,6 @@ define('INDEX', true);
 
 error_reporting( E_ALL );
 
-//получим схему явно - в этом месте не удается инстанциировать request,
-//так как пути к нему заданы позже - в конфиге, который уже зависит от PROTOCOL_SCHEME
-define ('USING_HTTPS', ($_SERVER["SERVER_PORT"] == 443 ) ? 1 : 0);
-define('PROTOCOL_SCHEME', USING_HTTPS ? 'https' : 'http');
-
-function createUrlWithScheme($urlWithoutScheme) {
-    return PROTOCOL_SCHEME . "://" . $urlWithoutScheme;
-}
-
 // Подключаем файл с общей конфигурацией проекта
 require_once dirname(dirname(__FILE__)) . '/include/config.php';
 

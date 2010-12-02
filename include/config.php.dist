@@ -23,6 +23,17 @@ define('DIR_TEMPLATES',    dirname(dirname(__FILE__)) . '/template/');
 
 ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . SYS_DIR_LIBS . '/external/');
 
+//получим схему явно - в этом месте не удается инстанциировать request,
+//так как пути к нему заданы позже - в конфиге, который уже зависит от PROTOCOL_SCHEME
+define ('USING_HTTPS', ($_SERVER["SERVER_PORT"] == 443 ) ? 1 : 0);
+define('PROTOCOL_SCHEME', USING_HTTPS ? 'https' : 'http');
+
+//создание полного url
+function createUrlWithScheme($urlWithoutScheme) {
+    return PROTOCOL_SCHEME . "://" . $urlWithoutScheme;
+}
+
+
 //Настройки языка
 putenv('LANG=ru_RU.utf8');
 setlocale(LC_ALL, 'ru_RU.utf8');
