@@ -33,7 +33,6 @@ class _Core_Request
         {
             self::$currentInstance = new self();
 
-            self::$currentInstance->scheme = self::$currentInstance->getScheme();
             self::$currentInstance->method = $_SERVER['REQUEST_METHOD'];
             self::$currentInstance->host     = $_SERVER["HTTP_HOST"];
 
@@ -60,7 +59,11 @@ class _Core_Request
 
     protected function getScheme()
     {
-        return ($_SERVER["SERVER_PORT"] == 443 )?'http':'https';
+        if(!isset($this->scheme)) {
+            $this->scheme = ($_SERVER["SERVER_PORT"] == 443 )?'http':'https';
+        }
+
+        return $this->scheme;
     }
 
     /**
