@@ -213,7 +213,7 @@ class oldUser
         // Вызывает инициализацию пользовательских категорий, счетов, денег
         $this->init();
 
-        if (_Core_Request::getCurrent()->host . '/' != URL_ROOT_PDA) {
+        if (_Core_Request::getCurrent()->host . '/' != HOST_ROOT_PDA) {
             // Если у нас есть неподтверждённые операции, то переходим на них
             if ( count ($this->getUserEvents( 'overdue' ) ) > 0 ) {
                 $_SESSION['REQUEST_URI'] = '/calendar/#list';

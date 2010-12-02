@@ -32,7 +32,7 @@ class _Core_TemplateEngine
             default:
                 switch ( $request->host . '/' )
                 {
-                    case URL_ROOT_PDA:
+                    case HOST_ROOT_PDA:
 
                         $templateEngine = new _Core_TemplateEngine_Native( DIR_TEMPLATES . 'pda/' );
 

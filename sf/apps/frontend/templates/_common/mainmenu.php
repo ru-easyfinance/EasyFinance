@@ -86,7 +86,7 @@
                 <li class="last"></li>
             </ul>
         </i>
-        <a href="https://<?php echo URL_ROOT_PDA; ?>" class="icon menu-icons-mobile" title="Мобильная версия"></a>
+        <a href="<?php echo URL_ROOT_PDA; ?>" class="icon menu-icons-mobile" title="Мобильная версия"></a>
         <a href="/logout/" class="icon menu-icons-logout" title="Выход"></a>
     </div>
 </div>

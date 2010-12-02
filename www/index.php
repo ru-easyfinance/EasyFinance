@@ -50,15 +50,15 @@ try
 
             // Если пользователь зашёл с мобильного браузера
             if (
-                _Core_Request::getCurrent()->host . '/' != URL_ROOT_PDA
+                _Core_Request::getCurrent()->host . '/' != HOST_ROOT_PDA
                 && Helper_DetectBrowser::detectMobile()
                 && !isset($_COOKIE['DO_WHANT_FULL_VERSION'])
             ) {
                 if (
                     isset($_SERVER['HTTP_REFERER'])
-                    && strpos($_SERVER['HTTP_REFERER'], URL_ROOT_PDA) === false
+                    && strpos($_SERVER['HTTP_REFERER'], HOST_ROOT_PDA) === false
                 ) {
-                    header( 'Location: https://' . URL_ROOT_PDA );
+                    header( 'Location: ' . URL_ROOT_PDA );
                     exit;
                 } else {
                     setcookie('DO_WHANT_FULL_VERSION', true);
