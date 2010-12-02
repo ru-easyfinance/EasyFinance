@@ -36,16 +36,18 @@ define('ENVIRONMENT',      "${project.environment}");
 define('MAIL_ENABLED',     ${project.mail.enabled});
 
 // Ссылка на главную страницу сайта
-define('URL_ROOT_MAIN',    "${project.url.root}/");
+define('ROOT_WITHOUT_SCHEME', "${project.url.root}/");
+
+define('URL_ROOT_MAIN',    createUrlWithScheme(ROOT_WITHOUT_SCHEME));
 define('URL_ROOT_DEMO',    "${demo.url.root}/");
-define('URL_ROOT_IFRAME',  "iframe." . URL_ROOT_MAIN);
-define('URL_ROOT_RAMBLER', "rambler." . URL_ROOT_MAIN);
+define('URL_ROOT_IFRAME',  createUrlWithScheme("iframe." . ROOT_WITHOUT_SCHEME));
+define('URL_ROOT_RAMBLER', createUrlWithScheme("rambler." . ROOT_WITHOUT_SCHEME));
 if (!isset($_SERVER['HTTP_HOST']) || strpos($_SERVER['HTTP_HOST'], 'rambler') === false) {
     define('URL_ROOT_WIKI', URL_ROOT_MAIN . 'my/wikiwrapper/');
 } else {
     define('URL_ROOT_WIKI', URL_ROOT_RAMBLER . 'my/wikiwrapper/');
 }
-define('URL_ROOT_PDA',     "${pda.url.root}/");
+define('URL_ROOT_PDA',     createUrlWithScheme("${pda.url.root}/"));
 
 define('URL_ROOT', IS_DEMO ? URL_ROOT_DEMO : URL_ROOT_MAIN);
 
