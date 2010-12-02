@@ -42,7 +42,7 @@ try
 
     if (_Core_Request::getCurrent()->host . '/' == URL_ROOT_IFRAME) {
         $templateEngine->display('iframe/index.iframe.html');
-    } elseif (_Core_Request::getCurrent()->host . '/' == URL_ROOT_RAMBLER) {
+    } elseif (_Core_Request::getCurrent()->host . '/' == HOST_ROOT_RAMBLER) {
         $templateEngine->display('index.html');
     } else {
 

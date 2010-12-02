@@ -34,12 +34,12 @@
             <a href="/my/easybank/" class="top-level"></a>
         </li>
         <li id="m8">
-            <a href="https://<?php echo URL_ROOT_WIKI; ?>tiki-view_blog.php?blogId=1" class="top-level"></a>
+            <a href="<?php echo URL_ROOT_WIKI; ?>tiki-view_blog.php?blogId=1" class="top-level"></a>
             <ul class="dd-sub">
-                <li><span class="spacer"></span><a href="https://<?php echo URL_ROOT_WIKI; ?>tiki-view_blog.php?blogId=1">Блог</a></li>
-                <li><span class="spacer"></span><a href="https://<?php echo URL_ROOT_WIKI; ?>tiki-view_articles.php">Статьи</a></li>
-                <li><span class="spacer"></span><a href="https://<?php echo URL_ROOT_WIKI; ?>tiki-view_blog.php?blogId=2">Отзывы</a></li>
-                <li><span class="spacer"></span><a href="https://<?php echo URL_ROOT_WIKI; ?>tiki-view_blog.php?blogId=4">Сми о нас</a></li>
+                <li><span class="spacer"></span><a href="<?php echo URL_ROOT_WIKI; ?>tiki-view_blog.php?blogId=1">Блог</a></li>
+                <li><span class="spacer"></span><a href="<?php echo URL_ROOT_WIKI; ?>tiki-view_articles.php">Статьи</a></li>
+                <li><span class="spacer"></span><a href="<?php echo URL_ROOT_WIKI; ?>tiki-view_blog.php?blogId=2">Отзывы</a></li>
+                <li><span class="spacer"></span><a href="<?php echo URL_ROOT_WIKI; ?>tiki-view_blog.php?blogId=4">Сми о нас</a></li>
                 <li class="last"></li>
             </ul>
         </li>
@@ -50,7 +50,7 @@
                 <li class="first"></li>
                 <li><span> </span><a id="linkMainMenuFeedback" href="#">Обратная связь</a></li>
                 <li><span> </span><a id="linkMainMenuVideoGuide" href="#">Видеогид</a></li>
-                <li><span> </span><a href="https://<?php echo URL_ROOT_WIKI; ?>tiki-read_article.php?articleId=14">FAQ</a></li>
+                <li><span> </span><a href="<?php echo URL_ROOT_WIKI; ?>tiki-read_article.php?articleId=14">FAQ</a></li>
                 <li><span> </span><a href="/review/">Обзор</a></li>
                 <li class="last"></li>
             </ul>
@@ -74,7 +74,7 @@
                 <li class="first"></li>
                 <li><span class="spacer"></span><a id="linkMainMenuFeedback" href="#" style="letter-spacing: -1px;">Обратная связь</a></li>
                 <li><span class="spacer"></span><a href="/my/review/">Обзор</a></li>
-                <li><span class="spacer"></span><a href="https://<?php echo URL_ROOT_WIKI; ?>tiki-read_article.php?articleId=14">FAQ</a></li>
+                <li><span class="spacer"></span><a href="<?php echo URL_ROOT_WIKI; ?>tiki-read_article.php?articleId=14">FAQ</a></li>
                 <li class="last"></li>
             </ul>
         </i>
