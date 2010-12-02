@@ -8,15 +8,17 @@ define('INDEX', true);
 
 error_reporting( E_ALL );
 
+// Получаем обьект с параметрами запроса.
+$request = _Core_Request::getCurrent();
+
+define('PROTOCOL_SCHEME', $request->getScheme());
+
 // Подключаем файл с общей конфигурацией проекта
 require_once dirname(dirname(__FILE__)) . '/include/config.php';
 
 // Загружаем общие данные
-// @todo оторвать! 
+// @todo оторвать!
 require_once SYS_DIR_INC . 'common.php';
-
-// Получаем обьект с параметрами запроса.
-$request = _Core_Request::getCurrent();
 
 // Получаем текущий шаблонизатор на основании запроса
 $templateEngine = _Core_TemplateEngine::getPrepared( $request );
@@ -37,7 +39,7 @@ try
     } elseif (_Core_Request::getCurrent()->host . '/' == URL_ROOT_RAMBLER) {
         $templateEngine->display('index.html');
     } else {
-        
+
         if (!IS_DEMO) {
 
             // Если пользователь зашёл с мобильного браузера

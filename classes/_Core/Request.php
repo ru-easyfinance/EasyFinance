@@ -57,7 +57,7 @@ class _Core_Request
         return $request;
     }
 
-    protected function getScheme()
+    public function getScheme()
     {
         if(!isset($this->scheme)) {
             $this->scheme = ($_SERVER["SERVER_PORT"] == 443 )?'http':'https';
