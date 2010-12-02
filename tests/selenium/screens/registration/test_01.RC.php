@@ -11,7 +11,7 @@ class Example extends PHPUnit_Extensions_SeleniumTestCase
   function setUp()
   {
     $this->setBrowser("*firefox");
-    $this->setBrowserUrl("https://".URL_ROOT_MAIN);
+    $this->setBrowserUrl("".URL_ROOT_MAIN);
 
     $this->userName = "selenium".time();
     $this->userMail = $this->userName."@easyfinance.ru";
@@ -32,7 +32,7 @@ class Example extends PHPUnit_Extensions_SeleniumTestCase
     $this->open("/registration/");
     $this->waitForPageToLoad("30000");
     try {
-        $this->assertEquals("https://".URL_ROOT_MAIN."registration/", $this->getLocation());
+        $this->assertEquals("".URL_ROOT_MAIN."registration/", $this->getLocation());
         $this->assertTextPresent("Регистрация");
     } catch (PHPUnit_Framework_AssertionFailedError $e) {
         array_push($this->verificationErrors, "Регистрация: " . $e->toString());
@@ -53,7 +53,7 @@ class Example extends PHPUnit_Extensions_SeleniumTestCase
 
     try {
         // должен произойти редирект на главную
-        $this->assertEquals("https://".URL_ROOT_MAIN, $this->getLocation());
+        $this->assertEquals("".URL_ROOT_MAIN, $this->getLocation());
     } catch (PHPUnit_Framework_AssertionFailedError $e) {
         array_push($this->verificationErrors, "Главная: " . $e->toString());
     }
@@ -61,7 +61,7 @@ class Example extends PHPUnit_Extensions_SeleniumTestCase
     $this->clickAndWait("id=linkLogin");
 
     try {
-        $this->assertEquals("https://".URL_ROOT_MAIN."login/", $this->getLocation());
+        $this->assertEquals("".URL_ROOT_MAIN."login/", $this->getLocation());
     } catch (PHPUnit_Framework_AssertionFailedError $e) {
         array_push($this->verificationErrors, "Вход: " . $e->toString());
     }

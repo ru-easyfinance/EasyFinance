@@ -33,7 +33,7 @@
     <tr>
         <td style="padding-left: 5px; padding-top:1px;">
             <a href="<?php echo isset($res['user'])?'/info':'/login'?>" style="color:white; font-size: small; font-weight: bold; text-decoration:none;">&copy; EasyFinance, 2010</a><br>
-            <a href="https://<?php echo $linkToMain?>" style="font-size: small; font-weight: bold; text-decoration:none;">Основная версия</a>
+            <a href="<?php echo $linkToMain?>" style="font-size: small; font-weight: bold; text-decoration:none;">Основная версия</a>
         </td>
         <td width="80" style="text-align: right;">
             <?php if( isset($res['user']) ) : ?>

@@ -10,7 +10,8 @@ error_reporting( E_ALL );
 
 //получим схему явно - в этом месте не удается инстанциировать request,
 //так как пути к нему заданы позже - в конфиге, который уже зависит от PROTOCOL_SCHEME
-define('PROTOCOL_SCHEME', ($_SERVER["SERVER_PORT"] == 443 )?'http':'https');
+define ('USING_HTTPS', ($_SERVER["SERVER_PORT"] == 443 ) ? 1 : 0);
+define('PROTOCOL_SCHEME', USING_HTTPS ? 'https' : 'http');
 
 function createUrlWithScheme($urlWithoutScheme) {
     return PROTOCOL_SCHEME . "://" . $urlWithoutScheme;
@@ -40,7 +41,7 @@ try
 	// Выполнение запроса (разбор ->вызов контроллера)
 	$router->performRequest();
 
-    if (_Core_Request::getCurrent()->host . '/' == URL_ROOT_IFRAME) {
+    if (_Core_Request::getCurrent()->host . '/' == HOST_ROOT_IFRAME) {
         $templateEngine->display('iframe/index.iframe.html');
     } elseif (_Core_Request::getCurrent()->host . '/' == HOST_ROOT_RAMBLER) {
         $templateEngine->display('index.html');

@@ -45,7 +45,7 @@ while ($unUser = mysql_fetch_array($result, MYSQL_ASSOC)) {
 
         C уважением,\n
         Администрация системы EasyFinance
-        https://easyfin.ru/ \n\n";
+        http://easyfin.ru/ \n\n";
 
     $subject = "Вы зарегистрированы в системе управления личными финансами EasyFinance";
 

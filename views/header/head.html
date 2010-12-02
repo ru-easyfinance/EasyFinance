@@ -86,11 +86,11 @@
 <!--шапка-->
             <div id="header">
             {if $smarty.const.IS_DEMO == true }
-                {assign var="logoUrl" value="https://`$smarty.const.URL_ROOT_MAIN`"}
+                {assign var="logoUrl" value="`$smarty.const.URL_ROOT_MAIN`"}
             {elseif $smarty.session.user.id > 0}
-                {assign var="logoUrl" value="https://`$smarty.const.URL_ROOT`info"}
+                {assign var="logoUrl" value="`$smarty.const.URL_ROOT`info"}
             {elseif $smarty.server.REQUEST_URI != "/"}
-                {assign var="logoUrl" value="https://`$smarty.const.URL_ROOT`"}
+                {assign var="logoUrl" value="`$smarty.const.URL_ROOT`"}
             {/if}
 
                 <a {if $logoUrl !=""}href="{$logoUrl}"{/if} class="logo">EasyFinance.ru</a>

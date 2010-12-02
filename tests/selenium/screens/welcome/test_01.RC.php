@@ -9,7 +9,7 @@ class Example extends PHPUnit_Extensions_SeleniumTestCase
   function setUp()
   {
     $this->setBrowser("*firefox");
-    $this->setBrowserUrl("https://".URL_ROOT_MAIN);
+    $this->setBrowserUrl("".URL_ROOT_MAIN);
   }
 
   function testMyTestCase()
@@ -30,7 +30,7 @@ class Example extends PHPUnit_Extensions_SeleniumTestCase
     $this->click("link=Обзор");
     $this->waitForPageToLoad("30000");
     try {
-        $this->assertEquals("https://".URL_ROOT_MAIN."review/", $this->getLocation());
+        $this->assertEquals("".URL_ROOT_MAIN."review/", $this->getLocation());
     } catch (PHPUnit_Framework_AssertionFailedError $e) {
         array_push($this->verificationErrors, "Обзор: " . $e->toString());
     }
@@ -39,7 +39,7 @@ class Example extends PHPUnit_Extensions_SeleniumTestCase
     $this->click("link=Отзывы");
     $this->waitForPageToLoad("30000");
     try {
-        $this->assertEquals("https://".URL_ROOT_MAIN."feedback/", $this->getLocation());
+        $this->assertEquals("".URL_ROOT_MAIN."feedback/", $this->getLocation());
     } catch (PHPUnit_Framework_AssertionFailedError $e) {
         array_push($this->verificationErrors, "Отзывы: " . $e->toString());
     }
@@ -59,7 +59,7 @@ class Example extends PHPUnit_Extensions_SeleniumTestCase
     $this->click("link=Статьи");
     $this->waitForPageToLoad("30000");
     try {
-        $this->assertEquals("https://".URL_ROOT_MAIN."articles/", $this->getLocation());
+        $this->assertEquals("".URL_ROOT_MAIN."articles/", $this->getLocation());
     } catch (PHPUnit_Framework_AssertionFailedError $e) {
         array_push($this->verificationErrors, "Статьи: " . $e->toString());
     }
@@ -79,7 +79,7 @@ class Example extends PHPUnit_Extensions_SeleniumTestCase
     $this->click("link=Помощь");
     $this->waitForPageToLoad("30000");
     try {
-        $this->assertEquals("https://".URL_ROOT_MAIN."articles/12", $this->getLocation());
+        $this->assertEquals("".URL_ROOT_MAIN."articles/12", $this->getLocation());
     } catch (PHPUnit_Framework_AssertionFailedError $e) {
         array_push($this->verificationErrors, "Помощь: " . $e->toString());
     }
@@ -88,7 +88,7 @@ class Example extends PHPUnit_Extensions_SeleniumTestCase
     $this->click("link=Интеграция");
     $this->waitForPageToLoad("30000");
     try {
-        $this->assertEquals("https://".URL_ROOT_MAIN."integration", $this->getLocation());
+        $this->assertEquals("".URL_ROOT_MAIN."integration", $this->getLocation());
     } catch (PHPUnit_Framework_AssertionFailedError $e) {
         array_push($this->verificationErrors, "Интеграция: " . $e->toString());
     }

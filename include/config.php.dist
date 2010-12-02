@@ -40,7 +40,9 @@ define('HOST_ROOT_MAIN', "${project.url.root}/");
 
 define('URL_ROOT_MAIN',    createUrlWithScheme(HOST_ROOT_MAIN));
 define('URL_ROOT_DEMO',    "${demo.url.root}/");
-define('URL_ROOT_IFRAME',  createUrlWithScheme("iframe." . HOST_ROOT_MAIN));
+
+define('HOST_ROOT_IFRAME', "iframe." . HOST_ROOT_MAIN);
+define('URL_ROOT_IFRAME', createUrlWithScheme(HOST_ROOT_IFRAME));
 
 define('HOST_ROOT_RAMBLER', createUrlWithScheme("rambler." . HOST_ROOT_MAIN));
 define('URL_ROOT_RAMBLER', HOST_ROOT_RAMBLER);
@@ -50,10 +52,14 @@ if (!isset($_SERVER['HTTP_HOST']) || strpos($_SERVER['HTTP_HOST'], 'rambler') ==
     define('URL_ROOT_WIKI', URL_ROOT_RAMBLER . 'my/wikiwrapper/');
 }
 
+define('URL_ROOT_BANNERS', createUrlWithScheme('fa.easyfinance.ru/'));
+
 define('HOST_ROOT_PDA', "${pda.url.root}/");
 define('URL_ROOT_PDA',     createUrlWithScheme(HOST_ROOT_PDA));
 
-define('URL_ROOT', IS_DEMO ? URL_ROOT_DEMO : URL_ROOT_MAIN);
+define('HOST_ROOT', IS_DEMO ? URL_ROOT_DEMO : HOST_ROOT_MAIN);
+
+define('URL_ROOT', createUrlWithScheme(HOST_ROOT));
 
 define('DEBUG',            ${project.debug});
 
@@ -66,7 +72,7 @@ else
     define('COOKIE_DOMEN', $_SERVER['HTTP_HOST']);
 
 define('COOKIE_PATH',      "${project.cookie.path}"); // по-умолчанию "/"
-define('COOKIE_HTTPS',     ${project.cookie.https});  // На продуктиве всегда true
+define('COOKIE_HTTPS',     USING_HTTPS ? 1 : 0);  // На продуктиве всегда true
 define('COOKIE_EXPIRE',    ${project.cookie.expire}); // две недели = 60 * 60 * 24 * 2
 
 //CRYPT

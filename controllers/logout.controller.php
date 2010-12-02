@@ -18,7 +18,7 @@ class Logout_Controller extends _Core_Controller
     {
         Core::getInstance()->user->destroy();
     if (IS_DEMO) {
-            header("Location: https://" . URL_ROOT_MAIN);
+            header("Location: " . URL_ROOT_MAIN);
             exit;
     } else {
             header("Location: /");

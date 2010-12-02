@@ -28,7 +28,7 @@ class Helper_IframeLoginIframe extends Helper_IframeLogin
 
             if ($_SERVER['REQUEST_URI'] != '/registration/' &&  $_SERVER['REQUEST_URI'] != '/restore/') {
 
-                $this->_redirect("Location: https://" . URL_ROOT_IFRAME . "login/");
+                $this->_redirect("Location: " . URL_ROOT_IFRAME . "login/");
 
             }
 
@@ -81,7 +81,7 @@ class Helper_IframeLoginIframe extends Helper_IframeLogin
             $this->templateEngine->assign('user_info', $uar);
             $this->templateEngine->assign('template_view', 'iframe');
             $this->_setCookie($row_user['user_login'], $row_user['user_pass']);
-            $this->_redirect("Location: https://" . URL_ROOT_IFRAME . "info/");
+            $this->_redirect("Location: " . URL_ROOT_IFRAME . "info/");
 
     }
 
@@ -112,7 +112,7 @@ class Helper_IframeLoginIframe extends Helper_IframeLogin
             $this->templateEngine->assign('user_info', $uar);
             $this->templateEngine->assign('template_view', 'iframe');
             $this->_setCookie($row_user['user_login'], $row_user['user_pass']);
-            $this->_redirect("Location: https://" . URL_ROOT_IFRAME . "info/");
+            $this->_redirect("Location: " . URL_ROOT_IFRAME . "info/");
             return $newId;
     }
 }

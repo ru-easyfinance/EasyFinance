@@ -73,9 +73,10 @@ class Restore_Controller extends _Core_Controller
             $code = $this->storeRequest( $moron );
 
             // Хачок для mail.ru (шоб не банило)
-            $domain = (URL_ROOT == 'easyfinance.ru')?'easyfin.ru':URL_ROOT;
+            $domain = (HOST_ROOT == 'easyfinance.ru')
+                    ? createUrlWithScheme('easyfin.ru') : URL_ROOT;
 
-            $href = 'https://' . $domain . 'restore/confirm/' . $code;
+            $href = $domain . 'restore/confirm/' . $code;
 
             $body = '<html><head><title>Запрос на восстановление пароля :: EasyFinance.ru</title></head>
                 <body><p>Здравствуйте, ' . $moron->getName() . '!</p>
@@ -83,7 +84,7 @@ class Restore_Controller extends _Core_Controller
                 Чтобы завершить процедуру и изменить пароль, перейдите по ссылке:</p>
                 <p><a href="' . $href . '">' . $href . '</a></p>
                 <p>C уважением,
-                <br/>Администрация системы <a href="https:// ' . $domain . '" />Easy Finance</a>
+                <br/>Администрация системы <a href=" ' . $domain . '" />Easy Finance</a>
                 </body>
                 </html>';
 
@@ -189,7 +190,7 @@ class Restore_Controller extends _Core_Controller
 
         $json['result'] = array(
             'text'=>'',
-            'redirect' => 'https://' . URL_ROOT_MAIN . 'login'
+            'redirect' => URL_ROOT_MAIN . 'login'
         );
 
         $_SESSION['resultMessage'] = 'Изменение пароля успешно выполнено. Теперь вы можете войти в систему используя новый пароль.';

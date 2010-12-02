@@ -10,13 +10,13 @@
                     $r = rand(0,2);
                     if ($r == 1) {
                         // AMT1
-                        echo "<script language='JavaScript' src='https://fa.easyfinance.ru/adjs.php?what=format:web,_717x86,_client_id:420,'></script>";
+                        echo "<script language='JavaScript' src='" . URL_ROOT_BANNERS . "adjs.php?what=format:web,_717x86,_client_id:420,'></script>";
                     } elseif ($r == 2) {
                         // AMT2
-                        echo "<script language='JavaScript' src='https://fa.easyfinance.ru/adjs.php?what=format:web,_717x86,_client_id:421,'></script>";
+                        echo "<script language='JavaScript' src='" . URL_ROOT_BANNERS . "adjs.php?what=format:web,_717x86,_client_id:421,'></script>";
                     } else {
                         // Тиньков
-                        echo "<script language='JavaScript' src='https://fa.easyfinance.ru/adjs.php?what=format:web,_717x86,_client_id:427,'></script>";
+                        echo "<script language='JavaScript' src='" . URL_ROOT_BANNERS . "adjs.php?what=format:web,_717x86,_client_id:427,'></script>";
                     }
                 {/php}
             {else}
@@ -25,9 +25,9 @@
                     $r = rand(0,1);
                     if ($r == 1) {
                         // Регистрация + AMT
-                        echo "<script language='JavaScript' src='https://fa.easyfinance.ru/adjs.php?what=format:web,_717x86,_client_id:418,'></script>";
+                        echo "<script language='JavaScript' src='" . URL_ROOT_BANNERS . "adjs.php?what=format:web,_717x86,_client_id:418,'></script>";
                     } else {
-                        echo "<script language='JavaScript' src='https://fa.easyfinance.ru/adjs.php?what=format:web,_717x86,_client_id:427,'></script>";
+                        echo "<script language='JavaScript' src='" . URL_ROOT_BANNERS . "adjs.php?what=format:web,_717x86,_client_id:427,'></script>";
                     }
                 {/php}
             {/if}

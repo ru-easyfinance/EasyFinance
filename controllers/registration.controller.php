@@ -114,7 +114,7 @@
                 $answer = array (
                     'result' => array (
                         'text' => 'Спасибо, вы зарегистрированы!',
-                        'redirect' => "https://".URL_ROOT_MAIN."my/review/"
+                        'redirect' => URL_ROOT_MAIN."my/review/"
                     )
                 );
 
@@ -169,7 +169,7 @@
             Логин: {$login}<br/>
             Пароль: {$password}</p>
 
-            <p>C уважением,<br/>Администрация системы <a href='https://".URL_ROOT."' />EasyFinance.ru</a>
+            <p>C уважением,<br/>Администрация системы <a href='".URL_ROOT."' />EasyFinance.ru</a>
             </body>
             </html>";
 

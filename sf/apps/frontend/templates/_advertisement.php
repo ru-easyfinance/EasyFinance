@@ -4,7 +4,7 @@
  * вынести это все в app.yml
  */
 
-$templateUrl = "https://fa.easyfinance.ru/adjs.php?what=format:web,_717x86,_client_id:%d,";
+$templateUrl = URL_ROOT_BANNERS . "adjs.php?what=format:web,_717x86,_client_id:%d,";
 $clientId = 0;
 
 if ($sf_user->isAuthenticated() && IS_DEMO == false) {

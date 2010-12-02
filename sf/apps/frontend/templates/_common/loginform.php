@@ -1,4 +1,4 @@
-<form method="post" action="https://<?php echo URL_ROOT ?>login/">
+<form method="post" action="<?php echo URL_ROOT ?>login/">
     <div class="b-login-form">
         <div class="b-login-form-row l-buttons-inline">
             <?php include_partial('global/common/ui/textfield', array('name' => 'login', 'placeholder' => 'логин/почта')) ?>

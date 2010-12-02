@@ -71,7 +71,7 @@ class controller_RegistrationTest extends UnitTestCase
         $this->assertTrue($ctl->authIsCalled, 'Auth is called');
         $this->assertEquals(array('result' => array(
             'text'     => 'Спасибо, вы зарегистрированы!',
-            'redirect' => "https://".URL_ROOT_MAIN."my/review/",
+            'redirect' => "".URL_ROOT_MAIN."my/review/",
         )), $ctl->output);
     }
 

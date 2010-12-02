@@ -98,7 +98,7 @@ class _Core_Router
         if (method_exists($controller, $this->methodName)) {
             call_user_func( array( $controller, $this->methodName ), $this->requestRemains );
         } else {
-            $url = sprintf("http%s://%smy/%s", ($_SERVER["SERVER_PORT"] == 443 ? '' : 's'), URL_ROOT, $uri);
+            $url = sprintf("%smy/%s", URL_ROOT, $uri);
             _Core_Router::redirect($url, true, 302);
             die();
         }

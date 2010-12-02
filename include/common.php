@@ -1,8 +1,6 @@
 <?php if (!defined('INDEX')) trigger_error("Index required!",E_USER_WARNING);
 /**
  * Файл с общими настройками проекта
- * @copyright https://easyfinance.ru/
- * SVN $Id$
  */
 
 require_once SYS_DIR_INC.'/functions.php';
