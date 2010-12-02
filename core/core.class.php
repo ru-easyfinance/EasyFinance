@@ -96,6 +96,15 @@ class Core
 
     }
 
+    public function CurrentUserIsAuthorized() {
+        return !is_null($this->user) && $this->user->getId() > 0;
+    }
+
+    public function redirectToStartPage() {
+        header("Location: " . $this->user->getStartUri());
+        exit;
+    }
+
     /**
      * Конструктор, запрещаем его переопределение, сделав приватным
      * @return void

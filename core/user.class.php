@@ -213,22 +213,42 @@ class oldUser
         // Вызывает инициализацию пользовательских категорий, счетов, денег
         $this->init();
 
+        return $this->save();
+    }
+
+    /*
+     * Получение начальной страницы для данного пользователя
+     */
+    public function getStartUri() {
+
+        //мобильную версию разберем отдельно
         if (_Core_Request::getCurrent()->host . '/' != HOST_ROOT_PDA) {
+
             // Если у нас есть неподтверждённые операции, то переходим на них
             if ( count ($this->getUserEvents( 'overdue' ) ) > 0 ) {
-                $_SESSION['REQUEST_URI'] = '/calendar/#list';
-            // Иначе переходим на самый первый счёт #1062
-            } else {
+                $startUri = '/calendar/#list';
+            }
+
+            else {
+                //если есть счета, перейдем на самый первый счет
                 $keys = array_keys($this->user_account);
                 if (count($keys) > 0) {
-                    $_SESSION['REQUEST_URI'] = '/operation/#account=' . $keys[0];
+                    $startUri = '/operation/#account=' . $keys[0];
+                }
+
+                //если же нет счетов, перейдем на Инфо
+                else {
+                    $startUri = '/info';
                 }
             }
-        } else {
-            $_SESSION['REQUEST_URI'] = '/operation/add/waste/';
         }
 
-        return $this->save();
+        //мобильную версию по умолчанию кидаем на добавление операции
+        else {
+            $startUri = '/operation/add/waste/';
+        }
+
+        return $startUri;
     }
 
     /**
