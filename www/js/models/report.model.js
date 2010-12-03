@@ -56,14 +56,20 @@ easyFinance.models.report = function() {
         }
     }
 
+    var API = {
+        graph_loss: "/report/getData/?responseMode=json",
+        graph_profit: "/report/getData/?responseMode=json",
+        graph_profit_loss: "/report/getData/?responseMode=json",
+        matrix: "/my/reports/matrix",
+        txt_loss: "/report/getData/?responseMode=json",
+        txt_loss_difference: "/report/getData/?responseMode=json",
+        txt_profit: "/report/getData/?responseMode=json",
+        txt_profit_difference: "/report/getData/?responseMode=json",
+    }
+    
     function load(requestData, callback) {
-        var api_url = '/report/getData/?responseMode=json';
-
-        if (requestData.report == 'matrix') {
-            api_url = '/my/reports/matrix';
-        }
         $.get(
-            api_url,
+            API[requestData.report],
             requestData,
             function(data) {
                 if (typeof(callback) == 'function'){
