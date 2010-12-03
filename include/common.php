@@ -51,9 +51,9 @@ if($currentUriIsRoot && $core->CurrentUserIsAuthorized()) {
     //проверим, что еще не перекидывали,
     //чтобы дать залогиненному возможность заходить на главную
     $startRedirectFlagName = "REDIRECTED_TO_START_PAGE_ALREADY";
-    if(!isset($_SESSION[$startRedirectFlagName])) {
 
-            $_SESSION[$startRedirectFlagName] = true;
+    if(!isset($_COOKIE[$startRedirectFlagName])) {
+            setcookie($startRedirectFlagName, 1, 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
             $core->redirectToStartPage();
     }
 }
