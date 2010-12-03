@@ -43,18 +43,23 @@ $core->user = new oldUser();
 
 //если зашли на главную авторизованным пользователем,
 //по умолчанию кинем его на его стартовую страницу
-$currentUri = $_SERVER['REQUEST_URI'];
-$currentUriIsRoot = $currentUri == "/" || $currentUri == "/index.php";
 
-if($currentUriIsRoot && $core->CurrentUserIsAuthorized()) {
+//проверим, что определены нужные переменные, чтобы не падать на тестах
+//TODO: тесты отвязать от общего окружения - иначе какие это модульные тесты
+if (isset($_SERVER) && isset($_SERVER['REQUEST_URI'])) {
+    $currentUri = $_SERVER['REQUEST_URI'];
+    $currentUriIsRoot = $currentUri == "/" || $currentUri == "/index.php";
 
-    //проверим, что еще не перекидывали,
-    //чтобы дать залогиненному возможность заходить на главную
-    $startRedirectFlagName = "REDIRECTED_TO_START_PAGE_ALREADY";
+    if($currentUriIsRoot && $core->CurrentUserIsAuthorized()) {
 
-    if(!isset($_COOKIE[$startRedirectFlagName])) {
-            setcookie($startRedirectFlagName, 1, 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
-            $core->redirectToStartPage();
+        //проверим, что еще не перекидывали,
+        //чтобы дать залогиненному возможность заходить на главную
+        $startRedirectFlagName = "REDIRECTED_TO_START_PAGE_ALREADY";
+
+        if(!isset($_COOKIE[$startRedirectFlagName])) {
+                setcookie($startRedirectFlagName, 1, 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
+                $core->redirectToStartPage();
+        }
     }
 }
 
