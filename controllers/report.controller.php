@@ -32,9 +32,11 @@ class Report_Controller extends _Core_Controller_UserCommon
             'graph_loss'                => 'Расходы - итоги',
             'txt_loss'                  => 'Расходы - детальные',
             'txt_loss_difference'       => 'Расходы - сравнение за периоды',
+            'matrix_loss'               => 'Расходы - матричный отчёт',
             'graph_profit'              => 'Доходы &nbsp;&nbsp;- итоги',
             'txt_profit'                => 'Доходы &nbsp;&nbsp;- детальные',
             'txt_profit_difference'     => 'Доходы &nbsp;&nbsp;- сравнение за периоды',
+            'matrix_profit'             => 'Доходы &nbsp;&nbsp;- матричный отчёт',
             'graph_profit_loss'         => 'Сравнение расходов и доходов',
         );
     }
