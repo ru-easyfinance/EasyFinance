@@ -1,4 +1,4 @@
-<iframe src="http://wiki.<?php echo URL_ROOT_MAIN; ?><?php echo $wikiURL; ?>"
+<iframe src="<?php echo URL_IFRAME_WIKI; ?><?php echo $wikiURL; ?>"
     style="
         width: 100%;
         height: 100%;
