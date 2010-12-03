@@ -50,7 +50,7 @@ define('MAIL_ENABLED',     ${project.mail.enabled});
 define('HOST_ROOT_MAIN', "${project.url.root}/");
 
 define('URL_ROOT_MAIN',    createUrlWithScheme(HOST_ROOT_MAIN));
-define('URL_ROOT_DEMO',    "${demo.url.root}/");
+define('URL_ROOT_DEMO',    createUrlWithScheme("demo." . HOST_ROOT_MAIN));
 
 define('HOST_ROOT_IFRAME', "iframe." . HOST_ROOT_MAIN);
 define('URL_ROOT_IFRAME', createUrlWithScheme(HOST_ROOT_IFRAME));
@@ -67,7 +67,7 @@ define ('URL_IFRAME_WIKI', createUrlWithScheme("wiki." . HOST_ROOT_MAIN));
 
 define('URL_ROOT_BANNERS', createUrlWithScheme('fa.easyfinance.ru/'));
 
-define('HOST_ROOT_PDA', "${pda.url.root}/");
+define('HOST_ROOT_PDA', "m." . HOST_ROOT_MAIN);
 define('URL_ROOT_PDA',     createUrlWithScheme(HOST_ROOT_PDA));
 
 define('HOST_ROOT', IS_DEMO ? URL_ROOT_DEMO : HOST_ROOT_MAIN);
