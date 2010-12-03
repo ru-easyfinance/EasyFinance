@@ -80,4 +80,46 @@ class model_myReportMatrixTest extends myUnitTestCase
             'Счёт по которому нет операций'
         );
     }
+
+    /**
+     * Проверяем отчёт по доходам
+     * и таблица с числами
+     */
+    public function testProfitReport()
+    {
+        $user = Doctrine::getTable('User')->findOneByLogin('tester');
+        $dateStart = new DateTime('2010-05-01');
+        $dateEnd   = new DateTime('2010-12-01');
+        $currency  = $user->getCurrency();
+
+        $report = new myReportMatrix($currency);
+        $report->buildReport(
+            $user,
+            null,
+            $dateStart,
+            $dateEnd,
+            Operation::TYPE_PROFIT
+        );
+
+        $headerLeft = $report->getHeaderLeft();
+        $matrix     = $report->getMatrix();
+
+        $this->assertEquals(
+            2,
+            count($headerLeft),
+            'В заголовках ожидается одна доходная категория и Итого'
+        );
+
+        $this->assertEquals(
+            800,
+            $matrix[$headerLeft[0]->flatIndex]['tag_bar'],
+            'Сумма в доходной категории по тэгу tag_bar'
+        );
+
+        $this->assertEquals(
+            400,
+            $matrix[$headerLeft[0]->flatIndex]['tag_foo'],
+            'Сумма в доходной категории по тэгу tag_foo'
+        );
+    }
 }

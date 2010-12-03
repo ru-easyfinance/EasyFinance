@@ -19,7 +19,7 @@ easyFinance.models.report = function() {
             var str = '';
             var rowClassName = isParent ? 'b-reportstable-row-category' : 'b-reportstable-row-subcategory';
             var iteratible = isParent ? root : root.children
- 
+
             for (var i = 0; i < iteratible.length; i++) {
                 str += '<tr class="' + rowClassName  + '">';
                 str += '<th>' + iteratible[i].label + '</th>';
@@ -53,11 +53,11 @@ easyFinance.models.report = function() {
         graph_loss:             "/report/getData/?responseMode=json",
         txt_loss:               "/report/getData/?responseMode=json",
         txt_loss_difference:    "/report/getData/?responseMode=json",
-        matrix_loss:            "/my/reports/matrix/loss",
+        matrix_loss:            "/my/reports/matrix?type=0",
         graph_profit:           "/report/getData/?responseMode=json",
         txt_profit:             "/report/getData/?responseMode=json",
         txt_profit_difference:  "/report/getData/?responseMode=json",
-        matrix_profit:          "/my/reports/matrix/profit",
+        matrix_profit:          "/my/reports/matrix?type=1",
         graph_profit_loss:      "/report/getData/?responseMode=json"
     }
 

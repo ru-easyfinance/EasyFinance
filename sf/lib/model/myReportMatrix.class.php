@@ -16,7 +16,21 @@ class myReportMatrix {
         $this->_currency = $currency;
     }
 
-    public function buildReport(User $user, Account $account = null, DateTime $startDate, DateTime $endDate)
+    /**
+     * Строит матричный отчёт
+     * @param User $user
+     * @param Account $account
+     * @param DateTime $startDate
+     * @param DateTime $endDate
+     * @param int $operationType
+     */
+    public function buildReport(
+        User $user,
+        Account $account = null,
+        DateTime $startDate,
+        DateTime $endDate,
+        $operationType = null
+    )
     {
         $operationCollection = new OperationCollection($user);
         $operationCollection->fillForPeriod($startDate, $endDate);
@@ -34,8 +48,16 @@ class myReportMatrix {
 
 
         foreach ($operations as $operation) {
-            if ($account && $operation->getAccount() != $account)
+            if (
+                $operationType !== null &&
+                $operationType != $operation->getType()
+            ) {
                 continue;
+            }
+
+            if ($account && $operation->getAccount() != $account) {
+                continue;
+            }
 
             $category = $operation->getCategory();
             $opTags = array_map('trim', explode(',', $operation->getTags()));
@@ -43,7 +65,11 @@ class myReportMatrix {
 
             if ($tag && $category) {
                 $this->_addTagAndCategory($tag, $category, $operation);
-                $this->_addTagAndCategory($tag, $this->_totalCategory, $operation);
+                $this->_addTagAndCategory(
+                    $tag,
+                    $this->_totalCategory,
+                    $operation
+                );
             }
         }
 
@@ -57,7 +83,11 @@ class myReportMatrix {
         $this->_buildHeaderTop($this->_tags);
     }
 
-    public function _addTagAndCategory($tag, Category $category, Operation $operation)
+    public function _addTagAndCategory(
+        $tag,
+        Category $category,
+        Operation $operation
+    )
     {
         $flatIndexLeft = $category->getId();
         $flatIndexTop  = $tag;
@@ -72,7 +102,8 @@ class myReportMatrix {
             += (float) $operation->getAmountForBudget($this->_currency, false);
 
         $parentCategory = ($category->getParentId()) ?
-            Doctrine::getTable('Category')->findOneById($category->getParentId()) :
+            Doctrine::getTable('Category')
+                ->findOneById($category->getParentId()) :
             null ;
 
         if ($parentCategory) {
@@ -117,7 +148,8 @@ class myReportMatrix {
             if ($parentId = $category->getParentId()) {
                 if (!isset($categoriesById[$parentId])) {
                     $categoriesById[$parentId]
-                        = Doctrine::getTable('Category')->findOneById($parentId);
+                        = Doctrine::getTable('Category')
+                            ->findOneById($parentId);
                 }
 
                 $elementsByCategoryId[$parentId]->children[]
