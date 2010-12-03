@@ -47,25 +47,6 @@ $core->user = new oldUser();
 //TODO: тесты отвязать от общего окружения - иначе какие это модульные тесты
 if (isset($_SERVER) && isset($_SERVER['REQUEST_URI'])) {
 
-    if (isset($_SERVER['HTTP_HOST'])) {
-        //для тестов сымитируем старое поведение: перекидываем по умолчанию на https,
-        //пока пользователь с https явно не перейдет на http
-        //на демо такого делать не нужно
-        $needRedirectToHttps = !USING_HTTPS && !IS_DEMO;
-
-
-        if ($needRedirectToHttps) {
-            //проверим, что еще не перекидывали
-            $redirectToHttpsFlagName = "REDIRECTED_TO_HTTPS_ALREADY";
-
-            if (!isset($_COOKIE[$redirectToHttpsFlagName])) {
-                setcookie($redirectToHttpsFlagName, 1, 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
-                header("Location: " . "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-                exit;
-            }
-        }
-    }
-
     //если зашли на главную авторизованным пользователем,
     //по умолчанию кинем его на его стартовую страницу
     $currentUri = $_SERVER['REQUEST_URI'];
