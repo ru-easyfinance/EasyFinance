@@ -53,15 +53,7 @@ if (isset($_SERVER) && isset($_SERVER['REQUEST_URI'])) {
     $currentUriIsRoot = $currentUri == "/" || $currentUri == "/index.php";
 
     if ($currentUriIsRoot && $core->CurrentUserIsAuthorized()) {
-
-        //проверим, что еще не перекидывали,
-        //чтобы дать залогиненному возможность заходить на главную
-        $redirectToStartFlagName = "REDIRECTED_TO_START_PAGE_ALREADY";
-
-        if (!isset($_COOKIE[$redirectToStartFlagName])) {
-            setcookie($redirectToStartFlagName, 1, 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
-            $core->redirectToStartPage();
-        }
+        $core->tryRedirectToStartPage();
     }
 }
 

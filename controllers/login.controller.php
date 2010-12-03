@@ -92,7 +92,7 @@ class Login_Controller extends _Core_Controller
             }
         } else {
             if (!$errorMessage) {
-                Core::getInstance()->redirectToStartPage();
+                Core::getInstance()->tryRedirectToStartPage();
             }
         }
 
