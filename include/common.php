@@ -53,7 +53,7 @@ if (isset($_SERVER) && isset($_SERVER['REQUEST_URI'])) {
     $currentUriIsRoot = $currentUri == "/" || $currentUri == "/index.php";
 
     if ($currentUriIsRoot && $core->CurrentUserIsAuthorized()) {
-        $core->tryRedirectToStartPage();
+        $core->tryRedirectToStartPage(false);
     }
 }
 
