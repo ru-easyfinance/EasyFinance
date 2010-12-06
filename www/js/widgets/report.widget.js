@@ -53,8 +53,8 @@ easyFinance.widgets.report = function() {
         var displayFieldsSettings = {
             '#itogo': ["graph_profit", "graph_loss"],
             '.js-compare-fields': ["txt_loss_difference", "txt_profit_difference"],
-            '#profitCategory': ["graph_profit", "txt_profit", "txt_profit_difference"],
-            '#drainCategory': ["graph_loss", "txt_loss", "txt_loss_difference"]
+            '#profitCategory': ["graph_profit", "txt_profit", "txt_profit_difference", "matrix_profit"],
+            '#drainCategory': ["graph_loss", "txt_loss", "txt_loss_difference", "matrix_loss"]
         };
 
         var chosenReport = $('#report :selected').val();
@@ -114,7 +114,8 @@ easyFinance.widgets.report = function() {
                 case "txt_profit_difference":
                     ShowCompareWaste(data, currencyId);
                     break;
-                case "matrix":
+                case "matrix_loss":
+                case "matrix_profit":
                     ShowMatrix(data, currencyId);
                     break;
             }
