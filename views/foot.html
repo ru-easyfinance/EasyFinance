@@ -14,30 +14,6 @@
                     style="display:block;width:640px;height:480px"
                 ></a><br>
             </div>
-
-            {literal}
-            <div id="popupWizard" class="hidden">
-                <dl class="dl-tabs">
-                    <dt class="selected" ondblclick="return {file: '1.mp4'}"><img src="/img/i/wizard/1.png" title="Используем личный кабинет"/></dt>
-                    <dd class="selected">Текст. Длинный или не очень.</dd>
-                    <dt ondblclick="return {file: '2.mp4'}"><img src="/img/i/wizard/2.png" title="Анализируем"/></dt>
-                    <dd><!-- А можно вообще без текста --></dd>
-                    <dt ondblclick="return {file: '3.mp4'}"><img src="/img/i/wizard/3.png" title="Учитываем"/></dt>
-                    <dd>Палимпсест, несмотря на внешние воздействия, точно вызывает поэтический
-                        холодный цинизм, хотя по данному примеру нельзя судить об авторских
-                        оценках. Даже в этом коротком фрагменте видно, что ритмический рисунок
-                        вызывает метафоричный верлибр, потому что сюжет и фабула различаются.</dd>
-                    <dt ondblclick="return {file: '4.mp4'}"><img src="/img/i/wizard/4.png" title="Планируем"/></dt>
-                    <dd>Текст. Длинный или не очень.</dd>
-                </dl>
-                <a
-                    id = "playerWizard"
-                    class = "video"
-                    href="/flv/test.mp4"
-                    style="display:block;width:640px; height:480px; margin: 1em auto;"
-                ></a>
-            </div>
-            {/literal}
         </div>
 {if strpos($smarty.server.HTTP_HOST, 'rambler') === false}
         <div id="footer" style="z-index: 1">
