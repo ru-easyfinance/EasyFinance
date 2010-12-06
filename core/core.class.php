@@ -100,14 +100,14 @@ class Core
         return !is_null($this->user) && $this->user->getId() > 0;
     }
 
-    public function tryRedirectToStartPage() {
+    public function tryRedirectToStartPage($forceRedirect) {
 
         //проверим, что еще не перекидывали,
         //чтобы дать залогиненному возможность заходить, например, на главную
         //с которой тоже идет редирект
         $redirectToStartFlagName = "REDIRECTED_TO_START_PAGE_ALREADY";
 
-        if (!isset($_COOKIE[$redirectToStartFlagName])) {
+        if (!isset($_COOKIE[$redirectToStartFlagName]) || $forceRedirect) {
             setcookie($redirectToStartFlagName, 1, 0, COOKIE_PATH, COOKIE_DOMEN, COOKIE_HTTPS);
             header("Location: " . $this->user->getStartUri());
             exit;
