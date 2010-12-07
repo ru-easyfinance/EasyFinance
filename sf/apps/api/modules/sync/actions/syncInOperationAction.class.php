@@ -20,10 +20,10 @@ class syncInOperationAction extends myBaseSyncInAction
 
         // существующие записи, владельца не проверяем! так надо!
         $recordIds = $this->filterByXPath('//record/@id', 'id');
-        $operations = Doctrine_Query::create()
+        $operations = empty($recordIds) ? null : Doctrine_Query::create()
             ->select("o.*")
             ->from("Operation o INDEXBY o.id")
-            ->whereIn("o.id", $recordIds)
+            ->whereIn("o.id", $recordIds) // recordIds пуст - выбирает всё
             ->execute();
 
         // FK: выбор существующих счетов
@@ -53,7 +53,7 @@ class syncInOperationAction extends myBaseSyncInAction
         $results   = array();
         foreach ($data as $record) {
             // не добавляем в коллекцию новых объектов, поэтому так:
-            if ($operations->contains($record['id'])) {
+            if ($operations && $operations->contains($record['id'])) {
                 $myObject = $operations[(int) $record['id']];
             } else {
                 $myObject = new $modelName();
