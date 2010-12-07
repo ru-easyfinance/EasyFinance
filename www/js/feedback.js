@@ -88,20 +88,8 @@ var feedback = (function(selector) {
         return false;
     }
 
-    function onTabs(e) {
-       if (tabs.tabs('option', 'selected') == 0) {
-           tabs.tabs('select', 1);
-       }
-       else {
-           tabs.tabs('select', 0)
-       }
-       dialog.dialog('option', 'title', $(e.target).attr('title'));
-    }
-
-
     function init() {
         container = $(selector || '.js-widget-feedback');
-        utils.initControls(container);
 
         dialog = container.find('.js-feedback-dialogue');
 
@@ -115,6 +103,12 @@ var feedback = (function(selector) {
         $('#btnFeedback, #footerAddMessage, #linkMainMenuFeedback').bind('click', function() {
             dialog.prompt(utils.getParams(dialog));
             dialog.dialog('open');
+            if ($.browser.opera) {
+                dialog.find('textarea').css('display', 'none');
+                window.setTimeout(function(){
+                    dialog.find('textarea').css('display', 'block');
+                }, 10)
+            }
         });
 
         container.bind('widget.ok', function() {
@@ -124,10 +118,6 @@ var feedback = (function(selector) {
         container.bind('widget.cancel', function() {
             dialog.dialog('close');
         });
-
-        tabs = dialog.find('.js-control-tabs');
-        tabsSwitches = dialog.find('.js-switchtabs');
-        tabsSwitches.bind('click', onTabs);
     }
 
     $(init);
