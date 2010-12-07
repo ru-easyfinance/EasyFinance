@@ -25,7 +25,7 @@ ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . SYS_DIR_LIBS 
 
 //получим схему явно - в этом месте не удается инстанциировать request,
 //так как пути к нему заданы позже - в конфиге, который уже зависит от PROTOCOL_SCHEME
-define ('USING_HTTPS', isset($_SERVER["HTTPS"]) ? 1 : 0);
+define ('USING_HTTPS', isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? 1 : 0);
 define('PROTOCOL_SCHEME', USING_HTTPS ? 'https' : 'http');
 
 //создание полного url
