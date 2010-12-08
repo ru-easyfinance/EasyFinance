@@ -48,9 +48,11 @@ class Registration_Model
             foreach($result as $value) {
                 if (strtolower($value['mail']) == strtolower($mail)) {
                     $this->_error['mail'] = "Пользователь с таким адресом электронной почты уже зарегистрирован!";
-                } else if (strtolower($value['login']) == strtolower($login)) {
+                }
+                if (strtolower($value['login']) == strtolower($login)) {
                     $this->_error['login'] = "Пользователь с таким логином уже существует!";
-                } else {
+                }
+                if (empty($this->_error)) {
                     // Вряд-ли это кто-то увидит, но сообщение об ошибке должно
                     // быть во всех случаях когда !empty($result)
                     $this->_error['hardly_ever_happens'] = "Случилась что-то странное. Сообщите администратору.";
