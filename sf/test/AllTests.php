@@ -32,6 +32,7 @@ class AllTests extends PHPUnit_Framework_TestSuite
             'no-confirmation' => true,
             'db' => true,
             'and-migrate' => true,
+            'application' => 'frontend'
         ));
         // Таск создает свой конфиг, после чего в изоляции может молча умереть
         ProjectConfiguration::getApplicationConfiguration('frontend', 'test', $debug = true);
