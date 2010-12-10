@@ -9,7 +9,8 @@ class myReportMatrix {
         $_currency,
         $_categories,
         $_tags,
-        $_totalCategory;
+        $_totalCategory,
+        $_totalTag;
 
     public function __construct(Currency $currency)
     {
@@ -32,6 +33,8 @@ class myReportMatrix {
         $operationType = null
     )
     {
+        $totalLabel = "ИТОГО:";
+
         $operationCollection = new OperationCollection($user);
         $operationCollection->fillForPeriod($startDate, $endDate);
         $operations = $operationCollection->getOperations();
@@ -43,8 +46,9 @@ class myReportMatrix {
 
         $this->_totalCategory = new Category();
         $this->_totalCategory->setId(-1);
-        $this->_totalCategory->setName("Итого:");
+        $this->_totalCategory->setName($totalLabel);
         $this->_totalCategory->setParentId(null);
+        $this->_totalTag = $totalLabel;
 
 
         foreach ($operations as $operation) {
@@ -73,11 +77,17 @@ class myReportMatrix {
             }
         }
 
-        if (isset($this->_categories[-1])) {
-            $tmpCat = $this->_categories[-1];
-            unset($this->_categories[-1]);
-            $this->_categories[-1] = $tmpCat;
-        }
+        //сортируем по алфавиту, но итоговые значения ставим самыми последними
+        $sortLabelsWithTotal = function($firstLabel, $secondLabel) use ($totalLabel) {
+            if($firstLabel == $totalLabel)
+                return 1;
+            else if($secondLabel == $totalLabel)
+                return -1;
+            else return $firstLabel < $secondLabel;
+        };
+
+        usort($this->_categories, $sortLabelsWithTotal);
+        usort($this->_tags, $sortLabelsWithTotal);
 
         $this->_buildHeaderLeft($this->_categories);
         $this->_buildHeaderTop($this->_tags);
@@ -88,6 +98,29 @@ class myReportMatrix {
         Category $category,
         Operation $operation
     )
+    {
+        //добавим сначала прямо в соответствующие тэг и категорию
+        $this->_directAddTagAndCategory($tag, $category, $operation);
+
+        $parentCategory = ($category->getParentId()) ?
+            Doctrine::getTable('Category')
+                ->findOneById($category->getParentId()) :
+            null ;
+
+        //добавим непосредственно в родительскую
+        if ($parentCategory) {
+            $this->_directAddTagAndCategory($tag, $parentCategory, $operation);
+        }
+
+        //добавим непосредственно итог по всем категориям
+        $this->_directAddTagAndCategory($tag, $this->_totalCategory, $operation);
+
+        //полностью повторим добавление для итога по тегам, если добавляем в обычный тэг
+        if($tag != $this->_totalTag)
+            $this->_addTagAndCategory($this->_totalTag, $category, $operation);
+    }
+
+    private function _directAddTagAndCategory($tag, $category, $operation)
     {
         $flatIndexLeft = $category->getId();
         $flatIndexTop  = $tag;
@@ -100,15 +133,6 @@ class myReportMatrix {
 
         $this->_matrix[$flatIndexLeft][$flatIndexTop]
             += (float) $operation->getAmountForBudget($this->_currency, false);
-
-        $parentCategory = ($category->getParentId()) ?
-            Doctrine::getTable('Category')
-                ->findOneById($category->getParentId()) :
-            null ;
-
-        if ($parentCategory) {
-            $this->_addTagAndCategory($tag, $parentCategory, $operation);
-        }
     }
 
     public function getHeaderLeft()
