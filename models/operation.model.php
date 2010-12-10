@@ -1076,7 +1076,7 @@ class Operation_Model
     {
         $dateTo   = new DateTime();
         $dateFrom = new DateTime();
-        $dateFrom->add(new DateInterval('-1M'));
+        $dateFrom->sub(new DateInterval('P1M'));
 
         $sql = "
             SELECT count(*) as op_count FROM operation
