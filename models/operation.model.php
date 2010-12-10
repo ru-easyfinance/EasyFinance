@@ -236,13 +236,16 @@ class Operation_Model
      * @return array
      */
     function checkExistance($money = 0, $date = '', $category = 0, $comment = '', $account = 0) {
+        $now = time();
+        $dateFrom = date('Y-m-d H:i:s', $now - 2);
+        $dateTo = date('Y-m-d H:i:s', $now);
         $last = $this->db->select("
                     SELECT id
                     FROM operation
                     WHERE user_id=? AND money=? AND date=?
                         AND cat_id=? AND comment=? AND account_id=?
-                        AND created_at BETWEEN ADDDATE(NOW(), INTERVAL -2 SECOND) AND NOW()",
-                $this->_user->getId(), $money, $date, $category, $comment, $account);
+                        AND created_at BETWEEN ? AND ?",
+        $this->_user->getId(), $money, $date, $category, $comment, $account, $dateFrom, $dateTo);
 
         return $last;
     }
@@ -558,9 +561,10 @@ class Operation_Model
      * @return bool true - в случае успеха, false - в случае ошибки
      */
     function deleteOperation($id = 0) {
-        $sql = "UPDATE operation o SET deleted_at=NOW(), updated_at=NOW() WHERE user_id = ? AND id = ?";
+        $now = date('Y-m-d H:i:s');
+        $sql = "UPDATE operation o SET deleted_at=?, updated_at=? WHERE user_id = ? AND id = ?";
 
-        return (bool) $this->db->query($sql, $this->_user->getId(), $id);
+        return (bool) $this->db->query($sql, $now, $now, $this->_user->getId(), $id);
     }
 
 
@@ -580,7 +584,8 @@ class Operation_Model
             $this->_user->getId(), $accountId, $accountId);
 
         if ($opIds) {
-            $this->db->query("UPDATE operation o SET deleted_at=NOW(), updated_at=NOW() WHERE id IN (?a)", $opIds);
+            $now = date('Y-m-d H:i:s');
+            $this->db->query("UPDATE operation o SET deleted_at = ?, updated_at = ? WHERE id IN (?a)", $now, $now, $opIds);
         }
     }
 
@@ -1069,14 +1074,24 @@ class Operation_Model
      */
     public function getNumOfOperationOnAccount($accountId)
     {
+        $dateTo   = new DateTime();
+        $dateFrom = new DateTime();
+        $dateFrom->add(new DateInterval('-1M'));
+
         $sql = "
             SELECT count(*) as op_count FROM operation
             WHERE account_id=?
                 AND type <> ?
                 AND deleted_at IS NULL
-                AND updated_at BETWEEN ADDDATE(NOW(), INTERVAL -1 MONTH) AND NOW()
+                AND updated_at BETWEEN ? AND ?
             ";
-        $count = $this->db->selectRow($sql, (int) $accountId, Operation::TYPE_BALANCE);
+        $count = $this->db->selectRow(
+            $sql,
+            (int) $accountId,
+            Operation::TYPE_BALANCE,
+            $dateFrom->format('Y-m-d H:i:s'),
+            $dateTo->format('Y-m-d H:i:s')
+        );
 
         return $count['op_count'];
     }

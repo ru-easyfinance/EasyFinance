@@ -144,12 +144,13 @@ class Login_Model
      */
     static public function defaultAccounts($uid)
     {
+        $now = date('Y-m-d H:i:s');
         $sql = "INSERT INTO accounts (`account_name`,`account_type_id`,`account_description`,`account_currency_id`,`user_id`, `created_at`, `updated_at`)
-            VALUES('Кошелёк', 1, 'Мои наличные деньги', 1,".$uid.", NOW(), NOW())";
-        $aid = Core::getInstance()->db->query($sql);
+            VALUES('Кошелёк', 1, 'Мои наличные деньги', 1, ?, ?, ?)";
+        $aid = Core::getInstance()->db->query($sql, $uid, $now, $now);
         $sql = "INSERT INTO operation (user_id, money, date, cat_id, account_id, comment, type, created_at, updated_at)
-                VALUES (?, 0, '0000-00-00', NULL, ?, ?, 3, NOW(), NOW())";
-            Core::getInstance()->db->query($sql, $uid, $aid, 'Начальный остаток');
+                VALUES (?, 0, '0000-00-00', NULL, ?, ?, 3, ?, ?)";
+            Core::getInstance()->db->query($sql, $uid, $aid, 'Начальный остаток', $now, $now);
     }
 
 
@@ -330,10 +331,9 @@ class Login_Model
         $islog = $db->selectRow("SELECT count(*) as `count` FROM users WHERE user_login=?", 'azbuka_'.$login);
 
         if ( $islog['count'] == 0 ) {
-
             $db->query("INSERT into users (user_name , user_login, user_pass, user_mail,
-                user_active, user_new, user_created) VALUES (?, ?, ?, ?, 1, 0, NOW())",
-                    $login, 'azbuka_'.$login, $pass, $mail);
+                user_active, user_new, user_created) VALUES (?, ?, ?, ?, 1, 0, ?)",
+                    $login, 'azbuka_'.$login, $pass, $mail, date('Y-m-d H:i:s'));
 
             $id = mysql_insert_id();
 
@@ -371,10 +371,10 @@ class Login_Model
                 (user_name, user_login, user_pass, user_mail, user_active,
                 user_new, user_created)
             VALUES
-                (?, ?, ?, ?, 1, 0, NOW())";
+                (?, ?, ?, ?, 1, 0, ?)";
 
         $userId = Core::getInstance()->db->query($query, $name, $ramblerKey,
-            sha1($ramblerKey), $email);
+            sha1($ramblerKey), $email, date('Y-m-d H:i:s'));
 
         if ($userId) {
             self::defaultCategory($userId);
