@@ -52,7 +52,7 @@ define('HOST_ROOT_MAIN', "${project.url.root}/");
 define('URL_ROOT_MAIN',    createUrlWithScheme(HOST_ROOT_MAIN));
 
 define('HOST_ROOT_DEMO', "demo." . HOST_ROOT_MAIN);
-define('URL_ROOT_DEMO',    createUrlWithScheme(HOST_ROOT_DEMO));
+define('URL_ROOT_DEMO',  'http://' . HOST_ROOT_DEMO);
 
 define('HOST_ROOT_IFRAME', "iframe." . HOST_ROOT_MAIN);
 define('URL_ROOT_IFRAME', createUrlWithScheme(HOST_ROOT_IFRAME));
