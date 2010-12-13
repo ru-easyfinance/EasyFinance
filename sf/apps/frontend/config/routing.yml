@@ -153,8 +153,7 @@ budget_delete:
 easybank:
   url:    /easybank/
   class:  sfRoute
-  params: { module: page, action: index, pageName: underConstruction }
-#  params: { module: page, action: index, pageName: easyBank }
+  params: { module: page, action: index, pageName: easyBank }
 
 easybank_amt_easyfinance:
   url:    /easybank/amt-easyfinance
@@ -164,8 +163,7 @@ easybank_amt_easyfinance:
 easybank_citi_cashback:
   url:    /easybank/citi-cashback
   class:  sfRoute
-  params: { module: page, action: index, pageName: underConstruction }
-#  params: { module: page, action: index, pageName: citiCashBack }
+  params: { module: page, action: index, pageName: citiCashBack }
 
 easybank_citi_cashback_apply:
   url:    /easybank/citi-cashback-apply
