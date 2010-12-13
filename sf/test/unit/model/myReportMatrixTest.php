@@ -32,22 +32,38 @@ class model_myReportMatrixTest extends myUnitTestCase
         $headerTop  = $report->getHeaderTop();
         $matrix     = $report->getMatrix();
 
+        $getCategoryByLabel = function($elements, $label) {
+            foreach ($elements as $element) {
+                if ($element->label == $label) {
+                    return $element;
+                }
+            }
+            return false;
+        };
+
+        $categoryParent  = $getCategoryByLabel($headerLeft, 'Parent Cat 1');
+        $categoryChild   = $getCategoryByLabel(
+            $categoryParent->children,
+            'Child Cat 1'
+        );
+        $categoryAnother = $getCategoryByLabel($headerLeft, 'Another Cat');
+
         $this->assertEquals(
             1200,
-            $matrix[$headerLeft[0]->flatIndex]['tag_bar'],
-            'Сумма в родительской категории'
+            $matrix[$categoryParent->flatIndex]['tag_bar'],
+            'Сумма в родительской категории ' . $categoryParent->label
         );
 
         $this->assertEquals(
             800,
-            $matrix[$headerLeft[0]->children[0]->flatIndex]['tag_bar'],
-            'Сумма в дочерней категории'
+            $matrix[$categoryChild->flatIndex]['tag_bar'],
+            'Сумма в дочерней категории ' . $categoryChild->label
         );
 
         $this->assertEquals(
             50,
-            $matrix[$headerLeft[1]->flatIndex]['tag_foo'],
-            'Сумма в третьей категории'
+            $matrix[$categoryAnother->flatIndex]['tag_foo'],
+            'Сумма в третьей категории ' . $categoryAnother->label
         );
     }
 
