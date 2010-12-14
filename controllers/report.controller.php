@@ -57,17 +57,17 @@ class Report_Controller extends _Core_Controller_UserCommon
         $this->tpl->assign('dateFrom', date('01.m.Y'));
         $this->tpl->assign('dateTo',   date(date('t').'.m.Y'));
 
-        $lastmonth = date('m') - 1;
-        if ($lastmonth == 0) {
-            $lastmonth = 12;
+        $lastMonth = date('m') - 1;
+        if ($lastMonth == 0) {
+            $lastMonth = 12;
         }
 
-        //@FIXME Поправить этот диапазон дат, до 2012го..
-        $days = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+        $lastYear = ($lastMonth != 12) ? date('Y') : date('Y') - 1;
 
-        //@TODO Переписать
-        $this->tpl->assign('dateFrom2', '01'.'.'.$lastmonth.'.'.( ($lastmonth!=12)?date('Y'):date('Y')-1 ) );
-        $this->tpl->assign('dateTo2',   $days[$lastmonth-1].'.'.$lastmonth.'.'.( ($lastmonth!=12)?date('Y'):date('Y')-1 ));
+        $monthYear = $lastMonth . '.' . $lastYear;
+
+        $this->tpl->assign('dateFrom2', '01' . '.' . $monthYear);
+        $this->tpl->assign('dateTo2', cal_days_in_month(CAL_GREGORIAN, $lastMonth, $lastYear) . '.' . $monthYear);
     }
 
     /**
