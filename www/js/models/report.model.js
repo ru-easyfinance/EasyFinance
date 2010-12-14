@@ -17,17 +17,20 @@ easyFinance.models.report = function() {
 
         function generateCategories(root, isParent) {
             var str = '';
+
             var rowClassName = isParent ? 'b-reportstable-row-category' : 'b-reportstable-row-subcategory';
             var iteratible = isParent ? root : root.children
 
-            for (var i = 0; i < iteratible.length; i++) {
-                str += '<tr class="' + rowClassName  + '">';
-                str += '<th>' + iteratible[i].label + '</th>';
-                str += generateValues(iteratible[i].flatIndex, data.headerTop, data.matrix)
-                str += '</tr>';
+            if (iteratible.length == 0) {
+                for (var i = 0; i < iteratible.length; i++) {
+                    str += '<tr class="' + rowClassName  + '">';
+                    str += '<th>' + iteratible[i].label + '</th>';
+                    str += generateValues(iteratible[i].flatIndex, data.headerTop, data.matrix)
+                    str += '</tr>';
 
-                if (isParent) {
-                    str += generateCategories(iteratible[i]);
+                    if (isParent) {
+                        str += generateCategories(iteratible[i]);
+                    }
                 }
             }
 
@@ -36,9 +39,15 @@ easyFinance.models.report = function() {
 
         function generateHeader(tags) {
             var str = '<tr>';
-            str += '<th style="text-align: left;">Категория</th>';
-            for (var i = 0; i < tags.length; i++) {
-                str += '<th>' + tags[i].label + '</th>'
+
+            if (tags.length == 0) {
+                str += '<th style="text-align: center; height: 10em;">Нет операций с метками за выбранный период</th>'
+            }
+            else {
+                str += '<th style="text-align: left;">Категория</th>';
+                for (var i = 0; i < tags.length; i++) {
+                    str += '<th>' + tags[i].label + '</th>'
+                }
             }
             return str;
         }
