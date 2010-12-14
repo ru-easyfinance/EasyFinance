@@ -10,34 +10,27 @@ easyFinance.models.report = function() {
                 child = columns[i];
 
                 arr.push( formatCurrency(values[index][child.flatIndex]) )
-
             }
 
             return '<td>' + arr.join('</td><td>') + '</td>'
         }
 
-        function generateParentCategories(root) {
+        function generateCategories(root, isParent) {
             var str = '';
-            for (var i = 0; i < root.length; i++) {
-                str += '<tr class="b-reportstable-row-category">';
-                str += '<th>' + root[i].label + '</th>';
-                str += generateValues(root[i].flatIndex, data.headerTop, data.matrix)
+            var rowClassName = isParent ? 'b-reportstable-row-category' : 'b-reportstable-row-subcategory';
+            var iteratible = isParent ? root : root.children
+
+            for (var i = 0; i < iteratible.length; i++) {
+                str += '<tr class="' + rowClassName  + '">';
+                str += '<th>' + iteratible[i].label + '</th>';
+                str += generateValues(iteratible[i].flatIndex, data.headerTop, data.matrix)
                 str += '</tr>';
 
-                str += generateSubCategories(root[i]);
+                if (isParent) {
+                    str += generateCategories(iteratible[i]);
+                }
             }
 
-            return str;
-        }
-
-        function generateSubCategories(root) {
-            var str = '';
-            for (var i = 0; i < root.children.length; i++) {
-                str += '<tr class="b-reportstable-row-subcategory">';
-                str += '<th>' + root.children[i].label + '</th>';
-                str += generateValues(root.children[i].flatIndex, data.headerTop, data.matrix);
-                str += '</tr>';
-            }
             return str;
         }
 
@@ -52,18 +45,25 @@ easyFinance.models.report = function() {
 
         return {
             head: generateHeader(data.headerTop),
-            body: generateParentCategories(data.headerLeft)
+            body: generateCategories(data.headerLeft, true)
         }
     }
 
-    function load(requestData, callback) {
-        var api_url = '/report/getData/?responseMode=json';
+    var API = {
+        graph_loss:             "/report/getData/?responseMode=json",
+        txt_loss:               "/report/getData/?responseMode=json",
+        txt_loss_difference:    "/report/getData/?responseMode=json",
+        matrix_loss:            "/my/reports/matrix?type=0",
+        graph_profit:           "/report/getData/?responseMode=json",
+        txt_profit:             "/report/getData/?responseMode=json",
+        txt_profit_difference:  "/report/getData/?responseMode=json",
+        matrix_profit:          "/my/reports/matrix?type=1",
+        graph_profit_loss:      "/report/getData/?responseMode=json"
+    }
 
-        if (requestData.report == 'matrix') {
-            api_url = '/my/reports/matrix';
-        }
+    function load(requestData, callback) {
         $.get(
-            api_url,
+            API[requestData.report],
             requestData,
             function(data) {
                 if (typeof(callback) == 'function'){

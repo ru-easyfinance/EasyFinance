@@ -63,13 +63,14 @@ class Account_Model
         // Удалить счет
         $sql = "
             UPDATE accounts
-            SET deleted_at=NOW(),
-                updated_at=NOW()
+            SET deleted_at=?,
+                updated_at=?
             WHERE
                     account_id = ?
                 AND user_id = ?
             LIMIT 1";
-        Core::getInstance()->db->query($sql, $accountId, $userId);
+        $now = date('Y-m-d H:i:s');
+        Core::getInstance()->db->query($sql, $now, $now, $accountId, $userId);
 
         // Удалить все операции
         $opModel = new Operation_Model(Core::getInstance()->user);

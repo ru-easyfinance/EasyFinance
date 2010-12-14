@@ -111,9 +111,10 @@ class Category_Model {
      */
     function add($name, $parent, $system, $type)
     {
+        $now = date('Y-m-d H:i:s');
         $sql = "INSERT INTO category(user_id, cat_parent, system_category_id, cat_name, type, custom,
-            created_at, updated_at) VALUES(?, ?, ?, ?, ?, 1, NOW(), NOW())";
-        $newID = $this->db->query($sql, Core::getInstance()->user->getId(), $parent, $system, $name, $type);
+            created_at, updated_at) VALUES(?, ?, ?, ?, ?, 1, ?, ?)";
+        $newID = $this->db->query($sql, Core::getInstance()->user->getId(), $parent, $system, $name, $type, $now, $now);
         Core::getInstance()->user->initUserCategory();
         Core::getInstance()->user->save();
 
@@ -156,9 +157,9 @@ class Category_Model {
 
         // Если это пользовательская категория
         if ($cat[$id]['custom'] == 1) {
-            $sql = "UPDATE category SET cat_parent = ?, system_category_id = ? , cat_name = ?, type =?, updated_at = NOW()
+            $sql = "UPDATE category SET cat_parent = ?, system_category_id = ? , cat_name = ?, type =?, updated_at = ?
                 WHERE user_id = ? AND cat_id = ?";
-            $result = $this->db->query($sql, $parent, $system, $name, $type,
+            $result = $this->db->query($sql, $parent, $system, $name, $type, date('Y-m-d H:i:s'),
                             Core::getInstance()->user->getId(), $id);
             // Системная категория, можно изменить только имя
         } else {
@@ -168,8 +169,8 @@ class Category_Model {
                 return array('error' => array(
                         'text' => 'Категория не была изменена'
             ));
-            $sql = "UPDATE category SET cat_name = ?, updated_at = NOW() WHERE user_id = ? AND cat_id = ?";
-            $result = $this->db->query($sql, $name, Core::getInstance()->user->getId(), $id);
+            $sql = "UPDATE category SET cat_name = ?, updated_at = ? WHERE user_id = ? AND cat_id = ?";
+            $result = $this->db->query($sql, $name, date('Y-m-d H:i:s'), Core::getInstance()->user->getId(), $id);
         }
 
         if ($result) {
@@ -190,15 +191,16 @@ class Category_Model {
      */
     function del($id = 0)
     {
+        $now = date('Y-m-d H:i:s');
         // Удаляет (скрывает) категорию, заодно и дочерние (если есть)
         $sql = "
             UPDATE category
-                SET updated_at=NOW(), deleted_at=NOW()
+                SET updated_at=?, deleted_at=?
             WHERE
                     user_id=?
                 AND (cat_id=? OR cat_parent=?)
         ";
-        $this->db->query($sql, Core::getInstance()->user->getId(), $id, $id);
+        $this->db->query($sql, $now, $now, Core::getInstance()->user->getId(), $id, $id);
 
         //@FIXME Починить удаление операций по категории
         Core::getInstance()->user->initUserCategory();

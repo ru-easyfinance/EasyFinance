@@ -32,22 +32,38 @@ class model_myReportMatrixTest extends myUnitTestCase
         $headerTop  = $report->getHeaderTop();
         $matrix     = $report->getMatrix();
 
+        $getCategoryByLabel = function($elements, $label) {
+            foreach ($elements as $element) {
+                if ($element->label == $label) {
+                    return $element;
+                }
+            }
+            return false;
+        };
+
+        $categoryParent  = $getCategoryByLabel($headerLeft, 'Parent Cat 1');
+        $categoryChild   = $getCategoryByLabel(
+            $categoryParent->children,
+            'Child Cat 1'
+        );
+        $categoryAnother = $getCategoryByLabel($headerLeft, 'Another Cat');
+
         $this->assertEquals(
             1200,
-            $matrix[$headerLeft[0]->flatIndex]['tag_bar'],
-            'Сумма в родительской категории'
+            $matrix[$categoryParent->flatIndex]['tag_bar'],
+            'Сумма в родительской категории ' . $categoryParent->label
         );
 
         $this->assertEquals(
             800,
-            $matrix[$headerLeft[0]->children[0]->flatIndex]['tag_bar'],
-            'Сумма в дочерней категории'
+            $matrix[$categoryChild->flatIndex]['tag_bar'],
+            'Сумма в дочерней категории ' . $categoryChild->label
         );
 
         $this->assertEquals(
             50,
-            $matrix[$headerLeft[1]->flatIndex]['tag_foo'],
-            'Сумма в третьей категории'
+            $matrix[$categoryAnother->flatIndex]['tag_foo'],
+            'Сумма в третьей категории ' . $categoryAnother->label
         );
     }
 
@@ -78,6 +94,48 @@ class model_myReportMatrixTest extends myUnitTestCase
         $this->assertEmpty(
             $report->getMatrix(),
             'Счёт по которому нет операций'
+        );
+    }
+
+    /**
+     * Проверяем отчёт по доходам
+     * и таблица с числами
+     */
+    public function testProfitReport()
+    {
+        $user = Doctrine::getTable('User')->findOneByLogin('tester');
+        $dateStart = new DateTime('2010-05-01');
+        $dateEnd   = new DateTime('2010-12-01');
+        $currency  = $user->getCurrency();
+
+        $report = new myReportMatrix($currency);
+        $report->buildReport(
+            $user,
+            null,
+            $dateStart,
+            $dateEnd,
+            Operation::TYPE_PROFIT
+        );
+
+        $headerLeft = $report->getHeaderLeft();
+        $matrix     = $report->getMatrix();
+
+        $this->assertEquals(
+            2,
+            count($headerLeft),
+            'В заголовках ожидается одна доходная категория и Итого'
+        );
+
+        $this->assertEquals(
+            800,
+            $matrix[$headerLeft[0]->flatIndex]['tag_bar'],
+            'Сумма в доходной категории по тэгу tag_bar'
+        );
+
+        $this->assertEquals(
+            400,
+            $matrix[$headerLeft[0]->flatIndex]['tag_foo'],
+            'Сумма в доходной категории по тэгу tag_foo'
         );
     }
 }

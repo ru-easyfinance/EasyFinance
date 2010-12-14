@@ -426,7 +426,7 @@ class Targets_Model {
             if ( $targets['user_targets'][$value['target']]['account'] == $value['account'] ) {
 
                 $sql = "INSERT INTO target_bill ( `bill_id`, `target_id`, `user_id`, `money`, `comment`,
-                    `date`, `chain_id`, `accepted`, `dt_create` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, NOW() )";
+                    `date`, `chain_id`, `accepted`, `dt_create` ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 
                 $this->db->query( $sql,
                     $value['account'],
@@ -436,7 +436,8 @@ class Targets_Model {
                     strip_tags( $value['comment'] ),
                     $value['date'],
                     $value['chain'],
-                    $value['accepted']
+                    $value['accepted'],
+                    date('Y-m-d H:i:s')
                 );
 
             } else {
@@ -462,7 +463,7 @@ class Targets_Model {
 
                 $sql = "INSERT INTO target_bill
                     ( `bill_id`, `target_id`, `user_id`, `money`, `comment`, `date`, `chain_id`, `accepted`, `dt_create` )
-                    VALUES ( ?, ?, ?, ?, ?, ? , ?, ?, NOW());";
+                    VALUES ( ?, ?, ?, ?, ?, ? , ?, ?, ?);";
 
                 //Добавим перевод на фин цель со счёта фин цели
                 $this->db->query (
@@ -474,7 +475,8 @@ class Targets_Model {
                     $value['comment'],
                     $value['date'],
                     $value['chain'],
-                    $value['accepted']
+                    $value['accepted'],
+                    date('Y-m-d H:i:s')
                 );
 
             }
@@ -513,9 +515,9 @@ class Targets_Model {
 
             $sql = "INSERT INTO
                         target_bill (`bill_id`, `target_id`, `user_id`, `money`, `comment`, `date`, `dt_create`)
-                    VALUES ( ?, ?, ?, ?, ?, ?, NOW());";
+                    VALUES ( ?, ?, ?, ?, ?, ?, ?);";
 
-            $this->db->query($sql, $accountId, $targetId, $userId, $money, strip_tags($comment), $date);
+            $this->db->query($sql, $accountId, $targetId, $userId, $money, strip_tags($comment), $date, date('Y-m-d H:i:s'));
 
             if ($close == 1) {
                 $sql = "UPDATE target SET close=1 WHERE user_id=? AND id=?";
@@ -535,7 +537,7 @@ class Targets_Model {
 
             //а теперь добавим перевод на фин цель со счёта фин цели!
             $this->db->query("INSERT INTO target_bill (`bill_id`, `target_id`, `user_id`, `money`, `dt_create`, `comment`, `date`)
-                VALUES(?,?,?,?,NOW(),?,?);",$targetAccountId, $targetId, Core::getInstance()->user->getId(), $convert, $comment, $date);
+                VALUES(?,?,?,?,?,?,?);",$targetAccountId, $targetId, Core::getInstance()->user->getId(), $convert, date('Y-m-d H:i:s'), $comment, $date);
             if (!empty($close)) {
                 $this->db->query("UPDATE target SET close=1 WHERE user_id=? AND id=?", Core::getInstance()->user->getId(), $targetId);
             }

@@ -39,6 +39,13 @@ Category:
     name: 'Another Cat'
     type: '1'
     custom: '1'
+  Category_4:
+    parent_id: '0'
+    system_id: null
+    User: User_1
+    name: 'Income'
+    type: '-1'
+    custom: '1'
 
 Account:
   Account_1:
@@ -116,3 +123,23 @@ Operation:
     type: '0'
     accepted: true
     tags: 'tag_bar'
+  Operation_7:
+    comment: 'Доход 800 р. 4 месяца назад'
+    User: User_1
+    Account: Account_1
+    Category: Category_4
+    amount: '800.00'
+    date: '2010-07-03'
+    type: '1'
+    accepted: true
+    tags: 'tag_bar'
+  Operation_8:
+    comment: 'Доход 400 р. 4 месяца назад'
+    User: User_1
+    Account: Account_1
+    Category: Category_4
+    amount: '400.00'
+    date: '2010-07-03'
+    type: '1'
+    accepted: true
+    tags: 'tag_foo'
