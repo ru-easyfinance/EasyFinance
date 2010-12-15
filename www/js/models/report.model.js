@@ -18,10 +18,11 @@ easyFinance.models.report = function() {
         function generateCategories(root, isParent) {
             var str = '';
 
-            var rowClassName = isParent ? 'b-reportstable-row-category' : 'b-reportstable-row-subcategory';
             var iteratible = isParent ? root : root.children
 
-            if (iteratible.length == 0) {
+            if (iteratible.length != 0) {
+                var rowClassName = isParent ? 'b-reportstable-row-category' : 'b-reportstable-row-subcategory';
+
                 for (var i = 0; i < iteratible.length; i++) {
                     str += '<tr class="' + rowClassName  + '">';
                     str += '<th>' + iteratible[i].label + '</th>';
