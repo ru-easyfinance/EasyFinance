@@ -87,19 +87,21 @@ class mySyncInOperationForm extends BaseFormDoctrine
             case Operation::TYPE_BALANCE:
                 unset($this['date'], $this['transfer_account_id'], $this['transfer_amount']);
                 $values['accepted'] = true;
-                $validator = new sfValidatorDoctrineUnique(
-                    array(
-                        'model'  => 'Operation',
-                        'column' => array('account_id', 'type')
-                    ),
-                    array(
-                        'invalid' => sprintf(
-                            'Duplicate balance operations for account %s',
-                            $values['account_id']
+                if (!empty($values['id'])) {
+                    $validator = new sfValidatorDoctrineUnique(
+                        array(
+                            'model'  => 'Operation',
+                            'column' => array('account_id', 'type')
+                        ),
+                        array(
+                            'invalid' => sprintf(
+                                'Duplicate balance operations for account %s',
+                                $values['account_id']
+                            )
                         )
-                    )
-                );
-                $validator->clean($values);
+                    );
+                    $validator->clean($values);
+                }
                 break;
             case Operation::TYPE_TRANSFER:
                 unset($this['category_id']);

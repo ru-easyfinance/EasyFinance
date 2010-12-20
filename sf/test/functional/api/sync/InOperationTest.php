@@ -492,6 +492,7 @@ class api_sync_InOperationTest extends api_sync_in
     {
         $account = $this->helper->makeAccount($this->_user);
 
+        // Балансовая операция существует и мы это знаем
         $balanceOperation = Doctrine::getTable('Operation')
             ->findOneByAccountIdAndType(
                 $account->getId(),
@@ -500,6 +501,7 @@ class api_sync_InOperationTest extends api_sync_in
             ->getData();
 
         $xmlData = array(
+            // Зная id балансовой операции, успешно меняем её
             array(
                 'id'         => $balanceOperation['id'],
                 'amount'     => 200,
@@ -508,6 +510,7 @@ class api_sync_InOperationTest extends api_sync_in
                 'accepted'   => 1,
                 'cid'        => 1,
             ),
+            // Профит тут для массовки
             array(
                 'amount'     => 400,
                 'account_id' => $account->getId(),
@@ -515,7 +518,9 @@ class api_sync_InOperationTest extends api_sync_in
                 'accepted'   => 1,
                 'cid'        => 2,
             ),
+            // А это балансовая операция с неверным id
             array(
+                'id'         => $balanceOperation['id'] + 1,
                 'amount'     => 100,
                 'account_id' => $account->getId(),
                 'type'       => Operation::TYPE_BALANCE,
@@ -540,7 +545,37 @@ class api_sync_InOperationTest extends api_sync_in
 
 
     /**
-     * Отправляем две балансовые операции для одного счёта
+     * Отправляем балансовую операцию с пустым id
+     */
+    public function testBalanceOperationWithNullSid()
+    {
+        $account = $this->helper->makeAccount($this->_user);
+
+        $xmlData = array(
+            array(
+                'amount'     => 100,
+                'account_id' => $account->getId(),
+                'type'       => Operation::TYPE_BALANCE,
+                'accepted'   => 1,
+                'cid'        => 3,
+            ),
+        );
+
+        $xml = $this->getXMLHelper()->makeCollection(3, $xmlData);
+
+        $this->myXMLPost($xml, 200);
+
+        // Ответ
+        $this->browser
+            ->with('response')->begin()
+                ->checkElement('resultset[type="Operation"]', 1)
+                ->checkElement('record[cid="3"][success="true"]', 'OK')
+            ->end();
+    }
+
+
+    /**
+     * Отправляем операцию из часового пояса отличного от Москвы и Гринвича
      */
     public function testOperationDatesWithTimezones()
     {
@@ -550,7 +585,12 @@ class api_sync_InOperationTest extends api_sync_in
         $dateBetween = new DateTime('1 week ago');
         $dateEnd     = new DateTime('now');
 
-        $dateBetween->setTimezone(new DateTimeZone('Europe/Paris'));
+        $timezone    = date_default_timezone_get() == 'America/Los_Angeles' ?
+            'Europe/Paris' :
+            'America/Los_Angeles';
+
+        // Теперь мы в Париже или в Лос-Анджелесе
+        $dateBetween->setTimezone(new DateTimeZone($timezone));
 
         $xmlData = array(
             array(
@@ -580,6 +620,7 @@ class api_sync_InOperationTest extends api_sync_in
         $record   = $sxml->xpath('resultset/record[@cid="1"]');
         $recordId = (int) $record[0]['id'];
 
+        // Дата осталась прежней, но в БД она хранится в часовом поясе Москвы
         $dateBetween->setTimezone(new DateTimeZone(date_default_timezone_get()));
 
         $this->browser
