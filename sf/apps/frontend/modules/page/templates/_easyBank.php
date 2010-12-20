@@ -25,7 +25,6 @@
 
     <div class="b-easybank-getcards">
         <div class="b-getcard b-getcard__citi">
-            <a class="b-getcard-banklogo" href="/my/wikiwrapper/tiki-index.php?page=Partners"></a>
             <a class="b-getcard-title" href="<?php echo url_for('easybank_citi_cashback'); ?>">Кредитная карта CITI CASH BACK</a>
             <span class="b-getcard-cardimage">
                 <a href="<?php echo url_for('easybank_citi_cashback'); ?>">
@@ -63,7 +62,6 @@
 
         </div>
         <div class="b-getcard b-getcard__amt">
-            <a class="b-getcard-banklogo" href="/my/wikiwrapper/tiki-index.php?page=Partners"></a>
             <a class="b-getcard-title" href="<?php echo url_for('easybank_amt_easyfinance'); ?>">Банковская карта AMT EasyFinance</a>
             <span class="b-getcard-cardimage">
                 <a href="<?php echo url_for('easybank_amt_easyfinance'); ?>">
