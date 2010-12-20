@@ -20,7 +20,7 @@ class syncInCategoryAction extends myBaseSyncInAction
 
         // существующие записи, владельца не проверяем! так надо!
         $recordIds = $this->filterByXPath('//record/@id', 'id');
-        $categories = Doctrine_Query::create()
+        $categories = empty($recordIds) ? null : Doctrine_Query::create()
             ->select("c.*")
             ->from("Category c INDEXBY c.id")
             ->whereIn("c.id", $recordIds)
@@ -47,7 +47,7 @@ class syncInCategoryAction extends myBaseSyncInAction
         $results   = array();
         foreach ($data as $record) {
             // не добавляем в коллекцию новых объектов, поэтому так:
-            if ($categories->contains($record['id'])) {
+            if ($categories && $categories->contains($record['id'])) {
                 $myObject = $categories[(int) $record['id']];
             } else {
                 $myObject = new $modelName();
