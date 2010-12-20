@@ -8,7 +8,7 @@
             <div class="b-slogan-part b-slogan-part__plus"></div>
             <div class="b-slogan-part b-slogan-part__cards"></div>
             <div class="b-slogan-part b-slogan-part__equals"></div>
-            
+
             <div class="b-slogan-part b-slogan-part__whatis">
                 <h3 class="b-slogan-2click">EasyBank &mdash; контроль расходов в 2 клика:</h3>
                 <p class="b-slogan-autoaccounting">
@@ -24,7 +24,7 @@
     <h3 class="b-easybank-choosecard">Выберите карту:</h3>
 
     <div class="b-easybank-getcards">
-        <div class="b-getcard b-getcard__citi">
+        <div class="b-getcard b-getcard__citi hidden">
             <a class="b-getcard-title" href="<?php echo url_for('easybank_citi_cashback'); ?>">Кредитная карта CITI CASH BACK</a>
             <span class="b-getcard-cardimage">
                 <a href="<?php echo url_for('easybank_citi_cashback'); ?>">
