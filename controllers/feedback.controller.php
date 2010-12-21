@@ -32,19 +32,19 @@ class Feedback_Controller extends _Core_Controller
      function add_message()
      {
          // Параметры браузера
-         $param = array();
-         $param['c_height'] = $_POST['cheight'];
-         $param['c_width']  = $_POST['cwidth'];
-         $param['colors']   = $_POST['colors'];
-         $param['height']   = $_POST['height'];
-         $param['width']    = $_POST['width'];
-         $param['plugins']  = $_POST['plugins'];
+         $paramNames = array('cheight', 'cwidth', 'colors', 'height', 'width', 'plugins');
+
+         $param = array_intersect_key($_POST, array_combine($paramNames, $paramNames));
 
          // Сообщение
+         if (empty($_POST['msg']) || empty($_POST['title'])) {
+             $this->tpl->assign('error', array('text'=>"Не заполнены обязательные поля."));
+             return false;
+         }
+
          $title             = $_POST['title'];
          $message           = $_POST['msg'];
          $param['email']    = @$_POST['email'];
-
 
          // Параметры страницы
          $param['request']  = $_SERVER['REQUEST_URI'];
