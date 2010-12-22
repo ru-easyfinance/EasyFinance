@@ -254,16 +254,6 @@ easyFinance.widgets.operationsJournal = function(){
         }
     }
 
-    /*function _sexyFilter (input, text){
-        if (this.wrapper.data("sc:lastEvent") == "click")
-            return true;
-
-        if (text.toLowerCase().indexOf(input.toLowerCase()) != -1)
-            return true;
-        else
-            return false;
-    }*/
-
     function _initFilters() {
         // фильтр по типу операции
         $('.type-sort', DataTables.table).unbind().click(function() {
