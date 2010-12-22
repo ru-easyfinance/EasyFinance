@@ -43,29 +43,6 @@
                 <li class="last"></li>
             </ul>
         </li>
-        <!--
-        <li id="m7">
-            <a href="#">Помощь</a>
-            <ul>
-                <li class="first"></li>
-                <li><span> </span><a id="linkMainMenuFeedback" href="#">Обратная связь</a></li>
-                <li><span> </span><a id="linkMainMenuVideoGuide" href="#">Видеогид</a></li>
-                <li><span> </span><a href="<?php echo URL_ROOT_WIKI; ?>tiki-read_article.php?articleId=14">FAQ</a></li>
-                <li><span> </span><a href="/review/">Обзор</a></li>
-                <li class="last"></li>
-            </ul>
-        </li>
-
-        <li id="m9">
-            <a href="/profile/">Настройки</a>
-            <ul>
-                <li class="first"></li>
-                <li><span> </span><a href="/my/profile/">Профиль</a></li>
-                <li><span> </span><a href="/my/services/">Услуги</a></li>
-                <li class="last"></li>
-            </ul>
-        </li>
-        -->
     </ul>
 
     <div class="menu-icons">

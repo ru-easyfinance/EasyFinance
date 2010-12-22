@@ -45,16 +45,6 @@
 
     <?php include_partial('global/common/feedback', array())?>
 
-    <div id="popupHelp" class="hidden">
-        <div class="title"></div><br>
-        <div class="links"></div><br>
-        <a
-            id = "playerHelp"
-            class = "video"
-            href="/flv/test.mp4"
-            style="display:block;width:640px;height:480px"
-        ></a><br>
-    </div>
 </div>
 <script type="text/javascript">
     var _gaq = _gaq || [];

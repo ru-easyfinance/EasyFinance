@@ -148,34 +148,6 @@ $(document).ready(function(){
     });
     if (location.hostname.indexOf("iframe.") != -1)
         isIframe = true;
-    // # тикет 625
-    // инициализируем виджет видео-гида
-    if (!isIframe) {
-        easyFinance.widgets.help.init('#popupHelp', true);
-        //easyFinance.widgets.wizard.init();
-        // по умолчанию устанавливаем видео,
-        // которое соответствует содержанию страницы
-        var tabVideo = {
-            "m0": "newOperation",
-            "m1": "newOperation",
-            "m2": "newAccount",
-            "m3": "newBudget",
-            "m4": "newTarget",
-            "m5": "newOperation",
-            "m6": "newOperation"
-        };
-        $('#linkMainMenuVideoGuide').click(function(){
-            $('#popupHelp').dialog('open');
-            if (page_mid) {
-                easyFinance.widgets.help.showVideo(tabVideo[page_mid]);
-            } else {
-                easyFinance.widgets.help.showVideo("newAccount");
-            }
-        });
-//        $('#linkMainMenuStartWizard').click(function() {
-//            easyFinance.widgets.wizard.show();
-//        })
-    }
 
     // #1583. задаем переменные для работы с боковой панелью
     var rightbar = $('.mid .block3'),
