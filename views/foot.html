@@ -4,16 +4,6 @@
 
             {include_php file="../sf/apps/frontend/templates/_common/feedback.php"}
 
-            <div id="popupHelp" class="hidden">
-                <div class="title"></div><br>
-                <div class="links"></div><br>
-                <a
-                    id = "playerHelp"
-                    class = "video"
-                    href="/flv/test.mp4"
-                    style="display:block;width:640px;height:480px"
-                ></a><br>
-            </div>
         </div>
 {if strpos($smarty.server.HTTP_HOST, 'rambler') === false}
         <div id="footer" style="z-index: 1">

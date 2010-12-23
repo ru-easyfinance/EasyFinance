@@ -1109,18 +1109,6 @@ ul.popularobject li .statistics div span.red { color: #e7732a; }
 #dialog_rating .link {text-align: right;}
 #dialog_rating td{border-bottom:1px solid #DFDEDE}
 
-
-ul.pager { margin-bottom: 24px;}
-ul.pager:after { display: block; content: ' '; height: 0; overflow: hidden; clear: both; }
-ul.pager li { float: left; margin-right: 1px; padding: 3px 6px 4px 5px;  line-height: 12px; }
-ul.pager li a { text-decoration: none; }
-ul.pager li a:hover { text-decoration: underline; }
-ul.pager li a.next { display: block; padding-top: 3px; width: 14px; height: 7px; text-indent: -999px; overflow: hidden; background: url('/img/i/icons.gif') no-repeat -20px -267px; }
-ul.pager li.act { color: #ffffff; background: #38ad00; }
-
-
-.but_cal { margin-bottom: 30px; }
-.but_cal input { margin: 0 15px 0 0; }
 .print { display: block; padding-left: 20px; background: url('/img/i/icons.gif') no-repeat -40px -266px; }
 
 
@@ -1186,9 +1174,6 @@ div.w_dialog{width:400px; height:auto;min-height:50px; z-index:100;position:abso
 div.w_dialog div.w_d_head{width:400px; height:20px;position:relative;  background: transparent url(/img/i/wel.msg.head.png) no-repeat scroll 0 0;}
 div#dialog.w_dialog div.w_d_body{width:400px; height:auto;position:relative; padding-left: 27px; background: transparent url(/img/i/wel.msg.body.png) no-repeat scroll 0 0;}
 div.w_dialog div.w_d_foot{width:400px; height:30px;position:relative;  background: transparent url(/img/i/wel.msg.foot.png) no-repeat scroll 0 0;}
-#popupreport div.w_d_head {width:400px; height:20px;position:relative;  background: transparent url(/img/i/wel.msg.head.png) no-repeat scroll 0 0;}
-#popupreport div.w_d_body {width:auto; height:auto;position:relative;left:1px;padding-left:20px;  background: transparent url(/img/i/wel.msg.body.png) repeat-y scroll 0 0;}
-#popupreport div.w_d_foot {width:400px; height:30px;position:relative;  background: transparent url(/img/i/wel.msg.foot.png) no-repeat scroll 0 0;}
 
 #popupHelp { margin: 10px; }
 
