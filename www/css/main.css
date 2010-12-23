@@ -358,15 +358,6 @@ ul.menu4 li#m_last a { background: none; }
 .block1 .title h2, .block1 .experts h2, .block1 .budget2 h2 { float: left; margin: 0 6px 0 0; font-size: 12px; line-height: 12px; color: #3c9915; font-weight: bold; }
 .block1 .title .add { display: block; float: left; margin-top: 2px; width: 9px; height: 9px; text-indent: -999px; overflow: hidden; background: url('/img/i/icons.gif') no-repeat 0 -270px; cursor: pointer; }
 
-.block1 .experts { padding-bottom: 9px; }
-.block1 .experts h2 { float: none; margin: 0 0 2px 0; }
-.block1 .experts dl dt { padding-top: 4px; border-top: 1px solid #e5e5e5; }
-.block1 .experts dl dt.first { border: 0 none; }
-.block1 .experts dl dt a { color: #383838; }
-.block1 .experts dl dt span { font-size: 11px; color: #e5691b; }
-.block1 .experts dl dd { margin-bottom: 11px; font-size: 11px; color: #979797; line-height: 15px; }
-.block1 .experts dl dd a { display: block; }
-
 .block1 .budget2 { padding-bottom: 9px; }
 .block1 .budget2 h2 { float: none; margin: 0 0 8px 0; }
 .block1 .budget2 ul li { margin-bottom: 8px; padding-bottom: 8px; font-size: 11px;  border-bottom: 1px solid #e5e5e5; }
