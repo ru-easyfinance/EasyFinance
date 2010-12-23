@@ -1102,105 +1102,12 @@ ul.popularobject li .statistics div span.red { color: #e7732a; }
 .addcategories small { display: block; margin-top: 17px; font-size: 11px; line-height: 13px; color: #898989; }
 
 
-
-.services { margin-bottom: 26px; }
-.serv_name { margin-bottom: 13px; padding-left: 17px; font-size: 14px; }
-.serv_name b { font-size: 16px; color: #222321; }
-.serv_name a { margin-left: 5px; padding-left: 22px; font-size: 12px; background: url('/img/i/icons.gif') no-repeat -20px -420px; }
-
-.serv_descr { margin: -3px 0 26px 17px; }
-.serv_descr ul, ul.themes { margin: 0 0 16px 9px;  }
-.serv_descr ul li, ul.themes li { margin-bottom: 5px; padding-left: 11px; background: url('/img/i/li2.gif') no-repeat 0 6px; }
-
-ul.themes li a { margin-left: 5px; padding-left: 22px; background: url('/img/i/icons.gif') no-repeat -20px -370px; }
-
-
 #dialog_rating .act {background-color:#FFFFF0}
 
 #dialog_rating {font: 12px/16px Arial, Tahoma, sans-serif; color:#20201e;}
 #dialog_rating table {width:98%;text-align: left; padding-right: 30px; border:2px solid #DFDEDE}
 #dialog_rating .link {text-align: right;}
 #dialog_rating td{border-bottom:1px solid #DFDEDE}
-
-
-#popupdiagram, #popupadd_calendar { display: none; position: absolute; width: 383px; z-index: 1000; }
-#popupdiagram .cont, #poputags .cont, #popupadd_calendar .cont { position: relative; width: 383px; overflow: hidden; }
-#popupdiagram .cont .ct, #popupdiagram .cb div,
-#poputags .cont .ct, #poputags .cb div,
-#popupadd_calendar .cont .ct, #popupadd_calendar .cb div { position: absolute; top: 0; left: 0; width: 671px; height: 800px; z-index: 0; background: url('/img/i/ramka5.png') no-repeat 0 0; //-filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="i/ramka5.png", sizingMethod="crop"); }
-#popupdiagram .cb, #poputags .cb, #popupadd_calendar .cb { position: relative; width: 383px; height: 25px; overflow: hidden; }
-#popupdiagram .cb div, #poputags .cb div, #popupadd_calendar .cb div { top: -775px; }
-#popupdiagram .inside,
-#poputags .inside,
-#popupadd_calendar .inside,
-#popupaddobject .inside,
-#popupdiagram .inside { padding: 33px 0 0 29px; }
-
-#popupdiagram .close,
-#poputags .close,
-#popupadd_calendar .close,
-#popupaddobject .close,
-#popupaddobject .close { position: absolute; top: 14px; right: 27px; width: 11px; height: 11px; text-indent: -999px; overflow: hidden; cursor: pointer; z-index: 10; background: url('/img/i/icons.gif') no-repeat -20px -390px; }
-
-
-#poputags { display: none; position: absolute; width: 271px; z-index: 1000; }
-#poputags .cont, #poputags .cb {  width: 271px; }
-#poputags .cont .ct { left: -400px; }
-#poputags .inside { padding: 20px 0 4px 23px; }
-#poputags .f_field { position: relative; margin: 0 0 8px 40px; }
-#poputags .f_field label { display: block; position: absolute; top: 3px; left: -40px; color: #4c4c4c; }
-#poputags .f_field input { color: #20201E; width: 158px;}
-
-#poputags .tags { margin: 0 22px 13px 0; line-height: 19px; color: #989898; }
-#poputags .tags a { margin-right: 6px; color: #989898; text-decoration: none; }
-#poputags .tags a:hover { text-decoration: underline; }
-#poputags .but { margin-left: 61px; }
-
-#poputags_edit { position: absolute; width: 271px; z-index: 1000; }
-#poputags_edit .cont, #poputags_edit .cb {  width: 271px; }
-#poputags_edit .cont .ct, #poputags_edit .cb div { left: -400px; }
-#poputags_edit .inside { padding: 20px 0 4px 23px; }
-#poputags_edit .f_field { position: relative; margin: 0 0 8px 40px; }
-#poputags_edit .f_field label { display: block; position: absolute; top: 3px; left: -40px; color: #4c4c4c; }
-#poputags_edit .f_field input { color: #b2b2b2; width: 158px; }
-#poputags_edit .tags { margin: 0 22px 13px 0; line-height: 19px; color: #989898; }
-#poputags_edit .tags a { margin-right: 6px; color: #989898; text-decoration: none; }
-#poputags_edit .tags a:hover { text-decoration: underline; }
-#poputags_edit .but { margin-left: 61px; }
-#popupadd_calendar .inside { padding: 20px 0 14px 0; }
-#popupadd_calendar .f_field { position: relative; margin: 0 0 8px 168px; }
-#popupadd_calendar .f_field label, #popupaddobject .f_field label { display: block; position: absolute; top: 3px; left: -140px; width: 125px; text-align: right; }
-#popupadd_calendar .f_field input, #popupaddobject .f_field input { color: #20201E; width: 158px;}
-#popupadd_calendar .f_field input#fpdate, #popupadd_calendar .f_field input#fpdate2,
-#popupaddobject .f_field input#fpdate3, #popupaddobject .f_field input#fpdate4 { width: 67px;}
-#popupadd_calendar .f_field select { width: 158px; color: #20201E; }
-#popupadd_calendar .f_field a, #popupaddobject .f_field a { top: 5px; left: 71px; width: 19px; background-position: 0 -390px; }
-#popupadd_calendar .but { margin: 10px 0 0 168px; }
-
-
-#popupaddobject { display: none; position: absolute; width: 687px; z-index: 1000; }
-#popupaddobject .cont{ position: relative; width: 687px; overflow: hidden; }
-#popupaddobject .cont .ct, #popupaddobject .cb div,
-#popupaddobject .cb { position: relative; width: 687px; height: 25px; overflow: hidden; }
-#popupaddobject .cb div { top: -775px; }
-#popupaddobject .inside { padding: 20px 0 14px 0; }
-#popupaddobject .form_block, #popupaddobject .gr { float: left; }
-#popupaddobject .form_block { margin-right: -1px; padding-right: 30px; border-right: 1px solid #d9d9d9; }
-#popupaddobject .gr { padding: 48px 0 0 23px; border-left: 1px solid #d9d9d9; }
-#popupaddobject .f_field { position: relative; margin: 0 0 8px 139px; }
-#popupaddobject .f_field select { color: #20201E; }
-#popupaddobject .showall { display: block; position: relative; margin: 10px 0 18px 159px; }
-#popupaddobject .showall input { display: block; position: absolute; top: -2px;left: -23px; }
-#popupaddobject .but { margin: 10px 0 0 139px; }
-
-#popupreview, #popupreview2 { display: none; position: absolute; z-index: 1000; }
-#popupreview { padding: 22px; border: 1px solid #a9b7a1; background: #ffffff; }
-#popupreview img, #popupreview2 img { display: block; }
-
-#popupreview2 { padding-top: 35px; }
-#popupreview2 .close { position: absolute; top: 0; right: 9px; width: 18px; height: 18px; text-indent: -999px; overflow: hidden; cursor: pointer; z-index: 10; background: url('/img/i/icons.gif') no-repeat -35px -390px; }
-
-#darkening { position: absolute; top: 0; left: 0; width: 100%; z-index: 900; background: #000000; opacity: 0.60; filter:progid:DXImageTransform.Microsoft.Alpha(opacity=60); }
 
 
 ul.pager { margin-bottom: 24px;}
