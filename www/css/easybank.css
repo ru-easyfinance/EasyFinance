@@ -1,3 +1,9 @@
+.debug {
+    border: 1px solid red;
+}
+.fll { float: left; }
+.flr {float: right; }
+
 .b-easybank {
     max-width: 940px;
     margin: 0 auto;
@@ -61,98 +67,98 @@
 
     .b-easybank .b-easybank-choosecard {
         font-size: 180%;
-        margin: 2em 0 1em;
+        margin: 2em 0 .5em;
     }
 
-
-    .b-easybank-getcards {
-    }
-
-        .b-getcard {
-            position: relative;
-            margin-bottom: 2em;
-            background: url(/img/i/easybank/item-bg.png) bottom repeat-x;
-            border-top: 1px solid #e3ffdf;
+        .b-easybank .b-easybank-choosecard__plugnow {
+            font-size: 180%;
+            margin: 2em 0 0em;
+            padding-top: 10px;
+            border-top: 10px solid #6cbd45;
         }
 
-            .b-getcard .b-getcard-banklogo {
-                position: absolute;
-                width: 210px;
-                height: 30px;
-                left: 5px;
-                top: 5px;
-                background: url(/img/i/easybank/logos.png) left top no-repeat;
-            }
-                .b-getcard__citi .b-getcard-banklogo {
-                    background-position: 0 -40px;
-                }
-                .b-getcard__amt .b-getcard-banklogo {
-                    background-position: 0 3px;
-                }
-
-            .b-getcard .b-getcard-title {
-                position: absolute;
-                left: 5px;
-                top: 10px;
-                font-size: 200%;
-                text-decoration: none;
-            }
-
-            .b-getcard .b-getcard-cardimage {
-                position: absolute;
-                left: 5px;
-                top: 50px;
-                text-align: center;
-            }
-                .b-getcard-cardimage .b-cardimage-icon {
+    .b-easybank-plugin {
+        margin-bottom: 2em;
+        padding-top: 5px;
+        background: url(/img/i/easybank/item-bg.png) bottom repeat-x;
+        border-top: 1px solid #e3ffdf;
+        clear: both;
+    }
+        .b-easybank-plugin .b-plugin-cardimage {
+            float: left;
+            margin-left: 5px;
+            width: 160px;
+            text-align: center;
+        }
+                .b-plugin-cardimage .b-cardimage-icon {
                     display: block;
                     background: url(/img/i/easybank/cards.png) left top no-repeat;
                     width: 160px;
                     height: 100px;
                 }
 
-                .b-getcard__citi .b-cardimage-icon {
+                .b-easybank-plugin__citi .b-cardimage-icon {
                     background-position: 0 -110px;
                 }
-                .b-getcard__amt .b-cardimage-icon {
+                .b-easybank-plugin__vtb .b-cardimage-icon {
+                    background-position: 0 -220px;
+                }
+                .b-easybank-plugin__amt .b-cardimage-icon {
                     background-position: 0 -0px;
                 }
 
-            .b-getcard .b-getcard-button {
-                display: block;
-                position: absolute;
-                right: 5px;
-                bottom: 10px;
-                width: 164px;
-                height: 100px;
-                border-radius: 15px;
-                -moz-border-radius: 15px;
-                -o-border-radius: 15px;
-                background: url(/img/i/easybank/getcard-bg.png) left bottom repeat-x;
-                cursor: pointer;
-                text-decoration: none;
+
+        .b-easybank-plugin .b-plugin-button {
+            float: right;
+            position: relative;
+            width: 164px;
+            height: 100px;
+            margin-right: 5px;
+            border-radius: 15px;
+            -moz-border-radius: 15px;
+            -o-border-radius: 15px;
+            background: url(/img/i/easybank/getcard-bg.png) left bottom repeat-x;
+            cursor: pointer;
+            text-decoration: none;
+        }
+            .b-easybank-plugin .b-plugin-button:hover {
+                background-position: left top;
             }
-                .b-getcard .b-getcard-button:hover {
-                    background-position: left top;
-                }
-                .b-getcard-button div {
+                .b-plugin-button div {
                     margin-top: 29px;
                     height: 100px;
-                    font-size: 200%;
+                    font-size: 180%;
                     font-weight: bold;
                     line-height: 100%;
                     text-align: center;
                     color: white;
                 }
 
-            .b-getcard .w-getcard-advantages {
-                margin: 90px 170px 0 220px;
+                .b-plugin-button .b-plugin-button-icon {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    width: 48px;
+                    height: 36px;
+                    background: url(/img/i/easybank/beta.png) no-repeat;
+                }
+
+        .b-plugin-text {
+            margin: 0 179px 0 175px;
+            height: 120px;
+        }
+            .b-plugin-text .b-text-note {
+                padding-top: 1em;
+                font-size: 150%;
+                line-height: 120%;
+                color: #121212;
             }
-                .w-getcard-advantages .b-getcard-advantages{
+
+                .b-plugin-text .b-text-advantages {
                     width: 100%;
                 }
 
-                    .b-getcard-advantages .b-advantages-item {
+                    .b-text-advantages .b-advantages-item {
                         text-align: center;
                         vertical-align: middle;
                         font-size: 110%;
@@ -174,3 +180,10 @@
                             font-size: 140%;
                             color: #676b6e;
                         }
+
+            .b-plugin-text .b-text-tariff {
+                padding-bottom: .7em;
+                font-size: 150%;
+                color: #383838;
+                text-transform: uppercase;
+            }

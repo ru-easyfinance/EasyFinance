@@ -19,76 +19,83 @@
         </div>
     </div>
 
-    <h3 style="margin-top: 1em;"><a href="/my/wikiwrapper/tiki-index.php?page=Citibank_integration" target="_blanc">Как настроить автоматический учет?</a></h3>
+    <!--h3 style="margin-top: 1em;"><a href="/my/wikiwrapper/tiki-index.php?page=Citibank_integration" target="_blanc">Как настроить автоматический учет?</a></h3-->
 
-    <h3 class="b-easybank-choosecard">Выберите карту:</h3>
+    <h3 class="b-easybank-choosecard">У вас уже есть карта &mdash; подключите автоматический учет операций:</h3>
+    <br class="clr"/>
 
-    <div class="b-easybank-getcards">
-        <div class="b-getcard b-getcard__citi hidden">
-            <a class="b-getcard-title" href="<?php echo url_for('easybank_citi_cashback'); ?>">Кредитная карта CITI CASH BACK</a>
-            <span class="b-getcard-cardimage">
-                <a href="<?php echo url_for('easybank_citi_cashback'); ?>">
-                    <img class="b-cardimage-icon" src="/img/i/pix.gif" alt="карта банка «CITIBANK»"/>
-                </a>
-                <a href="<?php echo url_for('easybank_citi_cashback'); ?>">подробнее</a>
-            </span>
-            <a class="b-getcard-button" href="<?php echo url_for('easybank_citi_cashback'); ?>"><div>Получить карту</div></a>
-            <div class="w-getcard-advantages">
-                <table class="b-getcard-advantages">
-                    <tr>
-                        <td class="b-advantages-item">
-                            <p class="b-item-name">Бесплатно</p>
-                            <p class="b-item-value">50 дней</p>
-                            <p class="b-item-explain">без процентов</p>
-                        </td>
-                        <td class="b-advantages-item">
-                            <p class="b-item-name">Cash Back</p>
-                            <p class="b-item-value">1%</p>
-                            <p class="b-item-explain">возвращается</p>
-                        </td>
-                        <td class="b-advantages-item">
-                            <p class="b-item-name">Максимум</p>
-                            <p class="b-item-value">300 000 р</p>
-                            <p class="b-item-explain">лимит</p>
-                        </td>
-                        <td class="b-advantages-item">
-                            <p class="b-item-name">Стоимость</p>
-                            <p class="b-item-value">1199 р</p>
-                            <p class="b-item-explain">в год</p>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+    <div class="b-easybank-plugin b-easybank-plugin__citi">
 
+        <div class="b-plugin-cardimage">
+            <a href="/my/wikiwrapper/tiki-index.php?page=Citibank">
+                <img class="b-cardimage-icon" src="/img/i/pix.gif" alt="карта банка «CITIBANK»"/>
+            </a>
+            <a href="/my/wikiwrapper/tiki-index.php?page=Citibank">подробнее</a>
         </div>
-        <div class="b-getcard b-getcard__amt">
-            <a class="b-getcard-title" href="<?php echo url_for('easybank_amt_easyfinance'); ?>">Банковская карта AMT EasyFinance</a>
-            <span class="b-getcard-cardimage">
-                <a href="<?php echo url_for('easybank_amt_easyfinance'); ?>">
-                    <img class="b-cardimage-icon" src="/img/i/pix.gif" alt="карта банка «АМТ БАНК»"/>
-                </a>
-                <a href="<?php echo url_for('easybank_amt_easyfinance'); ?>">подробнее</a>
-            </span>
-            <a class="b-getcard-button" href="<?php echo url_for('easybank_amt_easyfinance'); ?>"><div>Получить карту</div></a>
-            <div class="w-getcard-advantages">
-                <table class="b-getcard-advantages">
-                    <tr>
-                        <td class="b-advantages-item">
-                            <p class="b-item-name">Золотая карта</p>
-                            <p class="b-item-value">150 р / 2 года</p>
-                            <p class="b-item-explain">VISA / MasterCard</p>
-                        </td>
-                        <td class="b-advantages-item">
-                            <p class="b-item-name">Премиум-поддержка</p>
-                            <p class="b-item-value">Бесплатно</p>
-                            <p class="b-item-explain">от EasyFinance.ru</p>
-                        </td>
-                    </tr>
-                </table>
-            </div>
 
+        <a class="b-plugin-button" href="/my/wikiwrapper/tiki-index.php?page=Citibank"><div>Подключить учет по карте</div></a>
+
+        <div class="b-plugin-text">
+            <div class="b-text-note">
+                Если у Вас включена услуга «Alerting Service», то Вы можете подключить автоматический учет операций по картам Ситибанка
+            </div>
         </div>
     </div>
+
+    <div class="b-easybank-plugin b-easybank-plugin__vtb">
+
+        <div class="b-plugin-cardimage">
+            <a href="/my/wikiwrapper/tiki-index.php?page=VTB24">
+                <img class="b-cardimage-icon" src="/img/i/pix.gif" alt="карта банка «ВТБ24»"/>
+            </a>
+            <a href="/my/wikiwrapper/tiki-index.php?page=VTB24">подробнее</a>
+        </div>
+
+        <a class="b-plugin-button b-plugin-button__beta" href="/my/wikiwrapper/tiki-index.php?page=VTB24">
+            <div>Подключить учет по карте</div>
+            <i class="g-icon b-plugin-button-icon" title="Сервис работает в бета-режиме; возможны ошибки."></i>
+        </a>
+
+        <div class="b-plugin-text">
+            <div class="b-text-note">
+                Если Вы используете системы «Телебанк» или «Телеинфо», то Вы можете подключить автоматический учет по картам ВТБ24
+            </div>
+        </div>
+    </div>
+
+    <h3 class="b-easybank-choosecard b-easybank-choosecard__plugnow">Вы хотите выгодную карту с автоматическим учетом операций &mdash; оформите ее сейчас на Easyfinance.ru:</h3>
+    <br class="clr"/>
+
+    <div class="b-easybank-plugin b-easybank-plugin__amt">
+
+        <div class="b-plugin-cardimage">
+            <a href="<?php echo url_for('easybank_amt_easyfinance'); ?>">
+                <img class="b-cardimage-icon" src="/img/i/pix.gif" alt="карта банка «АМТ БАНК»"/>
+            </a>
+            <a href="<?php echo url_for('easybank_amt_easyfinance'); ?>">подробнее</a>
+        </div>
+
+        <a class="b-plugin-button" href="<?php echo url_for('easybank_amt_easyfinance'); ?>"><div>Получить карту</div></a>
+
+        <div class="b-plugin-text">
+            <h4 class="b-text-tariff">АМТ БАНК &mdash; тариф Easyfinance</h4>
+            <table class="b-text-advantages">
+                <tr>
+                    <td class="b-advantages-item">
+                        <p class="b-item-name">Золотая карта</p>
+                        <p class="b-item-value">150 р / 2 года</p>
+                        <p class="b-item-explain">VISA / MasterCard</p>
+                    </td>
+                    <td class="b-advantages-item">
+                        <p class="b-item-name">Премиум-поддержка</p>
+                        <p class="b-item-value">Бесплатно</p>
+                        <p class="b-item-explain">от EasyFinance.ru</p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
 
     <iframe
         src="https://www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2F%23%21%2Fpages%2FEasyFinanceru-sistema-upravlenia-licnymi-finansami%2F142011615821613%3Fv%3Dinfo&amp;width=600&amp;colorscheme=light&amp;connections=10&amp;stream=false&amp;header=false&amp;height=195"
