@@ -10,7 +10,7 @@ easyFinance.widgets.budget = function(data) {
                     <span class="js-planned">{%strPlan%}</span>\
                     <span class="js-planning hidden">\
                         <input type="text" value="{%planValue%}"/><br/>\
-                        <em>В календаре: {%planValueCalendar%}</em>\
+                        <em>В&nbsp;календаре:&nbsp;{%planValueCalendar%}</em>\
                     </span>\
                 </div>\
             </td>\
@@ -193,7 +193,7 @@ easyFinance.widgets.budget = function(data) {
 
                 strPlan: formatCurrency(article.getPlan(), true, false),
                 planValue: article.getPlan(),
-                planValueCalendar: article.getTotalCalendar(),
+                planValueCalendar: formatCurrency(article.getTotalCalendar(), true, false).replace(' ', '&nbsp;'),
                 factValue: formatCurrency(article.getFact(), true, false),
 
                 diffValue: formatCurrency(recomend.budgetLeft, true, false),
