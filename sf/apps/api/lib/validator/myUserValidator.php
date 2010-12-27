@@ -20,12 +20,12 @@ class myUserValidator extends sfValidatorBase
         $password = isset($values[$this->getOption('password_field')]) ? $values[$this->getOption('password_field')] : '';
 
         if ($username) {
-            $user = $this->getTable()->findOneByUserLogin($username);
-
-            if ($user) {
-                // password is ok?
-                if ($user->checkPassword($password)) {
-                    return array_merge($values, array('user' => $user));
+            if ($users = $this->getTable()->findByUserLoginOrUserMail($username, $username)) {
+                foreach ($users as $user) {
+                    // password is ok?
+                    if ($user->checkPassword($password)) {
+                        return array_merge($values, array('user' => $user));
+                    }
                 }
             }
         }

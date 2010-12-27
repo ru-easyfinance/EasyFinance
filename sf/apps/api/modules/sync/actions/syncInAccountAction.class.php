@@ -19,8 +19,9 @@ class syncInAccountAction extends myBaseSyncInAction
         }
 
         // существующие записи, владельца не проверяем! так надо!
+
         $recordIds = $this->filterByXPath('//record/@id', 'id');
-        $accounts = Doctrine_Query::create()
+        $accounts = empty($recordIds) ? null : Doctrine_Query::create()
             ->select("a.*")
             ->from("Account a INDEXBY a.id")
             ->whereIn("a.id", $recordIds)
@@ -46,7 +47,7 @@ class syncInAccountAction extends myBaseSyncInAction
         $results   = array();
         foreach ($data as $record) {
             // не добавляем в коллекцию новых объектов, поэтому так:
-            if ($accounts->contains($record['id'])) {
+            if ($accounts && $accounts->contains($record['id'])) {
                 $myObject = $accounts[(int) $record['id']];
             } else {
                 $myObject = new $modelName();
