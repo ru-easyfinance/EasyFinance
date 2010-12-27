@@ -17,6 +17,7 @@ class adminConfiguration extends sfApplicationConfiguration
             'sfDoctrinePlugin',
             'sfFormExtraPlugin',
             'sfAdminDashPlugin',
+            'myDoctrineLoggerPlugin',
         ));
     }
 }

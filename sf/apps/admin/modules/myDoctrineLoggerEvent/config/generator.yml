@@ -1,0 +1,50 @@
+generator:
+  class: sfDoctrineGenerator
+  param:
+    model_class:           myDoctrineLoggerEvent
+    theme:                 admin
+    non_verbose_templates: true
+    with_show:             false
+    singular:              Событие
+    plural:                События
+    route_prefix:          my_doctrine_logger_event
+    with_doctrine_route:   true
+    actions_base_class:    sfActions
+    css:                   false
+
+    config:
+      actions: ~
+      fields:  ~
+      list:
+        title:             Список событий
+        fields:
+          id:              { label: "ID" }
+          state:           { label: "Критичность" }
+          component:       { label: "Компонент" }
+          label:           { label: "Название" }
+          created_at:      { label: "Время" }
+        display: [id, state, label, created_at ]
+      filter:
+        fields:
+          id:              { label: "ID" }
+          state:           { label: "Критичность" }
+          component:       { label: "Компонент" }
+          label:           { label: "Название" }
+          result:          { label: "Расшифровка" }
+          context:         { label: "Данные" }
+          user_id:         { label: "User ID" }
+          model_id:        { label: "Model ID" }
+          created_at:      { label: "Время" }
+      form:
+        fields:
+          id:              { label: "ID" }
+          state:           { label: "Критичность" }
+          component:       { label: "Компонент" }
+          label:           { label: "Название" }
+          result:          { label: "Расшифровка" }
+          context:         { label: "Данные" }
+          user_id:         { label: "User ID" }
+          model_id:        { label: "Model ID" }
+          created_at:      { label: "Время" }
+      edit:    { title: 'Правка события' }
+      new:     { title: 'Создать событие' }

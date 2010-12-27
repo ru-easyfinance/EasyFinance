@@ -48,3 +48,12 @@ billing_transaction:
     prefix_path:          /transactions
     column:               id
     with_wildcard_routes: true
+
+my_doctrine_logger_event:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                myDoctrineLoggerEvent
+    module:               myDoctrineLoggerEvent
+    prefix_path:          /my_doctrine_logger_event
+    column:               id
+    with_wildcard_routes: true

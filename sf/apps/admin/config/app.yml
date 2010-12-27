@@ -24,3 +24,7 @@ all:
         items:
           emailsources:  { url: @email_source, name: Отправители }
           emailparsers:  { url: @email_parser, name: Парсеры }
+      myDoctrineLoggerEvent:
+        name:  Журнал событий
+        items:
+          myDoctrineLoggerEvent { url: @my_doctrine_logger_event, name: Cписок }

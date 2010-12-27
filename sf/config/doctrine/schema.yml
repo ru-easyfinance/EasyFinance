@@ -587,3 +587,10 @@ CalendarChain:
       foreignType:  many
       foreignAlias: CalendarChains     # User->CalendarChains
       onDelete:     CASCADE            # При удалении пользователя удаляется все
+
+      
+myDoctrineLoggerEvent:
+  options:
+    symfony:
+      form:   true
+      filter: true
