@@ -76,11 +76,6 @@ class myReportMatrix {
 
             if ($tag && $category) {
                 $this->_addTagAndCategory($tag, $category, $operation);
-                $this->_addTagAndCategory(
-                    $tag,
-                    $this->_totalCategory,
-                    $operation
-                );
             }
         }
 

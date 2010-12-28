@@ -137,5 +137,47 @@ class model_myReportMatrixTest extends myUnitTestCase
             $matrix[$headerLeft[0]->flatIndex]['tag_foo'],
             'Сумма в доходной категории по тэгу tag_foo'
         );
+
+        $this->assertEquals(
+            400,
+            $matrix[$headerLeft[1]->flatIndex]['tag_foo'],
+            'Сумма в тэге tag_foo по категориям'
+        );
+    }
+
+
+    /**
+     * Тест итогов на одной операции
+     */
+    public function testTotal()
+    {
+        $user = Doctrine::getTable('User')->findOneByLogin('tester');
+        $dateStart = new DateTime('2010-08-01');
+        $dateEnd   = new DateTime('2010-12-01');
+        $currency  = $user->getCurrency();
+
+        $report = new myReportMatrix($currency);
+        $report->buildReport(
+            $user,
+            null,
+            $dateStart,
+            $dateEnd,
+            Operation::TYPE_PROFIT
+        );
+
+        $headerLeft = $report->getHeaderLeft();
+        $matrix     = $report->getMatrix();
+
+        $this->assertEquals(
+            400,
+            $matrix[$headerLeft[0]->flatIndex]['tag_foo'],
+            'Сумма в доходной категории по тэгу tag_foo'
+        );
+
+        $this->assertEquals(
+            400,
+            $matrix[$headerLeft[1]->flatIndex]['tag_foo'],
+            'Сумма в тэге tag_foo по категориям'
+        );
     }
 }
