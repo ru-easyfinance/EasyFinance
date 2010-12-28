@@ -66,16 +66,20 @@ thead.budget-header th {
 
 .budget#budget .list .b-income span,
 .budget#budget .list .b-costs span {
-    font-size: 13px;
+    font-size: 110%;
     font-weight: bold;
 }
 .budget#budget .list .b-income span,
 .budget#budget .list .b-income td {
     color: #309500;
+    font-size: 110% !important;
+    font-weight: bold !important;
 }
 .budget#budget .list .b-costs span,
 .budget#budget .list .b-costs td {
     color: #EB3C34;
+    font-size: 110% !important;
+    font-weight: bold !important;
 }
 .budget#budget .list .b-costs td {
     border-bottom: 1px #aaa solid;
@@ -84,8 +88,6 @@ thead.budget-header th {
 
 .budget#budget .list .list.body {
     overflow-y: auto;
-    overflow-x: hidden;
-    max-height: 300px;
     position: relative;
     width: auto;
     padding-bottom: 6px;
