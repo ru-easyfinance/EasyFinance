@@ -12,6 +12,8 @@ class myReportMatrix {
         $_totalCategory,
         $_totalTag;
 
+    const TAG_FOR_OPERATIONS_WITHOUT_TAGS = "метка1";
+
     public function __construct(Currency $currency)
     {
         $this->_currency = $currency;
@@ -65,7 +67,12 @@ class myReportMatrix {
 
             $category = $operation->getCategory();
             $opTags = array_map('trim', explode(',', $operation->getTags()));
-            $tag = (isset($opTags[0])) ? $opTags[0] : null ;
+
+            //возьмем первый тэг операции (считаем, что тэг - один)
+            //если тэгов у операции нет, присвоим специальный тэг
+            $tag = (isset($opTags[0]) && strlen($opTags[0]) > 0)
+                    ? $opTags[0]
+                    : self::TAG_FOR_OPERATIONS_WITHOUT_TAGS;
 
             if ($tag && $category) {
                 $this->_addTagAndCategory($tag, $category, $operation);

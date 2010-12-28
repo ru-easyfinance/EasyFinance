@@ -9,7 +9,13 @@ easyFinance.models.report = function() {
             for (var i = 0; i < columns.length; i++) {
                 child = columns[i];
 
-                arr.push( formatCurrency(values[index][child.flatIndex]) )
+                var childValue = formatCurrency(values[index][child.flatIndex]);
+
+                //Нули не выводим, чтобы не мозолить глаза пользователю
+                if(childValue == "0")
+                    childValue = "";
+
+                arr.push( childValue )
             }
 
             return '<td>' + arr.join('</td><td>') + '</td>'
