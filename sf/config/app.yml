@@ -10,7 +10,7 @@ all:
     # Параметры SMS-шлюза
     sms_url:   http://www.websms.ru/http_in5.asp
     sms_login: easyfinance
-    sms_pass:  WGj163klSQ!@^&*SAds
+    sms_pass:  asdgh124367ASGJ
 
     # Уведомления по Email
     email_from: reminder@easyfinance.ru
