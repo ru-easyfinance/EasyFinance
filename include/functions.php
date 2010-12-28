@@ -413,3 +413,28 @@ function urlsafe_b64decode($string)
     $data = str_pad($data, $l + (4 - ($l % 4)) % 4, '=');
     return base64_decode($data);
 }
+
+if (!function_exists("cal_days_in_month")) {
+    function cal_days_in_month($cal, $month, $year)
+    {
+        $leapYear = ($year % 4 == 0) && ($year % 100 != 0 || $year % 400 == 0);
+
+        $days = array(
+            1  => 31,
+            2  => $leapYear ? 29 : 28,
+            3  => 31,
+            4  => 30,
+            5  => 31,
+            6  => 30,
+            7  => 31,
+            8  => 31,
+            9  => 30,
+            10 => 31,
+            11 => 30,
+            12 => 31,
+        );
+
+        return $days[(int)$month];
+    }
+}
+
