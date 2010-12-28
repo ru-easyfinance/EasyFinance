@@ -12,7 +12,7 @@ class myReportMatrix {
         $_totalCategory,
         $_totalTag;
 
-    const TAG_FOR_OPERATIONS_WITHOUT_TAGS = "метка1";
+    const TAG_FOR_OPERATIONS_WITHOUT_TAGS = "<Без метки>";
 
     public function __construct(Currency $currency)
     {
