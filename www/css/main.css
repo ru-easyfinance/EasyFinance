@@ -164,7 +164,7 @@ table.tab1 span.t3 { background-position: 0 -20px; }
 #header .logo { display: block; position: absolute; top: 36px; left: 30px; width: 137px; height: 86px; text-indent: -999px; overflow: hidden; background: url('/img/i/logo.png') no-repeat 0 0; }
 #header .slogan { position: absolute; top: 126px; left: 56px; width: 110px; font: 11px/13px Helvetica, Arial, Tahoma; color: #75a75c; }
 */#header { position: relative; width: 940px; height: 176px; margin:0 auto; }
-#header .logo { display: block; position: absolute; top: 7px; left: 30px; width: 137px; height: 86px; text-indent: -999px; overflow: hidden; background: url("/img/i/logo.png") no-repeat 0 0; }
+#header .logo { display: block; position: absolute; top: 7px; left: 30px; width: 137px; height: 86px; text-indent: -999px; overflow: hidden; background: url("/img/i/ny-logo.png") no-repeat 0 0; }
 #header .slogan { position: absolute; top: 102px; left: 56px; width: 110px; font: 11px/13px Helvetica, Arial, Tahoma; color: #75a75c; }
 
 #header #auth { position: absolute; top: 43px; left: 213px; width: 263px; }
