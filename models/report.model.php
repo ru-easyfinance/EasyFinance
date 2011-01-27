@@ -292,7 +292,6 @@ class Report_Model
      */
     function CompareForPeriods($type, $date1='', $date2='', $date3='', $date4='', $accounts = '', $currencyId = 0)
     {
-
         $sql = "SELECT
                     c.cat_name,
                     c.cat_id,
@@ -314,7 +313,7 @@ class Report_Model
                     AND a.deleted_at IS NULL
                     AND c.deleted_at IS NULL
                     AND a.account_id IN({$accounts})
-                GROUP BY c.cat_name, a.account_id
+                GROUP BY c.cat_name, cur.cur_id
 
                 UNION
 
@@ -340,7 +339,7 @@ class Report_Model
                     AND a.deleted_at IS NULL
                     AND c.deleted_at IS NULL
                     AND a.account_id IN({$accounts})
-                GROUP BY c.cat_name, a.account_id";
+                GROUP BY c.cat_name, cur.cur_id";
 
         $rows = $this->_db->query($sql, $type, $date1, $date2, $this->_user->getId(),
             $type, $date3, $date4, $this->_user->getId());
