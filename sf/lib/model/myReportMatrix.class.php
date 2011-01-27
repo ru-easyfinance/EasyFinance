@@ -38,7 +38,10 @@ class myReportMatrix {
         $totalLabel = "ИТОГО:";
 
         $operationCollection = new OperationCollection($user);
-        $operationCollection->fillForPeriod($startDate, $endDate);
+        $operationCollection->setPeriodStartDate($startDate)
+                ->setPeriodEndDate($endDate)
+                ->setAcceptedOnly(true)
+                ->fill();
         $operations = $operationCollection->getOperations();
 
         $this->_tags = array();

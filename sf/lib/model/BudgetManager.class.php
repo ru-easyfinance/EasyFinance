@@ -34,7 +34,9 @@ class BudgetManager
 
         //получим выборку операций за рассчитанный период
         $operations = new OperationCollection($user);
-        $operations->fillForPeriod($beginDate, $endDate);
+        $operations->setPeriodStartDate($beginDate)
+                ->setPeriodEndDate($endDate)
+                ->fill();
 
         //получим бюджет на месяц (коллекцию статей бюджета на заданный месяц)
         $budget = new Budget();

@@ -22,7 +22,9 @@ class model_OperationCollectionTest extends myUnitTestCase
         $op = $this->helper->makeOperation();
 
         $operationCollection = new OperationCollection($op->getUser());
-        $operationCollection->fillForPeriod($dateStart, $dateEnd);
+        $operationCollection->setPeriodStartDate($dateStart)
+                ->setPeriodEndDate($dateEnd)
+                ->fill();
         $this->assertNotEquals(0, count($operationCollection->getOperations()));
     }
 }

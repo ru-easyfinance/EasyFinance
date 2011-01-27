@@ -79,7 +79,9 @@ class ReportMatrix {
     private function _getData(User $user, DateTime $startDate, DateTime $endDate)
     {
         $this->_operations = new OperationCollection($user);
-        $this->_operations->fillForPeriod($startDate, $endDate);
+        $this->_operations->setPeriodStartDate($startDate)
+            ->setPeriodEndDate($endDate)
+            ->fill();
     }
 
     private function _buildMatrix()
