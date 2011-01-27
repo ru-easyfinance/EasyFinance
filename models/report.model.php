@@ -295,7 +295,7 @@ class Report_Model
         $queryString = "SELECT
                     c.cat_name,
                     c.cat_id,
-                    cur.cur_id,
+                    a.account_currency_id as cur_id,
                     sum(abs(op.money)) as su,
                     p.per
                 FROM operation op
@@ -303,8 +303,6 @@ class Report_Model
                     ON a.account_id=op.account_id
                 INNER JOIN category c
                     ON c.cat_id=op.cat_id
-                INNER JOIN currency cur
-                    ON cur.cur_id = a.account_currency_id
                 INNER JOIN (
                         SELECT ? AS begin_date, ? AS end_date, 1 AS per
                         UNION ALL
@@ -318,13 +316,13 @@ class Report_Model
                     AND a.deleted_at IS NULL
                     AND c.deleted_at IS NULL
                     AND a.account_id IN({$accounts})
-                GROUP BY c.cat_name, cur.cur_id, p.per";
+                GROUP BY c.cat_id, a.account_currency_id, p.per";
 
         $rows = $this->_db->query($queryString, $date1, $date2, $date3, $date4,
                                   $type, $this->_user->getId());
 
         $result = array();
-        foreach($rows as $key => $value) {
+        foreach($rows as $value) {
 
             $money = new myMoney(abs($value['su']), $value['cur_id']);
 
