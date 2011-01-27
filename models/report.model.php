@@ -292,12 +292,12 @@ class Report_Model
      */
     function CompareForPeriods($type, $date1='', $date2='', $date3='', $date4='', $accounts = '', $currencyId = 0)
     {
-        $sql = "SELECT
+        $queryString = "SELECT
                     c.cat_name,
                     c.cat_id,
                     cur.cur_id,
                     sum(abs(op.money)) as su,
-                    1 as per
+                    p.per
                 FROM operation op
                 INNER JOIN accounts a
                     ON a.account_id=op.account_id
@@ -305,44 +305,23 @@ class Report_Model
                     ON c.cat_id=op.cat_id
                 INNER JOIN currency cur
                     ON cur.cur_id = a.account_currency_id
+                INNER JOIN (
+                        SELECT ? AS begin_date, ? AS end_date, 1 AS per
+                        UNION ALL
+                        SELECT ? AS begin_date, ? AS end_date, 2 AS per
+                    ) p
+                    ON op.date between p.begin_date AND p.end_date
                 WHERE
                     op.`type`= ?
-                    AND (op.`date` BETWEEN ? AND ?)
                     AND op.user_id= ? AND op.accepted=1
                     AND op.deleted_at IS NULL
                     AND a.deleted_at IS NULL
                     AND c.deleted_at IS NULL
                     AND a.account_id IN({$accounts})
-                GROUP BY c.cat_name, cur.cur_id
+                GROUP BY c.cat_name, cur.cur_id, p.per";
 
-                UNION
-
-                SELECT
-                    c.cat_name,
-                    c.cat_id,
-                    cur.cur_id,
-                    sum(abs(op.money)) as su,
-                    2 as per
-                FROM operation op
-                INNER JOIN accounts a
-                    ON a.account_id=op.account_id
-                INNER JOIN category c
-                    ON c.cat_id=op.cat_id
-                INNER JOIN currency cur
-                    ON cur.cur_id = a.account_currency_id
-                WHERE
-                    op.`type`= ?
-                    AND (op.`date` BETWEEN ? AND ?)
-                    AND op.user_id= ?
-                    AND op.accepted=1
-                    AND op.deleted_at IS NULL
-                    AND a.deleted_at IS NULL
-                    AND c.deleted_at IS NULL
-                    AND a.account_id IN({$accounts})
-                GROUP BY c.cat_name, cur.cur_id";
-
-        $rows = $this->_db->query($sql, $type, $date1, $date2, $this->_user->getId(),
-            $type, $date3, $date4, $this->_user->getId());
+        $rows = $this->_db->query($queryString, $date1, $date2, $date3, $date4,
+                                  $type, $this->_user->getId());
 
         $result = array();
         foreach($rows as $key => $value) {
