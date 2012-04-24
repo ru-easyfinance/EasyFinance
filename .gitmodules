@@ -1,15 +1,15 @@
 [submodule "sf/lib/vendor/symfony"]
 	path = sf/lib/vendor/symfony
-	url = git://github.com/maxim-oleinik/Symfony.git
+	url = git://github.com/ru-easyfinance/Symfony.git
 [submodule "sf/plugins/sfPhpunitPlugin"]
 	path = sf/plugins/sfPhpunitPlugin
-	url = git://github.com/EasyFinance/sfPhpunitPlugin.git
+	url = git://github.com/ru-easyfinance/sfPhpunitPlugin.git
 [submodule "sf/plugins/sfAdminDashPlugin"]
 	path = sf/plugins/sfAdminDashPlugin
-	url = http://github.com/EasyFinance/sfAdminDashPlugin.git
+	url = git://github.com/ru-easyfinance/sfAdminDashPlugin.git
 [submodule "sf/plugins/myAuthPlugin"]
 	path = sf/plugins/myAuthPlugin
-	url = http://github.com/EasyFinance/myAuthPlugin.git
+	url = git://github.com/ru-easyfinance/myAuthPlugin.git
 [submodule "sf/plugins/myDoctrineLoggerPlugin"]
 	path = sf/plugins/myDoctrineLoggerPlugin
-	url = http://github.com/EasyFinance/myDoctrineLoggerPlugin.git
+	url = git://github.com/ru-easyfinance/myDoctrineLoggerPlugin.git
